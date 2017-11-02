@@ -1,6 +1,6 @@
 # Makefile bnremap
 
-include ${BFMDIR}/compilers/ifort.inc
+include ${BFMDIR}/compilers/$(COMPILER)
 
 # CPPDEFS=-DDEBUG
 

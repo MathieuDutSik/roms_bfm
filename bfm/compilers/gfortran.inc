@@ -4,8 +4,8 @@
 # -L/usr/local/lib -lhdf5_hl -lhdf5 -lz
 
   NCDF_DIR=${NETCDF}
-  NCDF_LIB= -L${NCDF_DIR}/lib -lnetcdff -lnetcdf 
-  NCDF_INC= -I${NCDF_DIR}/include
+  NCDF_LIB= -L${NETCDF_FORTRAN}/lib -lnetcdff -lnetcdf 
+  NCDF_INC= -I${NETCDF_FORTRAN}/include
 
   FC=gfortran
   LD=gfortran

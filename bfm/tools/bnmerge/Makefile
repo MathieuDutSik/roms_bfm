@@ -4,12 +4,12 @@ ifeq ($(DEBUG),yes)
 	OPTDEBUG=-DDEBUG
 endif
 
-ifeq ($(PARALLEL),yes)
-	COMPILER=ifort_openmp.inc
-	OPTPAR= -DPARAL
-else
-	COMPILER=ifort.inc
-endif
+#ifeq ($(PARALLEL),yes)
+#	COMPILER=ifort_openmp.inc
+#	OPTPAR= -DPARAL
+#else
+#	COMPILER=ifort.inc
+#endif
 
 include ${BFMDIR}/compilers/$(COMPILER)
 
