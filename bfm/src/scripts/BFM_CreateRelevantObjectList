@@ -1,0 +1,36 @@
+#!/usr/bin/perl -w
+$uu=scalar(@ARGV);
+if ($uu eq 0)
+{
+    print "BFM_CreateRelevantObjectList [eFile1] [eFile2] .... \n";
+    print "with [TheDir] being the build directory\n";
+    print "with [switch] being the WW3 switch file\n";
+    print "with [RuleBook] being the list of rules\n";
+    print "and [eFile1] ... the WW3 source files\n";
+    die;
+}
+#
+print "OBJsrc :=";
+for ($iU=0; $iU<$uu; $iU++)
+{
+    my $eFile=$ARGV[$iU];
+    my $lastPos=-1;
+    my @U=split("", $eFile);
+    for (my $iS=0; $iS<scalar(@U); $iS++)
+    {
+	my $eChar=$U[$iS];
+	if ($eChar eq ".")
+	{
+	    $lastPos=$iS;
+	}
+    }
+    my $strRed="";
+    for (my $iS=0; $iS<$lastPos; $iS++)
+    {
+	my $eChar=$U[$iS];
+	$strRed=$strRed.$eChar;
+    }
+    my $oFile=$strRed.".o";
+    print " ".$oFile;
+}
+print "\n";

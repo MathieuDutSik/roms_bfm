@@ -1,0 +1,39 @@
+#!/usr/bin/perl -w
+use strict;
+use warnings;
+
+my $uu=scalar(@ARGV);
+
+if ($uu eq 0)
+{
+    print "Program is used as\n";
+    print "BFM_GetEXEC file1 file2 .... fileN\n\n";
+    die;
+}
+
+for (my $iU=0; $iU<$uu; $iU++)
+{
+    my $strIN=$ARGV[$iU];
+    my @ST=split("/", $strIN);
+    my $name=$ST[scalar(@ST)-1];
+    my $lastPos=-1;
+    my @U=split("", $name);
+    for (my $iS=0; $iS<scalar(@U); $iS++)
+    {
+	my $eChar=$U[$iS];
+	if ($eChar eq ".")
+	{
+	    $lastPos=$iS;
+	}
+    }
+    my $strRed="";
+    for (my $iS=0; $iS<$lastPos; $iS++)
+    {
+	my $eChar=$U[$iS];
+	$strRed=$strRed.$eChar;
+    }
+    #
+    print "Build/".$strRed.".o: ".$strIN."\n";
+    print "\tcd Build/ && \$(FC) \$(FFLAGS) -c ../".$strIN."\n";
+    print "\n";
+}
