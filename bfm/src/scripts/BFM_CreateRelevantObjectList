@@ -13,7 +13,9 @@ if ($uu eq 0)
 print "OBJsrc :=";
 for ($iU=0; $iU<$uu; $iU++)
 {
-    my $eFile=$ARGV[$iU];
+    my $strIN=$ARGV[$iU];
+    my @US=split("/", $strIN);
+    my $eFile=$US[scalar(@US)-1];
     my $lastPos=-1;
     my @U=split("", $eFile);
     for (my $iS=0; $iS<scalar(@U); $iS++)
@@ -31,6 +33,6 @@ for ($iU=0; $iU<$uu; $iU++)
 	$strRed=$strRed.$eChar;
     }
     my $oFile=$strRed.".o";
-    print " ".$oFile;
+    print " Build/".$oFile;
 }
 print "\n";

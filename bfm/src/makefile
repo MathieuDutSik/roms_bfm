@@ -15,6 +15,8 @@ FC        = gfortran
  FFLAGS    = -Wall -O3 -g -ggdb -ffree-line-length-none -ffpe-trap=invalid,zero,overflow
 
 
+
+FFLAGS += -I../includes
 BINDIR = exe
 
 SCRATCH_DIR = Build
@@ -44,20 +46,10 @@ clean:
 	$(QUIET)rm -rf Build/* 
 	$(QUIET)rm -rf exe/* 
 
-SRC1 = $(notdir $(wildcard BFM/*/*.F90))
+SRC1 = $(notdir $(wildcard BFM/*.F90))
 OBJ1 = $(addprefix $(SCRATCH_DIR)/, $(patsubst %.F90,%.o, $(notdir $(SRC1))))
 
-SRC2 = $(notdir $(wildcard nemo/*.F90))
-OBJ2 = $(addprefix $(SCRATCH_DIR)/, $(patsubst %.F90,%.o, $(notdir $(SRC2))))
-
-SRC3 = $(notdir $(wildcard share/*.F90))
-OBJ3 = $(addprefix $(SCRATCH_DIR)/, $(patsubst %.F90,%.o, $(notdir $(SRC3))))
-
-SRC4 = $(notdir $(wildcard standalone/*.F90))
-OBJ4 = $(addprefix $(SCRATCH_DIR)/, $(patsubst %.F90,%.o, $(notdir $(SRC4))))
-
-
-OBJtot := $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4)
+OBJtot := $(OBJ1)
 
 -include $(SCRATCH_DIR)/OBJsrc
 -include $(SCRATCH_DIR)/MakeDepend
@@ -68,13 +60,13 @@ OBJtot := $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4)
 MDEPFLAGS := --file=- --silent --moddir $(SCRATCH_DIR) --objdir=$(SCRATCH_DIR)
 
 $(SCRATCH_DIR)/OBJsrc: $(SCRATCH_DIR)
-	$(SCRIPT_RULE) BFM/*/*.F90 nemo/*.F90 share/*.F90 standalone/*.F90 > $(SCRATCH_DIR)/OBJsrc
+	$(SCRIPT_RULE) BFM/*.F90 > $(SCRATCH_DIR)/OBJsrc
 
 $(SCRATCH_DIR)/MakeDepend: $(SCRATCH_DIR)
-	$(SFMAKEDEPEND) $(MDEPFLAGS) $(SWITCHFILE) BFM/*/*.F90 nemo/*.F90 share/*.F90 standalone/*.F90 srcEXEC/*.F90 > $(SCRATCH_DIR)/MakeDepend
+	$(SFMAKEDEPEND) $(MDEPFLAGS) $(SWITCHFILE) BFM/*.F90 srcEXEC/*.F90 > $(SCRATCH_DIR)/MakeDepend
 
 $(SCRATCH_DIR)/MakeSimpleObject: $(SCRATCH_DIR)
-	$(SCRIPT_OBJECT) BFM/*/*.F90 nemo/*.F90 share/*.F90 standalone/*.F90 srcEXEC/*.F90 > $(SCRATCH_DIR)/MakeSimpleObject
+	$(SCRIPT_OBJECT) BFM/*.F90 srcEXEC/*.F90 > $(SCRATCH_DIR)/MakeSimpleObject
 
 $(SCRATCH_DIR)/MakeSimpleBINARIES: $(SCRATCH_DIR) $(BINDIR)
 	$(RULE_BINARY) srcEXEC/*.F90 > $(SCRATCH_DIR)/MakeSimpleBINARIES
