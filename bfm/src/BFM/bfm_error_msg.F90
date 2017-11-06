@@ -48,8 +48,6 @@
      FATAL "bfm_error: Called from: ",trim(sub)
      FATAL "bfm_error: Message:     ",trim(msg)
      stop  "bfm_error( see bfm.log !! )"
-
-   return
    end subroutine bfm_error
 !-----------------------------------------------------------------------
 !BOP
@@ -69,8 +67,6 @@
 !
 !-----------------------------------------------------------------------
 !BOC
-
-  return
    end subroutine set_warning_for_getm
 !-----------------------------------------------------------------------
 

@@ -68,11 +68,11 @@
   Chla(:) = ZERO
   select case ( ChlDynamicsFlag)
     case ( 1 )
-      do i = 1 , ( iiPhytoPlankton)
+      do i = 1 , iiPhytoPlankton
         Chla(:) = Chla(:) + p_qlcPPY(i)*PhytoPlankton(i,iiC)
       end do
     case ( 2 )
-      do i = 1 , ( iiPhytoPlankton)
+      do i = 1 , iiPhytoPlankton
         Chla(:) = Chla(:) + PhytoPlankton(i,iiL)
       end do
   end select
