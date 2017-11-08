@@ -18,7 +18,7 @@
   ! Modules (use of ONLY is strongly encouraged!)
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #ifdef INCLUDE_PELCO2
-use global_mem, ONLY:RLEN
+  use global_mem, ONLY:RLEN
 #ifdef NOPOINTERS
   use mem
 #else

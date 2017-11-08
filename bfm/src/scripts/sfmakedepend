@@ -1,8 +1,8 @@
 #!/usr/bin/env perl
 #
-# svn $Id: sfmakedepend 450 2010-03-04 18:57:26Z arango $
+# svn $Id: sfmakedepend 830 2017-01-24 21:21:11Z arango $
 #######################################################################
-# Copyright (c) 2002-2010 The ROMS/TOMS Group                         #
+# Copyright (c) 2002-2017 The ROMS/TOMS Group                         #
 #   Licensed under a MIT/X style license                              #
 #   See License_ROMS.txt                                              #
 ##################################################### Kate Hedstrom ###
@@ -42,7 +42,7 @@ GetOptions("help" => \$opt_help,    "man" => \$opt_man,
 pod2usage(-verbose => 1) if $opt_help;
 pod2usage(-verbose => 2) if $opt_man;
 
-our @suffixes = qw( .c .C .cc .cxx .cpp .f .F .ftn .f90 .F90 .f95 .F95 .for);
+our @suffixes = qw( .c .C .cc .cxx .cpp .f .F .f90 .F90 .f95 .F95 .for);
 our @mod_files = ();
 
 my $mf = 'Makefile';
@@ -124,26 +124,7 @@ my $mystring = '# DO NOT DELETE THIS LINE - used by make depend';
 # Search for the includes in all the files
 my $file;
 my %sources;
-my $LSE;
-my $switchFile;
-my @LS;
-my $iFile;
-my @LSE;
-my @Lswitch;
-$switchFile=$ARGV[0];
-@LS=();
-for ($iFile=2; $iFile<=scalar(@ARGV); $iFile++)
-{
-    @LS[$iFile-2]=$ARGV[$iFile-1];
-}
-#print "switchFile=".$switchFile."\n";
-open(IN, $switchFile);
-@LSE=<IN>;
-close(IN);
-@Lswitch=split(" ", $LSE[0]);
-
-
-foreach $file (@LS) {
+foreach $file (@ARGV) {
     my $filesrc = findsrc($file);
     $sources{$file} = new Source_File($file, $filesrc, $filesrc);
     $sources{$file}->find_includes();
@@ -279,8 +260,6 @@ sub find_includes {
     my $file = $self->{'filepath'};
     my $parent = $self->{'parent'};
     my($after, $filepath, $ref, $included, $use, $modname);
-    my($RetLine, @LSL, $eChar, $pos, $posFirst, $eSwitch, $iSwitch);
-    my($WeMatch, $eLine, $ipos, $nbChar, $nbSwitch);
     local(*FILE);
     local($_);
 
@@ -289,70 +268,9 @@ sub find_includes {
     } else {
 	return;
     }
-#    print "file=".$file."\n";
     while (<FILE>) {
 	$included = "";
 	$use = "";
-	#
-	$eLine=$_;
-#	print "eLine=".$eLine;
-	@LSL=split("", $eLine);
-	$nbChar=scalar(@LSL);
-	if ($LSL[0] ne "!")
-	{
-	    $RetLine=$eLine;
-	}
-	else
-	{
-	    if ($LSL[1] ne "/")
-	    {
-		$RetLine=$eLine;
-	    }
-	    else
-	    {
-		$eSwitch="";
-		$pos=2;
-		while(1)
-		{
-		    $eChar=$LSL[$pos];
-		    if ($eChar eq " ")
-		    {
-			$posFirst=$pos;
-			last;
-		    }
-		    if ($pos eq $nbChar-1)
-		    {
-			last;
-		    }
-		    $eSwitch=$eSwitch.$eChar;
-		    $pos++;
-		}
-#		print "eSwitch=".$eSwitch."\n";
-		$WeMatch=0;
-		for ($iSwitch=1; $iSwitch<=scalar(@Lswitch); $iSwitch++)
-		{
-		    if ($Lswitch[$iSwitch-1] eq $eSwitch)
-		    {
-			$WeMatch=1;
-		    }
-		}
-#		print "WeMatch=".$WeMatch."\n";
-		if ($WeMatch == 1)
-		{
-		    $RetLine="";
-		    for ($ipos=$posFirst; $ipos<$nbChar; $ipos++)
-		    {
-			$RetLine=$RetLine.$LSL[$ipos];
-		    }
-		}
-		else
-		{
-		    $RetLine=$eLine;
-		}
-	    }
-	}
-#	print "RetLine=".$RetLine;
-	$_=$RetLine;
         # look for Fortran style includes
         if (/^\s*include\s*['"]([^"']*)["']/i) {
             $included = $1;
@@ -365,7 +283,7 @@ sub find_includes {
         } elsif (/^\s*use\s+(\w+)/i) {
 	    # Gavin Salam attempt at dealing with multiple uses on one line
 	    # remove trailing comments (do not take uses after a comment!)
-#	    s/\!.*//;
+	    s/\!.*//;
 	    # try and get multiple use commands
 	    my @commands = split(';',$_);
 	    while (my $command = shift @commands) {
