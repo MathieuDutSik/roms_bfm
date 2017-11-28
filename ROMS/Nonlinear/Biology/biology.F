@@ -129,6 +129,8 @@
 #  include <npzd_Powell.h>
 # elif defined RED_TIDE
 #  include <red_tide.h>
+# elif defined BFM
+#  include <bfm.h>
 # endif
 
 #endif

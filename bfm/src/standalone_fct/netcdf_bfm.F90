@@ -507,10 +507,10 @@
    call check_err(NF90_DEF_VAR(ncid_rst,'D2STATE_BEN_NAME',NF90_CHAR,(/chars_rdim, d2vars_rdim_ben/),d2state_name_rid_ben), fname)
    call check_err(NF90_DEF_VAR(ncid_rst,'D2STATE_BEN_UNITS',NF90_CHAR,(/chars_rdim, d2vars_rdim_ben/),d2state_units_rid_ben), fname)
    call check_err(NF90_DEF_VAR(ncid_rst,'D2STATE_BEN_LONG',NF90_CHAR,(/chars_rdim, d2vars_rdim_ben/),d2state_long_rid_ben), fname)
-#ifdef BFM_POM
+# ifdef BFM_POM
    call check_err(NF90_DEF_VAR(ncid_rst,'D2STATEB_BEN',NF90_DOUBLE,dims,d2stateb_rid_ben), fname)
    if (nc_compres) call check_err(NF90_DEF_VAR_DEFLATE(ncid_rst,d2stateb_rid_ben,nc_shuffle,nc_deflate,nc_defllev))
-#endif
+# endif
 #endif
 
    DEALLOCATE(dims)

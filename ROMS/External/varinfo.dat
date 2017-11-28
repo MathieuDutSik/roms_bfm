@@ -3217,6 +3217,397 @@
   1.0d0
 
 !
+!  Variables in BFM
+!
+
+'bacteria'                                         ! Input/Output
+  'aerobic and anaerobic bacteria'
+  'milligram meter-3'                              ! [mg/m3]
+  'Bacteria, scalar, series'
+  'ocean_time'
+  'idTvar(iB1c_)'
+  'r3dvar'
+  1.0d0
+
+'diatoms_c'                                        ! Input/Output
+  'diatoms carbon'
+  'milligram meter-3'                              ! [mg/m3]
+  'Diatoms, scalar, series'
+  'ocean_time'
+  'idTvar(iP1c_)'
+  'r3dvar'
+  1.0d0
+
+'diatoms_n'                                        ! Input/Output
+  'diatoms nitrogen'
+  'millimole meter-3'                              ! [millimole/m3]
+  'Diatoms, scalar, series'
+  'ocean_time'
+  'idTvar(iP1n_)'
+  'r3dvar'
+  1.0d0
+
+'diatoms_p'                                        ! Input/Output
+  'diatoms phosphate'
+  'millimole meter-3'                              ! [millimole/m3]
+  'Diatoms, scalar, series'
+  'ocean_time'
+  'idTvar(iP1p_)'
+  'r3dvar'
+  1.0d0
+
+'diatoms_l'                                        ! Input/Output
+  'diatoms chlorophyl'
+  'milligram meter-3'                              ! [mg/m3]
+  'Diatoms, scalar, series'
+  'ocean_time'
+  'idTvar(iP1l_)'
+  'r3dvar'
+  1.0d0
+
+'diatoms_s'                                        ! Input/Output
+  'diatoms silicate'
+  'millimole meter-3'                              ! [millimole/m3]
+  'Diatoms, scalar, series'
+  'ocean_time'
+  'idTvar(iP1s_)'
+  'r3dvar'
+  1.0d0
+
+'flagellates_c'                                    ! Input/Output
+  'flagellates carbon'
+  'milligram meter-3'                              ! [mg/m3]
+  'Flagellates, scalar, series'
+  'ocean_time'
+  'idTvar(iP2c_)'
+  'r3dvar'
+  1.0d0
+
+'flagellates_n'                                    ! Input/Output
+  'flagellates nitrogen'
+  'millimole meter-3'                              ! [millimole/m3]
+  'Flagellates, scalar, series'
+  'ocean_time'
+  'idTvar(iP2n_)'
+  'r3dvar'
+  1.0d0
+
+'flagellates_p'                                    ! Input/Output
+  'flagellates phosphate'
+  'millimole meter-3'                              ! [millimole/m3]
+  'Flagellates, scalar, series'
+  'ocean_time'
+  'idTvar(iP2p_)'
+  'r3dvar'
+  1.0d0
+
+'flagellates_l'                                    ! Input/Output
+  'flagellates chlorophyl'
+  'milligram meter-3'                              ! [mg/m3]
+  'Flagellates, scalar, series'
+  'ocean_time'
+  'idTvar(iP2l_)'
+  'r3dvar'
+  1.0d0
+
+'picophytoplankton_c'                              ! Input/Output
+  'picophytoplankton carbon'
+  'milligram meter-3'                              ! [mg/m3]
+  'PicoPhytoplankton, scalar, series'
+  'ocean_time'
+  'idTvar(iP3c_)'
+  'r3dvar'
+  1.0d0
+
+'picophytoplankton_n'                              ! Input/Output
+  'picophytoplankton nitrogen'
+  'millimole meter-3'                              ! [millimole/m3]
+  'PicoPhytoplankton, scalar, series'
+  'ocean_time'
+  'idTvar(iP3n_)'
+  'r3dvar'
+  1.0d0
+
+'picophytoplankton_p'                              ! Input/Output
+  'picophytoplankton phosphate'
+  'millimole meter-3'                              ! [millimole/m3]
+  'PicoPhytoplankton, scalar, series'
+  'ocean_time'
+  'idTvar(iP3p_)'
+  'r3dvar'
+  1.0d0
+
+'picophytoplankton_l'                              ! Input/Output
+  'picophytoplankton chlorophyl'
+  'milligram meter-3'                              ! [mg/m3]
+  'PicoPhytoplankton, scalar, series'
+  'ocean_time'
+  'idTvar(iP3l_)'
+  'r3dvar'
+  1.0d0
+
+'largephytoplankton_c'                             ! Input/Output
+  'largephytoplankton carbon'
+  'milligram meter-3'                              ! [mg/m3]
+  'LargePhytoplankton, scalar, series'
+  'ocean_time'
+  'idTvar(iP4c_)'
+  'r3dvar'
+  1.0d0
+
+'largephytoplankton_n'                             ! Input/Output
+  'largephytoplankton nitrogen'
+  'millimole meter-3'                              ! [millimole/m3]
+  'LargePhytoplankton, scalar, series'
+  'ocean_time'
+  'idTvar(iP4n_)'
+  'r3dvar'
+  1.0d0
+
+'largephytoplankton_p'                             ! Input/Output
+  'largephytoplankton chlorophyl'
+  'millimole meter-3'                              ! [millimole/m3]
+  'LargePhytoplankton, scalar, series'
+  'ocean_time'
+  'idTvar(iP4p_)'
+  'r3dvar'
+  1.0d0
+
+'largephytoplankton_l'                             ! Input/Output
+  'largephytoplankton chlorophyl'
+  'milligram meter-3'                              ! [mg/m3]
+  'LargePhytoplankton, scalar, series'
+  'ocean_time'
+  'idTvar(iP4l_)'
+  'r3dvar'
+  1.0d0
+
+'CarnPlankton'                                     ! Input/Output
+  'Carnivorous Mesozooplankton'
+  'milligram meter-3'                              ! [mg/m3]
+  'CarnPlankton, scalar, series'
+  'ocean_time'
+  'idTvar(iZ3c_)'
+  'r3dvar'
+  1.0d0
+
+'OmniPlankton'                                     ! Input/Output
+  'Omnivorous Mesozooplankton'
+  'milligram meter-3'                              ! [mg/m3]
+  'OmniPlankton, scalar, series'
+  'ocean_time'
+  'idTvar(iZ4c_)'
+  'r3dvar'
+  1.0d0
+
+'MicroPlankton'                                    ! Input/Output
+  'Microzooplankton'
+  'milligram meter-3'                              ! [mg/m3]
+  'MicroPlankton, scalar, series'
+  'ocean_time'
+  'idTvar(iZ5c_)'
+  'r3dvar'
+  1.0d0
+
+'HeteroNanoflagelattes'                            ! Input/Output
+  'Heterotrophic Nanoflagellates (HNAN)'
+  'milligram meter-3'                              ! [mg/m3]
+  'HeteroFlagellate, scalar, series'
+  'ocean_time'
+  'idTvar(iZ6c_)'
+  'r3dvar'
+  1.0d0
+
+'LabileDOM_c'                                      ! Input/Output
+  'Labile Dissolved Organic Matter (Carbon)'
+  'milligram meter-3'                              ! [mg/m3]
+  'LabileDOM, scalar, series'
+  'ocean_time'
+  'idTvar(iR1c_)'
+  'r3dvar'
+  1.0d0
+
+'LabileDOM_n'                                      ! Input/Output
+  'Labile Dissolved Organic Matter (Nitrogen)'
+  'millimole meter-3'                              ! [millimole/m3]
+  'LabileDOM, scalar, series'
+  'ocean_time'
+  'idTvar(iR1n_)'
+  'r3dvar'
+  1.0d0
+
+'LabileDOM_p'                                      ! Input/Output
+  'Labile Dissolved Organic Matter (Phosphate)'
+  'millimole meter-3'                              ! [millimole/m3]
+  'LabileDOM, scalar, series'
+  'ocean_time'
+  'idTvar(iR1p_)'
+  'r3dvar'
+  1.0d0
+
+'LabileDOM_c'                                      ! Input/Output
+  'Semi-labile Dissolved Organic Carbon'
+  'milligram meter-3'                              ! [mg/m3]
+  'SemiLabile, scalar, series'
+  'ocean_time'
+  'idTvar(iR2c_)'
+  'r3dvar'
+  1.0d0
+
+'ParticleOM_c'                                     ! Input/Output
+  'Particle Organic Matter (Carbon)'
+  'milligram meter-3'                              ! [mg/m3]
+  'ParticleOM, scalar, series'
+  'ocean_time'
+  'idTvar(iR6c_)'
+  'r3dvar'
+  1.0d0
+
+'ParticleOM_n'                                     ! Input/Output
+  'Particle Organic Matter (Nitrogen)'
+  'millimole meter-3'                              ! [millimole/m3]
+  'ParticleOM, scalar, series'
+  'ocean_time'
+  'idTvar(iR6n_)'
+  'r3dvar'
+  1.0d0
+
+'ParticleOM_p'                                     ! Input/Output
+  'Particle Organic Matter (Phosphate)'
+  'millimole meter-3'                              ! [millimole/m3]
+  'ParticleOM, scalar, series'
+  'ocean_time'
+  'idTvar(iR6p_)'
+  'r3dvar'
+  1.0d0
+
+'ParticleOM_s'                                     ! Input/Output
+  'Particle Organic Matter (Silicate)'
+  'millimole meter-3'                              ! [millimole/m3]
+  'ParticleOM, scalar, series'
+  'ocean_time'
+  'idTvar(iR6s_)'
+  'r3dvar'
+  1.0d0
+
+'Irradiance'                                       ! Input/Output
+  'Irradiance'
+  'uE meter-2 second-1'                            ! [uE/m2/s]
+  'irrad, scalar, series'
+  'ocean_time'
+  'idTvar(iEIR_)'
+  'r3dvar'
+  1.0d0
+
+'DissolvedIC'                                      ! Input/Output
+  'Dissolved Inorganic Carbon'
+  'umol kilogram-1'                                ! [umol/kg]
+  'dic, scalar, series'
+  'ocean_time'
+  'idTvar(iDIC_)'
+  'r3dvar'
+  1.0d0
+
+'ExtinctionCoeff'                                  ! Input/Output
+  'Total Extinction Coefficient'
+  'meter-1'                                        ! [1/m]
+  'tec, scalar, series'
+  'ocean_time'
+  'idTvar(ixEPS)'
+  'r3dvar'
+  1.0d0
+
+'NetProductionP1'                                  ! Input/Output
+  'Specific Net Production of P1(Phytoplankton)'
+  'd-1'                                            ! [1/d]
+  'netproduction, scalar, series'
+  'ocean_time'
+  'idTvar(siP1_)'
+  'r3dvar'
+  1.0d0
+
+'NetProductionP2'                                  ! Input/Output
+  'Specific Net Production of P2(Phytoplankton)'
+  'd-1'                                            ! [1/d]
+  'netproduction, scalar, series'
+  'ocean_time'
+  'idTvar(siP2_)'
+  'r3dvar'
+  1.0d0
+
+'NetProductionP3'                                  ! Input/Output
+  'Specific Net Production of P3(Phytoplankton)'
+  'd-1'                                            ! [1/d]
+  'netproduction, scalar, series'
+  'ocean_time'
+  'idTvar(siP3_)'
+  'r3dvar'
+  1.0d0
+
+'NetProductionP4'                                  ! Input/Output
+  'Specific Net Production of P4(Phytoplankton)'
+  'd-1'                                            ! [1/d]
+  'netproduction, scalar, series'
+  'ocean_time'
+  'idTvar(siP4_)'
+  'r3dvar'
+  1.0d0
+
+'RegFactorP1'                                      ! Input/Output
+  'Regular Factor for Light in P1(Phytoplankton)'
+  'nondim'                                         ! [1]
+  'regfactor, scalar, series'
+  'ocean_time'
+  'idTvar(eiP1_)'
+  'r3dvar'
+  1.0d0
+
+'RegFactorP2'                                      ! Input/Output
+  'Regular Factor for Light in P2(Phytoplankton)'
+  'nondim'                                         ! [1]
+  'regfactor, scalar, series'
+  'ocean_time'
+  'idTvar(eiP2_)'
+  'r3dvar'
+  1.0d0
+
+'RegFactorP3'                                      ! Input/Output
+  'Regular Factor for Light in P3(Phytoplankton)'
+  'nondim'                                         ! [1]
+  'regfactor, scalar, series'
+  'ocean_time'
+  'idTvar(eiP3_)'
+  'r3dvar'
+  1.0d0
+
+'RegFactorP4'                                      ! Input/Output
+  'Regular Factor for Light in P4(Phytoplankton)'
+  'nondim'                                         ! [1]
+  'regfactor, scalar, series'
+  'ocean_time'
+  'idTvar(eiP4_)'
+  'r3dvar'
+  1.0d0
+
+'GrossPP'                                          ! Input/Output
+  'Gross Primary Production'
+  'milligram meter-3 d-1'                          ! [mg/m3/d]
+  'production, scalar, series'
+  'ocean_time'
+  'idTvar(ruPTc)'
+  'r3dvar'
+  1.0d0
+
+'SecondPP'                                         ! Input/Output
+  'Second Primary Production'
+  'milligram meter-3 d-1'                          ! [mg/m3/d]
+  'production, scalar, series'
+  'ocean_time'
+  'idTvar(ruZTc)'
+  'r3dvar'
+  1.0d0
+
+!
 !  Diagnostic variables.
 !
 
