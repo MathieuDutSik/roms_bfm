@@ -2860,6 +2860,8 @@
 #  include <ecosim_def.h>
 # elif defined HYPOXIA_SRM
 #  include <hypoxia_srm_def.h>
+# elif defined BFM
+#  include <bfm_def.h>
 # elif defined NEMURO
 #  include <nemuro_def.h>
 # elif defined NPZD_FRANKS

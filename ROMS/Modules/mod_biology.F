@@ -112,6 +112,8 @@
 #  include <ecosim_mod.h>
 # elif defined HYPOXIA_SRM
 #  include <hypoxia_srm_mod.h>
+# elif defined BFM
+#  include <bfm_mod.h>
 # elif defined NEMURO
 #  include <nemuro_mod.h>
 # elif defined NPZD_FRANKS

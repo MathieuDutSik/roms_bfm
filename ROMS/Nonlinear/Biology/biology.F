@@ -119,6 +119,8 @@
 #  include <ecosim.h>
 # elif defined HYPOXIA_SRM
 #  include <hypoxia_srm.h>
+# elif defined BFM
+#  include <bfm.h>
 # elif defined NEMURO
 #  include <nemuro.h>
 # elif defined NPZD_FRANKS
@@ -129,8 +131,6 @@
 #  include <npzd_Powell.h>
 # elif defined RED_TIDE
 #  include <red_tide.h>
-# elif defined BFM
-#  include <bfm.h>
 # endif
 
 #endif
