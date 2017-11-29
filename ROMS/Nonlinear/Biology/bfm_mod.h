@@ -73,10 +73,15 @@
 !
 !  Biological parameters.
 !
-      integer, allocatable :: BioIter(:)
-
-      real(r8), allocatable :: ResRate(:)   ! repiration rate (1/day)
-
+      TYPE ARRAY_WET
+      integer Nwetpoint
+      integer, allocatable :: ListI(:)
+      integer, allocatable :: ListJ(:)
+      END TYPE ARRAY_WET
+!
+      integer, allocatable :: NO_BOXES_Z(:), NO_BOXES_XY(:), NO_BOXES(:)
+      ARRAY_WET, allocatable :: ListArrayWet(:)
+      
       CONTAINS
 
       SUBROUTINE initialize_biology
@@ -96,7 +101,7 @@
 !  Set number of biological tracers.
 !-----------------------------------------------------------------------
 !
-      NBT=1
+      NBT=48
 
 #if defined DIAGNOSTICS && defined DIAGNOSTICS_BIO
 !
@@ -106,12 +111,11 @@
 !
 !  Set number of diagnostics terms.
 !
-      NDbio2d=1
+      NDbio2d=0
       NDbio3d=0
 !
 !  Initialize biology diagnostic indices.
 !
-      iO2fx=1
 #endif
 !
 !-----------------------------------------------------------------------
