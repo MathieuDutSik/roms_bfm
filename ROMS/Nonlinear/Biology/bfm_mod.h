@@ -68,7 +68,7 @@
       integer :: iR6s_                  ! 48:
       integer :: iO3c_                  ! 49:
       integer :: iO3h_                  ! 50:
-      integer :: iEIR_                  !
+      integer :: iEIR_                  ! 
       integer :: iDIC_                  !
       integer :: iChlo                  !
       integer :: siP1_                  !
@@ -81,6 +81,7 @@
       integer :: eiP4_                  !
       integer :: ruPTc                  !
       integer :: ruZTc                  !
+      integer :: ixEPS                  !
 !
 !  Biological parameters.
 !
@@ -91,7 +92,7 @@
       END TYPE ARRAY_WET
 !
       integer, allocatable :: NO_BOXES_Z(:), NO_BOXES_XY(:), NO_BOXES(:)
-      ARRAY_WET, allocatable :: ListArrayWet(:)
+      type(ARRAY_WET), allocatable :: ListArrayWet(:)
       
       CONTAINS
 
@@ -216,6 +217,7 @@
       eiP4_ = ic+61
       ruPTc = ic+62
       ruZTc = ic+63
+      ixEPS = ic+64
 
       RETURN
       END SUBROUTINE initialize_biology
