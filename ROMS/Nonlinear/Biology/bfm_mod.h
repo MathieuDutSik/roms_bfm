@@ -6,11 +6,7 @@
 !    See License_ROMS.txt                                              !
 !=======================================================================
 !                                                                      !
-!  Parameters for Hypoxia Simple Respiration Model:                    !
-!                                                                      !
-!  BioIter        Maximum number of iterations to achieve convergence  !
-!                   of the nonlinear solution.                         !
-!  ResRate        Total biological respiration rate (1/day).           !
+!  Parameters for BFM model:                                           !
 !                                                                      !
 !=======================================================================
 !
@@ -63,7 +59,7 @@
       integer :: iZ6p_                  ! 39:
       integer :: iR1c_                  ! 40:
       integer :: iR1n_                  ! 41:
-      integer :: iP1p_                  ! 42:
+      integer :: iR1p_                  ! 42:
       integer :: iR2c_                  ! 43:
       integer :: iR3c_                  ! 44:
       integer :: iR6c_                  ! 45:
@@ -133,17 +129,6 @@
 !
 #endif
 !
-!-----------------------------------------------------------------------
-!  Allocate various module variables.
-!-----------------------------------------------------------------------
-!
-      IF (.not.allocated(BioIter)) THEN
-        allocate ( BioIter(Ngrids) )
-      END IF
-
-      IF (.not.allocated(ResRate)) THEN
-        allocate ( ResRate(Ngrids) )
-      END IF
 !
 !  Allocate biological tracer vector.
 !
