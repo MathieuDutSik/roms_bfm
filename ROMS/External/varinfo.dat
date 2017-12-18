@@ -3220,12 +3220,48 @@
 !  Variables in BFM
 !
 
-'bacteria'                                         ! Input/Output
+'NitrogenSink'                                     ! Input/Output
   'aerobic and anaerobic bacteria'
+  'millimole meter-3'                              ! [millimole/m3]
+  'NitrogenSink, scalar, series'
+  'ocean_time'
+  'idTvar(iO4n_)'
+  'r3dvar'
+  1.0d0
+
+'ReductionEquivalent'                              ! Input/Output
+  'reduction equivalent'
+  'millimole meter-3'                              ! [millimole/m3]
+  'ReductionEquivalent, scalar, series'
+  'ocean_time'
+  'idTvar(iN6r_)'
+  'r3dvar'
+  1.0d0
+
+'bacteria_c'                                         ! Input/Output
+  'aerobic and anaerobic bacteria(C)'
   'milligram meter-3'                              ! [mg/m3]
   'Bacteria, scalar, series'
   'ocean_time'
   'idTvar(iB1c_)'
+  'r3dvar'
+  1.0d0
+
+'bacteria_n'                                       ! Input/Output
+  'aerobic and anaerobic bacteria(N)'
+  'milligram meter-3'                              ! [mg/m3]
+  'Bacteria, scalar, series'
+  'ocean_time'
+  'idTvar(iB1n_)'
+  'r3dvar'
+  1.0d0
+
+'bacteria_p'                                       ! Input/Output
+  'aerobic and anaerobic bacteria(P)'
+  'milligram meter-3'                              ! [mg/m3]
+  'Bacteria, scalar, series'
+  'ocean_time'
+  'idTvar(iB1p_)'
   'r3dvar'
   1.0d0
 
@@ -3382,8 +3418,8 @@
   'r3dvar'
   1.0d0
 
-'CarnPlankton'                                     ! Input/Output
-  'Carnivorous Mesozooplankton'
+'CarnPlankton_c'                                   ! Input/Output
+  'Carnivorous Mesozooplankton(C)'
   'milligram meter-3'                              ! [mg/m3]
   'CarnPlankton, scalar, series'
   'ocean_time'
@@ -3391,8 +3427,26 @@
   'r3dvar'
   1.0d0
 
-'OmniPlankton'                                     ! Input/Output
-  'Omnivorous Mesozooplankton'
+'CarnPlankton_n'                                   ! Input/Output
+  'Carnivorous Mesozooplankton(N)'
+  'milligram meter-3'                              ! [mg/m3]
+  'CarnPlankton, scalar, series'
+  'ocean_time'
+  'idTvar(iZ3n_)'
+  'r3dvar'
+  1.0d0
+
+'CarnPlankton_p'                                   ! Input/Output
+  'Carnivorous Mesozooplankton(P)'
+  'milligram meter-3'                              ! [mg/m3]
+  'CarnPlankton, scalar, series'
+  'ocean_time'
+  'idTvar(iZ3p_)'
+  'r3dvar'
+  1.0d0
+
+'OmniPlankton_c'                                   ! Input/Output
+  'Omnivorous Mesozooplankton(C)'
   'milligram meter-3'                              ! [mg/m3]
   'OmniPlankton, scalar, series'
   'ocean_time'
@@ -3400,8 +3454,26 @@
   'r3dvar'
   1.0d0
 
-'MicroPlankton'                                    ! Input/Output
-  'Microzooplankton'
+'OmniPlankton_n'                                   ! Input/Output
+  'Omnivorous Mesozooplankton(N)'
+  'milligram meter-3'                              ! [mg/m3]
+  'OmniPlankton, scalar, series'
+  'ocean_time'
+  'idTvar(iZ4n_)'
+  'r3dvar'
+  1.0d0
+
+'OmniPlankton_p'                                   ! Input/Output
+  'Omnivorous Mesozooplankton(P)'
+  'milligram meter-3'                              ! [mg/m3]
+  'OmniPlankton, scalar, series'
+  'ocean_time'
+  'idTvar(iZ4p_)'
+  'r3dvar'
+  1.0d0
+
+'MicroPlankton_c'                                  ! Input/Output
+  'Microzooplankton(C)'
   'milligram meter-3'                              ! [mg/m3]
   'MicroPlankton, scalar, series'
   'ocean_time'
@@ -3409,12 +3481,48 @@
   'r3dvar'
   1.0d0
 
-'HeteroNanoflagelattes'                            ! Input/Output
-  'Heterotrophic Nanoflagellates (HNAN)'
+'MicroPlankton_n'                                  ! Input/Output
+  'Microzooplankton(N)'
+  'milligram meter-3'                              ! [mg/m3]
+  'MicroPlankton, scalar, series'
+  'ocean_time'
+  'idTvar(iZ5n_)'
+  'r3dvar'
+  1.0d0
+
+'MicroPlankton_p'                                  ! Input/Output
+  'Microzooplankton(P)'
+  'milligram meter-3'                              ! [mg/m3]
+  'MicroPlankton, scalar, series'
+  'ocean_time'
+  'idTvar(iZ5p_)'
+  'r3dvar'
+  1.0d0
+
+'HeteroNanoflagelattes_c'                          ! Input/Output
+  'Heterotrophic Nanoflagellates (HNAN) C'
   'milligram meter-3'                              ! [mg/m3]
   'HeteroFlagellate, scalar, series'
   'ocean_time'
   'idTvar(iZ6c_)'
+  'r3dvar'
+  1.0d0
+
+'HeteroNanoflagelattes_n'                          ! Input/Output
+  'Heterotrophic Nanoflagellates (HNAN) N'
+  'milligram meter-3'                              ! [mg/m3]
+  'HeteroFlagellate, scalar, series'
+  'ocean_time'
+  'idTvar(iZ6n_)'
+  'r3dvar'
+  1.0d0
+
+'HeteroNanoflagelattes_p'                          ! Input/Output
+  'Heterotrophic Nanoflagellates (HNAN) P'
+  'milligram meter-3'                              ! [mg/m3]
+  'HeteroFlagellate, scalar, series'
+  'ocean_time'
+  'idTvar(iZ6p_)'
   'r3dvar'
   1.0d0
 
@@ -3454,6 +3562,15 @@
   'r3dvar'
   1.0d0
 
+'RefractoryDOM_c'                                  ! Input/Output
+  'Semi-refractory Dissolved Organic Carbon'
+  'milligram meter-3'                              ! [mg/m3]
+  'SemiLabile, scalar, series'
+  'ocean_time'
+  'idTvar(iR3c_)'
+  'r3dvar'
+  1.0d0
+
 'ParticleOM_c'                                     ! Input/Output
   'Particle Organic Matter (Carbon)'
   'milligram meter-3'                              ! [mg/m3]
@@ -3487,6 +3604,24 @@
   'ParticleOM, scalar, series'
   'ocean_time'
   'idTvar(iR6s_)'
+  'r3dvar'
+  1.0d0
+
+'DissolvedIC_c'                                    ! Input/Output
+  'Dissolved Inorganic Carbon C'
+  'milligram meter-3'                              ! [mg/m3]
+  'DissolvedIC, scalar, series'
+  'ocean_time'
+  'idTvar(iO3c_)'
+  'r3dvar'
+  1.0d0
+
+'DissolvedIC_h'                                    ! Input/Output
+  'Dissolved Inorganic Carbon H'
+  'millimole meter-3'                              ! [millimole/m3]
+  'DissolvedIC, scalar, series'
+  'ocean_time'
+  'idTvar(iO3h_)'
   'r3dvar'
   1.0d0
 

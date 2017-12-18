@@ -22,41 +22,56 @@
 !
       integer, allocatable :: idbio(:)  ! Biological tracers
 
-      integer :: iOxyg                  ! Dissolved oxygen concentration
-      integer :: iPO4_                  ! Phosphate
-      integer :: iNO3_                  ! Nitrate
-      integer :: iNH4_                  ! Ammonium
-      integer :: iSiOH                  ! Silicate
-      integer :: iB1c_                  ! Aerobic or anaerobic bacteria
-      integer :: iP1c_                  !
-      integer :: iP1n_                  !
-      integer :: iP1p_                  !
-      integer :: iP1l_                  !
-      integer :: iP1s_                  !
-      integer :: iP2c_                  !
-      integer :: iP2n_                  !
-      integer :: iP2p_                  !
-      integer :: iP2l_                  !
-      integer :: iP3c_                  !
-      integer :: iP3n_                  !
-      integer :: iP3p_                  !
-      integer :: iP3l_                  !
-      integer :: iP4c_                  !
-      integer :: iP4n_                  !
-      integer :: iP4p_                  !
-      integer :: iP4l_                  !
-      integer :: iZ3c_                  !
-      integer :: iZ4c_                  !
-      integer :: iZ5c_                  !
-      integer :: iZ6c_                  !
-      integer :: iR1c_                  !
-      integer :: iR1n_                  !
-      integer :: iP1p_                  !
-      integer :: iR2c_                  !
-      integer :: iR6c_                  !
-      integer :: iR6n_                  !
-      integer :: iR6p_                  !
-      integer :: iR6s_                  !
+      integer :: iOxyg                  !  1: Dissolved oxygen concentration
+      integer :: iPO4_                  !  2: Phosphate
+      integer :: iNO3_                  !  3: Nitrate
+      integer :: iNH4_                  !  4: Ammonium
+      integer :: iO4n_                  !  5: 
+      integer :: iSiOH                  !  6: Silicate
+      integer :: iN6r_                  !  7:
+      integer :: iB1c_                  !  8: Aerobic or anaerobic bacteria
+      integer :: iB1n_                  !  9:
+      integer :: iB1p_                  ! 10:
+      integer :: iP1c_                  ! 11:
+      integer :: iP1n_                  ! 12:
+      integer :: iP1p_                  ! 13: 
+      integer :: iP1l_                  ! 14:
+      integer :: iP1s_                  ! 15: 
+      integer :: iP2c_                  ! 16:
+      integer :: iP2n_                  ! 17:
+      integer :: iP2p_                  ! 18:
+      integer :: iP2l_                  ! 19:
+      integer :: iP3c_                  ! 20:
+      integer :: iP3n_                  ! 21:
+      integer :: iP3p_                  ! 22:
+      integer :: iP3l_                  ! 23:
+      integer :: iP4c_                  ! 24: 
+      integer :: iP4n_                  ! 25:
+      integer :: iP4p_                  ! 26:
+      integer :: iP4l_                  ! 27: 
+      integer :: iZ3c_                  ! 28:
+      integer :: iZ3n_                  ! 29:
+      integer :: iZ3p_                  ! 30:
+      integer :: iZ4c_                  ! 31:
+      integer :: iZ4n_                  ! 32:
+      integer :: iZ4p_                  ! 33:
+      integer :: iZ5c_                  ! 34:
+      integer :: iZ5n_                  ! 35:
+      integer :: iZ5p_                  ! 36:
+      integer :: iZ6c_                  ! 37:
+      integer :: iZ6n_                  ! 38:
+      integer :: iZ6p_                  ! 39:
+      integer :: iR1c_                  ! 40:
+      integer :: iR1n_                  ! 41:
+      integer :: iP1p_                  ! 42:
+      integer :: iR2c_                  ! 43:
+      integer :: iR3c_                  ! 44:
+      integer :: iR6c_                  ! 45:
+      integer :: iR6n_                  ! 46:
+      integer :: iR6p_                  ! 47:
+      integer :: iR6s_                  ! 48:
+      integer :: iO3c_                  ! 49:
+      integer :: iO3h_                  ! 50:
       integer :: iEIR_                  !
       integer :: iDIC_                  !
       integer :: iChlo                  !
@@ -157,50 +172,65 @@
       iPO4_ = ic+2
       iNO3_ = ic+3
       iNH4_ = ic+4
-      iSiOH = ic+5
-      iB1c_ = ic+6
-      iP1c_ = ic+7
-      iP1n_ = ic+8
-      iP1p_ = ic+9
-      iP1l_ = ic+10
-      iP1s_ = ic+11
-      iP2c_ = ic+12
-      iP2n_ = ic+13
-      iP2p_ = ic+14
-      iP2l_ = ic+15
-      iP3c_ = ic+16
-      iP3n_ = ic+17
-      iP3p_ = ic+18
-      iP3l_ = ic+19
-      iP4c_ = ic+20
-      iP4n_ = ic+21
-      iP4p_ = ic+22
-      iP4l_ = ic+23
-      iZ3c_ = ic+24
-      iZ4c_ = ic+25
-      iZ5c_ = ic+26
-      iZ6c_ = ic+27
-      iR1c_ = ic+28
-      iR1n_ = ic+29
-      iP1p_ = ic+30
-      iR2c_ = ic+31
-      iR6c_ = ic+32
-      iR6n_ = ic+33
-      iR6p_ = ic+34
-      iR6s_ = ic+35
-      iEIR_ = ic+36
-      iDIC_ = ic+37
-      iChlo = ic+38
-      siP1_ = ic+39
-      siP2_ = ic+40
-      siP3_ = ic+41
-      siP4_ = ic+42
-      eiP1_ = ic+43
-      eiP2_ = ic+44
-      eiP3_ = ic+45
-      eiP4_ = ic+46
-      ruPTc = ic+47
-      ruZTc = ic+48
+      iO4n_ = ic+5
+      iSiOH = ic+6
+      iN6r_ = ic+7
+      iB1c_ = ic+8
+      iB1n_ = ic+9
+      iB1p_ = ic+10
+      iP1c_ = ic+11
+      iP1n_ = ic+12
+      iP1p_ = ic+13
+      iP1l_ = ic+14
+      iP1s_ = ic+15
+      iP2c_ = ic+16
+      iP2n_ = ic+17
+      iP2p_ = ic+18
+      iP2l_ = ic+19
+      iP3c_ = ic+20
+      iP3n_ = ic+21
+      iP3p_ = ic+22
+      iP3l_ = ic+23
+      iP4c_ = ic+24
+      iP4n_ = ic+25
+      iP4p_ = ic+26
+      iP4l_ = ic+27
+      iZ3c_ = ic+28
+      iZ3n_ = ic+29
+      iZ3p_ = ic+30
+      iZ4c_ = ic+31
+      iZ4n_ = ic+32
+      iZ4p_ = ic+33
+      iZ5c_ = ic+34
+      iZ5n_ = ic+35
+      iZ5p_ = ic+36
+      iZ6c_ = ic+37
+      iZ6n_ = ic+38
+      iZ6p_ = ic+39
+      iR1c_ = ic+40
+      iR1n_ = ic+41
+      iR1p_ = ic+42
+      iR2c_ = ic+43
+      iR3c_ = ic+44
+      iR6c_ = ic+45
+      iR6n_ = ic+46
+      iR6p_ = ic+47
+      iR6s_ = ic+48
+      iO3c_ = ic+49
+      iO3h_ = ic+50
+      iEIR_ = ic+51
+      iDIC_ = ic+52
+      iChlo = ic+53
+      siP1_ = ic+54
+      siP2_ = ic+55
+      siP3_ = ic+56
+      siP4_ = ic+57
+      eiP1_ = ic+58
+      eiP2_ = ic+59
+      eiP3_ = ic+60
+      eiP4_ = ic+61
+      ruPTc = ic+62
+      ruZTc = ic+63
 
       RETURN
       END SUBROUTINE initialize_biology

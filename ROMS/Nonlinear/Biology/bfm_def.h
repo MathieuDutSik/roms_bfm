@@ -15,19 +15,19 @@
 !
 !  Define Hypoxia Simple Respiration Model parameters.
 !
-      Vinfo( 1)='BioIter'
-      Vinfo( 2)='number of iterations to achieve convergence'
-      status=def_var(ng, model, ncid, varid, nf90_int,                  &
-     &               1, (/0/), Aval, Vinfo, ncname,                     &
-     &               SetParAccess = .FALSE.)
-      IF (FoundError(exit_flag, NoError, __LINE__,                      &
-     &               __FILE__)) RETURN
+!      Vinfo( 1)='BioIter'
+!      Vinfo( 2)='number of iterations to achieve convergence'
+!      status=def_var(ng, model, ncid, varid, nf90_int,                  &
+!     &               1, (/0/), Aval, Vinfo, ncname,                     &
+!     &               SetParAccess = .FALSE.)
+!      IF (FoundError(exit_flag, NoError, __LINE__,                      &
+!     &               __FILE__)) RETURN
 
-      Vinfo( 1)='ResRate'
-      Vinfo( 2)='total biological respiration rate'
-      Vinfo( 3)='day-1'
-      status=def_var(ng, model, ncid, varid, NF_TYPE,                   &
-     &               1, (/0/), Aval, Vinfo, ncname,                     &
-     &               SetParAccess = .FALSE.)
-      IF (FoundError(exit_flag, NoError, __LINE__,                      &
-     &               __FILE__)) RETURN
+!      Vinfo( 1)='ResRate'
+!      Vinfo( 2)='total biological respiration rate'
+!      Vinfo( 3)='day-1'
+!      status=def_var(ng, model, ncid, varid, NF_TYPE,                   &
+!     &               1, (/0/), Aval, Vinfo, ncname,                     &
+!     &               SetParAccess = .FALSE.)
+!      IF (FoundError(exit_flag, NoError, __LINE__,                      &
+!     &               __FILE__)) RETURN

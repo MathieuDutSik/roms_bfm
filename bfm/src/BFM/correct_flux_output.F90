@@ -80,70 +80,31 @@ subroutine correct_flux_output(mode, nr0,zlev,nlev,out)
 #else
   real(RLEN),dimension(NO_BOXES)   :: hulp
 #endif
-
-
-  !EOP
-  !-----------------------------------------------------------------------
-  !BOC
-
-
-
   nr=nr0
-
   out(:) = D3FLUX_FUNC(nr0,:)
-
-  ! correcting for fluxes  to other systems along the diagonal (origin == destination)
   do idx_i=stPelStateS, stPelStateE
      origin      = idx_i
      destination = idx_i
-
      if( allocated( D3FLUX_MATRIX(origin,destination)%p ) ) then
-
         do idx_j=1, SIZE(D3FLUX_MATRIX(origin,destination)%p)
-
            if( ABS(D3FLUX_MATRIX(origin,destination)%p(idx_j)) .eq. nr0 ) then
-
-              ! write(*,*) " FUNC:  ", ABS(D3FLUX_MATRIX(origin,destination)%p(idx_j)), " Compo: ", origin 
               if( D3FLUX_MATRIX(origin,destination)%dir(idx_j) == 0  ) then ! "A->B" => (out flow) => flux < ZERO => D3SINK
-                 ! write(LOGUNIT,format1) "FUNC_SS0(", nr0 , ")->", out(BOTindices)/SEC_PER_DAY, &
-                 !     " PELBOTTOM (", origin, "): ", PELBOTTOM(origin,:)
-                 ! write(LOGUNIT,format1) "FUNC_SS0(", nr0 , ")->" ,out(BOTindices)/SEC_PER_DAY, &
-                 !     " PELSURFACE(", origin, "): ", PELSURFACE(origin,:)
                  out(BOTindices) = out(BOTindices) - &
                       SIGN( 1, D3FLUX_MATRIX(origin,destination)%p(idx_j) ) * &
                       max(ZERO, PELBOTTOM(origin,:)) / Depth(BOTindices)
                  out(SRFindices) = out(SRFindices) - &
                       SIGN( 1, D3FLUX_MATRIX(origin,destination)%p(idx_j) ) * &
                       max(ZERO, PELSURFACE(origin,:)) / Depth(SRFindices)
-                 ! write(LOGUNIT,format2) "FUNC_SS0(", nr0 , ")-> ", "BOT: ", out(BOTindices)/SEC_PER_DAY, &
-                 !     " -- SUR: ", out(SRFindices)/SEC_PER_DAY
               else ! "A<-B" => (in flow) => flux > ZERO => D3SOURCE
-                 ! write(LOGUNIT,format1) "FUNC_SS1(", nr0 , ")->", out(BOTindices)/SEC_PER_DAY, &
-                 !     " PELBOTTOM (", origin, "): ", PELBOTTOM(origin,:)
-                 ! write(LOGUNIT,format1) "FUNC_SS1(", nr0 , ")->" ,out(BOTindices)/SEC_PER_DAY, &
-                 !     " PELSURFACE(", origin, "): ", PELSURFACE(origin,:)
                  out(BOTindices) = out(BOTindices) + &
                       SIGN( 1, D3FLUX_MATRIX(origin,destination)%p(idx_j) ) * &
                       min(ZERO, PELBOTTOM(origin,:)) / Depth(BOTindices)
                  out(SRFindices) = out(SRFindices) + &
                       SIGN( 1, D3FLUX_MATRIX(origin,destination)%p(idx_j) ) * &
                       min(ZERO, PELSURFACE(origin,:)) / Depth(SRFindices)
-                 ! write(LOGUNIT,format2) "FUNC_SS1(", nr0 , ")-> ", "BOT: ", out(BOTindices)/SEC_PER_DAY, &
-                 !     " -- SUR: ", out(SRFindices)/SEC_PER_DAY
               endif
-
            end if
-
         end do
-
      end if
-
   end do
-
-
-
-  ! write(LOGUNIT,*) "-------CORRECT FLUX END--------------"
-  return
 end subroutine correct_flux_output
-!EOC
-!-----------------------------------------------------------------------
