@@ -1,0 +1,97 @@
+#!/usr/bin/perl -w
+use strict;
+use warnings;
+
+my $ePath="bfm_links";
+
+my $order="rm -rf ".$ePath;
+print $order."\n";
+system $order;
+
+
+$order="mkdir -p ".$ePath;
+print $order."\n";
+system $order;
+
+
+my $eDir1="../../bfm/src/BFM/";
+
+my @ListDir;
+my @ListPrefix;
+$ListDir[0]=$eDir1;
+$ListPrefix[0]="F90";
+
+for (my $iDir=0; $iDir<1; $iDir++)
+{
+    my $eDir=$ListDir[$iDir];
+    my $ePrefix=$ListPrefix[$iDir];
+    my $TmpFile="/tmp/LS";
+    $order="(cd ".$ePath." && ls ".$eDir."*.".$ePrefix." > ".$TmpFile.")";
+    print $order."\n";
+    system $order;
+    #
+    open(IN, $TmpFile);
+    my @B=<IN>;
+    close(IN);
+    #
+    my $nbFile=scalar(@B);
+    for (my $iFile=1; $iFile<=$nbFile; $iFile++)
+    {
+	$_=$B[$iFile-1];
+	s/\n//;
+	my $eFilePre=$_;
+	my @W=split("/", $eFilePre);
+	my $len=scalar(@W);
+	my $eFile=$W[$len-1];
+	my $IsOK;
+	if ($iDir == 1)
+	{
+	    if ($eFile ne "elfe_glbl.F90" && $eFile ne "elfe_msgp.F90" && $eFile ne "grid_subs.F90" && $eFile ne "io_subs.F90" && $eFile ne "misc_subs.F90" && $eFile ne "solver_subs.F90")
+	    {
+		$IsOK=1;
+	    }
+	    else
+	    {
+		$IsOK=0;
+	    }
+	}
+	else
+	{
+	    $IsOK=1;
+	}
+	print "eDir=".$eDir."  eFile=".$eFile." IsOK=".$IsOK."\n";
+	if ($IsOK == 1)
+	{
+	    print "iFile=".$iFile."/".$nbFile." eFile=".$eFile."\n";
+	    my $nbDot=0;
+	    my @U=split("", $eFile);
+	    my $ret="";
+	    for (my $iU=1; $iU<=scalar(@U); $iU++)
+	    {
+		my $eChar=$U[$iU-1];
+		if ($eChar eq ".")
+		{
+		    $nbDot++;
+		}
+		if ($nbDot eq 0)
+		{
+		    $ret=$ret.$eChar;
+		}
+	    }
+	    my $eFileNew=$ret.".F";
+	    my $eFileOld=$eDir.$eFile;
+	    $order="(cd ".$ePath." && ln -sf ".$eFileOld." ".$eFileNew.")";
+	    print $order."\n";
+	    system $order;
+	}
+	print "\n";
+    }
+}
+#
+$order="(cd ".$ePath." && ln -sf ../../../pgmcl/src/pgmcl_functions.h)";
+print $order."\n";
+system $order;
+#
+$order="cp BFM_Module.mk ".$ePath."/Module.mk";
+print $order."\n";
+system $order;

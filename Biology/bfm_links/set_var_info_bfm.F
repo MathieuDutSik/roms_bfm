@@ -1,0 +1,1 @@
+../../bfm/src/BFM/set_var_info_bfm.F90
