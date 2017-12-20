@@ -106,6 +106,16 @@
 #endif
 
 /*
+** Process BFM 
+*/
+
+#ifdef BFM
+  USE_BFM := on
+#else
+  USE_BFM :=
+#endif
+
+/*
 ** Process REFDIF wave model for coupling.
 */
 

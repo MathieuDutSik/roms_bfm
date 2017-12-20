@@ -444,6 +444,11 @@ ifdef USE_SWAN
  includes +=	Waves/SWAN/Src
 endif
 
+ifdef USE_BFM
+ modules  +=	Biology/bfm_links
+ includes +=	Biology/bfm_links
+endif
+
  modules  +=	Master
  includes +=	Master Compilers
 
