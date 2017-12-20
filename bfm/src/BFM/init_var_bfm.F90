@@ -24,7 +24,7 @@ MODULE init_var_bfm_local
      real(RLEN),dimension(:),intent(in)             :: c
      real(RLEN),intent(in),optional                 :: nc,pc,lc,sc,hc
      real(RLEN),dimension(:),intent(inout),optional :: n,p,l,s,h
-     real(RLEN)                                     :: nc_ratio,pc_ratio,lc_ratio,sc_ratio,hc_ratio
+     real(RLEN)   :: nc_ratio,pc_ratio,lc_ratio,sc_ratio,hc_ratio
      
          nc_ratio = nc_ratio_default
          if (present(nc)) then
@@ -258,18 +258,20 @@ END MODULE init_var_bfm_local
 ! Definition of Initial Pelagic (D3) state variables
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-   real(RLEN) :: O2o0, N1p0, N3n0, N4n0, O4n0, N5s0, N6r0, B1c0, B1n0, B1p0, &
-    P1c0, P1n0, P1p0, P1l0, P1s0, P2c0, P2n0, P2p0, P2l0, P3c0, P3n0, P3p0, &
-    P3l0, P4c0, P4n0, P4p0, P4l0, Z3c0, Z3n0, Z3p0, Z4c0, Z4n0, Z4p0, Z5c0, &
-    Z5n0, Z5p0, Z6c0, Z6n0, Z6p0, R1c0, R1n0, R1p0, R2c0, R3c0, R6c0, R6n0, &
-    R6p0, R6s0, O3c0, O3h0
+      real(RLEN) :: O2o0, N1p0, N3n0, N4n0, O4n0, N5s0, N6r0, B1c0,     &
+     & P1c0, P1n0, P1p0, P1l0, P1s0, P2c0, P2n0, P2p0, P2l0, P3c0,      &
+     & P3l0, P4c0, P4n0, P4p0, P4l0, Z3c0, Z3n0, Z3p0, Z4c0, Z4n0,      &
+     & Z5n0, Z5p0, Z6c0, Z6n0, Z6p0, R1c0, R1n0, R1p0, R2c0, R3c0,      &
+     & R6p0, R6s0, O3c0, O3h0, R6c0, R6n0, Z4p0, Z5c0, P3n0, P3p0,      &
+     & B1n0, B1p0
 
 
-   namelist /bfm_init_nml/ O2o0, N1p0, N3n0, N4n0, O4n0, N5s0, N6r0, B1c0, &
-    B1n0, B1p0, P1c0, P1n0, P1p0, P1l0, P1s0, P2c0, P2n0, P2p0, P2l0, P3c0, &
-    P3n0, P3p0, P3l0, P4c0, P4n0, P4p0, P4l0, Z3c0, Z3n0, Z3p0, Z4c0, Z4n0, &
-    Z4p0, Z5c0, Z5n0, Z5p0, Z6c0, Z6n0, Z6p0, R1c0, R1n0, R1p0, R2c0, R3c0, &
-    R6c0, R6n0, R6p0, R6s0, O3c0, O3h0
+       namelist /bfm_init_nml/ O2o0, N1p0, N3n0, N4n0, O4n0, N5s0,      &
+     & B1n0, B1p0, P1c0, P1n0, P1p0, P1l0, P1s0, P2c0, P2n0, P2p0,      &
+     & P3n0, P3p0, P3l0, P4c0, P4n0, P4p0, P4l0, Z3c0, Z3n0, Z3p0,      &
+     & Z4p0, Z5c0, Z5n0, Z5p0, Z6c0, Z6n0, Z6p0, R1c0, R1n0, R1p0,      &
+     & R6c0, R6n0, R6p0, R6s0, O3c0, O3h0, R2c0, R3c0, Z4c0, Z4n0,      &
+     & P2l0, P3c0, N6r0, B1c0
 
 
    namelist /bfm_init_nml/ surface_flux_method,       &

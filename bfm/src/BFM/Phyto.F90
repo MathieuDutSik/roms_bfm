@@ -22,12 +22,13 @@
   use mem
 #else
   use mem, ONLY: iiC,iiN,iiP,iiS,iiL,iiP3
-  use mem, ONLY: D3STATE, R1c, R6c, O2o, R2c, &
-                 N3n, N4n, N1p, R1n, R6n, R1p, R6p, N5s
-  use mem, ONLY: ppR1c, ppR6c, ppO2o, ppR2c, ppN3n, ppN4n, ppN1p, ppR1n, &
-    ppR6n, ppR1p, ppR6p, ppN5s, ppR6s, SUNQ, ThereIsLight, ETW, EIR, &
-    xEPS, Depth, eiPPY, sediPPY, sunPPY, qpcPPY, qncPPY, qscPPY, qlcPPY, NO_BOXES, &
-    iiBen, iiPel, flux_vector
+        use mem, ONLY: D3STATE, R1c, R6c, O2o, R2c,                     &
+     &            N3n, N4n, N1p, R1n, R6n, R1p, R6p, N5s
+        use mem, ONLY: ppR1c, ppR6c, ppO2o, ppR2c, ppN3n, ppN4n,        &
+     & ppR6n, ppR1p, ppR6p, ppN5s, ppR6s, SUNQ, ThereIsLight,           &
+     & xEPS, Depth, eiPPY, sediPPY, sunPPY, qpcPPY, qncPPY,             &
+     &       iiBen, iiPel, flux_vector, ppN1p, ppR1n, ETW, EIR,         &
+     & qscPPY, qlcPPY, NO_BOXES
   use mem, ONLY: ppPhytoPlankton
 #ifdef INCLUDE_PELCO2
   use mem, ONLY: ppO3c
@@ -83,16 +84,17 @@
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   integer, save :: first=0
   integer :: ppphytoc, ppphyton, ppphytop, ppphytos, ppphytol 
-  real(RLEN),allocatable,save,dimension(:) :: phytoc,phyton,phytop,phytos,phytol
-                                                                                                                                                             
-  real(RLEN),allocatable,save,dimension(:) :: r,tmp,et,sum,sadap,sea,sdo,rugc,  &
-                                       srt,slc,run,pe_R6,rupp,rump,misp,rupn,   &
-                                       rumn3,rumn4,rumn,netgrowth,misn,cqun3,   &
-                                       sra,srs
-  real(RLEN),allocatable,save,dimension(:) :: rums,rups,miss,tN,fpplim,iN,iN1p, &
-                                       rr1n,rr1p,rr6c,rr6n,rr6p,rr6s,runn,runn3,&
-                                       runn4,runp,runs,Irr,rho_Chl,rate_Chl,seo,&
-                                       flPIR2c,iNIn,eN5s,rrc,rr1c
+       real(RLEN),allocatable,save,dimension(:) :: phytoc,phyton,       &
+     &    phytop,phytos,phytol
+      
+       real(RLEN),allocatable,save,dimension(:) :: r,tmp,et,sum,        &
+     &          srt,slc,run,pe_R6,rupp,rump,misp,rupn,                  &
+     &          rumn3,rumn4,rumn,netgrowth,misn,cqun3,                  &
+     &          sra,srs, sadap,sea,sdo,rugc
+       real(RLEN),allocatable,save,dimension(:) :: rums,rups,miss,      &
+     &          rr1n,rr1p,rr6c,rr6n,rr6p,rr6s,runn,runn3,               &
+     &          runn4,runp,runs,Irr,rho_Chl,rate_Chl,seo,               &
+     &          flPIR2c,iNIn,eN5s,rrc,rr1c, tN,fpplim,iN,iN1p
   real(RLEN),allocatable,save,dimension(:) :: iN5s,chl_opt
 #ifndef INCLUDE_PELCO2
   integer,parameter :: ppO3c = 0
@@ -403,8 +405,9 @@
   ! at least a fraction equal to the minimum quota is released as POM.
   ! Therefore, nutrients (and C) in the structural part go to R6.
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-  pe_R6 = min( p_qplc(phyto)/( qpcPPY(phyto, :)+ p_small), p_qnlc(phyto)/ &
-          ( qncPPY(phyto, :)+ p_small))
+        pe_R6 = min( p_qplc(phyto)/( qpcPPY(phyto, :)+ p_small),        &
+     &      p_qnlc(phyto)/ ( qncPPY(phyto, :)+ p_small))
+          
   pe_R6  =   min(  ONE,  pe_R6)
   rr6c  =   pe_R6* sdo* phytoc
   rr1c  =  ( ONE- pe_R6)* sdo* phytoc
@@ -604,13 +607,16 @@
     !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     select case (p_switchChl(phyto))
       case (1) ! PELAGOS
-           rho_Chl = p_qlcPPY( phyto)* min(ONE, p_sum(phyto)* eiPPY(phyto,:)* phytoc/( &
-                     p_alpha_chl(phyto)*( phytol+ p_small)* Irr))
+         rho_Chl = p_qlcPPY( phyto)* min(ONE,                           &
+     &      p_sum(phyto)* eiPPY(phyto,:)* phytoc/(                      &
+     &      p_alpha_chl(phyto)*( phytol+ p_small)* Irr))
            rate_Chl = rho_Chl*(sum - seo - sea - sra) * phytoc - sdo*phytol
       case (2) ! OPATM-BFM
            rho_Chl  =   p_qlcPPY(phyto)* sum/( p_alpha_chl(phyto)* qlcPPY(phyto,:)* Irr)
-           rate_Chl = iN* rho_Chl* run- max( p_sdchl(phyto)*( ONE - iN), sdo)* &
-               phytol+ min( ZERO, sum- slc+ sdo)* max( ZERO, phytol- p_qlcPPY(phyto)* phytoc)
+           rate_Chl = iN* rho_Chl* run-                                 &
+     &      max( p_sdchl(phyto)*( ONE - iN), sdo)*                      &
+     &          phytol+ min( ZERO, sum- slc+ sdo)*                      &
+     &      max( ZERO, phytol- p_qlcPPY(phyto)* phytoc)
       case (3) ! UNIBO
            rho_Chl = p_qlcPPY(phyto)*min(ONE,          &
                      (sum-seo-sea-sra) *phytoc /          &
@@ -621,16 +627,18 @@
                      (p_alpha_chl(phyto)*Irr+p_small)
            !  Actual chlorophyll concentration exceeding the "optimal" value is 
            !  discarded with a p_tochl_relt relaxation.
-           rate_Chl = rho_Chl*(sum-seo-sea-sra)*phytoc-(sdo+srs)*phytol - &
-                      max(ZERO,(phytol-chl_opt))*p_tochl_relt(phyto)
+                     rate_Chl = rho_Chl*(sum-seo-sea-sra)*phytoc-       &
+     &           (sdo+srs)*phytol -                                     &
+     &           max(ZERO,(phytol-chl_opt))*p_tochl_relt(phyto)
       case (4) ! NIOZ
           ! total synthesis, only when there is net production (run > 0)
           ! The fixed loss rate due to basal respiration is introduced to have 
           ! chl loss in the absence of light (< 1 uE/m2/s)
-           rho_Chl = p_qlcPPY( phyto)* min(ONE, p_sum(phyto)* eiPPY(phyto,:)* phytoc/( &
-                     p_alpha_chl(phyto)*( phytol+ p_small)* Irr))
-           rate_Chl = rho_Chl*run - p_sdchl(phyto)*phytol*max( ZERO, ( p_thdo(phyto)-tN)) &
-                     -srs * phytol * ONE/(Irr+ONE)
+         rho_Chl = p_qlcPPY( phyto)* min(ONE, p_sum(phyto)*             &
+     &    eiPPY(phyto,:)* phytoc/(                                      &
+     &                p_alpha_chl(phyto)*( phytol+ p_small)* Irr))
+         rate_Chl = rho_Chl*run - p_sdchl(phyto)*phytol*max( ZERO,      &
+     &    ( p_thdo(phyto)-tN)) -srs * phytol * ONE/(Irr+ONE)
     end select
     call flux_vector( iiPel, ppphytol,ppphytol, rate_Chl )
   end if
