@@ -193,7 +193,8 @@
 
         real(RLEN),public,pointer,dimension(:,:) :: D2DIAGNOS_ICE
 
-        type(ppFlux), public,dimension(:,:),allocatable :: D2FLUX_MATRIX_ICE
+        type(ppFlux), public,dimension(:,:),allocatable ::              &
+     &    D2FLUX_MATRIX_ICE
         real(RLEN)  , public,dimension(:),allocatable :: D2FLUX_FUNC_ICE
 #endif
 
@@ -216,7 +217,8 @@
 
         real(RLEN),public,pointer,dimension(:,:) :: D2DIAGNOS_BEN
 
-        type(ppFlux), public,dimension(:,:),allocatable :: D2FLUX_MATRIX_BEN
+        type(ppFlux), public,dimension(:,:),allocatable ::              &
+     &  D2FLUX_MATRIX_BEN
         real(RLEN)  , public,dimension(:),allocatable :: D2FLUX_FUNC_BEN
 #endif
 
@@ -288,21 +290,23 @@
         !! GLOBAL definition of Pelagic (D3/D2) state variables
         !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-        integer,parameter,public                :: ppO2o=1, ppN1p=2, ppN3n=3, &
-    ppN4n=4, ppO4n=5, ppN5s=6, ppN6r=7, ppB1c=8, ppB1n=9, ppB1p=10, ppP1c=11, &
-    ppP1n=12, ppP1p=13, ppP1l=14, ppP1s=15, ppP2c=16, ppP2n=17, ppP2p=18, &
-    ppP2l=19, ppP2s=0, ppP3c=20, ppP3n=21, ppP3p=22, ppP3l=23, ppP3s=0, &
-    ppP4c=24, ppP4n=25, ppP4p=26, ppP4l=27, ppP4s=0, ppZ3c=28, ppZ3n=29, &
-    ppZ3p=30, ppZ4c=31, ppZ4n=32, ppZ4p=33, ppZ5c=34, ppZ5n=35, ppZ5p=36, &
-    ppZ6c=37, ppZ6n=38, ppZ6p=39, ppR1c=40, ppR1n=41, ppR1p=42, ppR1s=0, &
-    ppR2c=43, ppR2n=0, ppR2p=0, ppR2s=0, ppR3c=44, ppR3n=0, ppR3p=0, ppR3s=0, &
-    ppR6c=45, ppR6n=46, ppR6p=47, ppR6s=48, ppO3c=49, ppO3h=50
-
-   real(RLEN),public,dimension(:),pointer  :: O2o, N1p, N3n, N4n, O4n, N5s, &
-    N6r, B1c, B1n, B1p, P1c, P1n, P1p, P1l, P1s, P2c, P2n, P2p, P2l, P3c, P3n, &
-    P3p, P3l, P4c, P4n, P4p, P4l, Z3c, Z3n, Z3p, Z4c, Z4n, Z4p, Z5c, Z5n, Z5p, &
-    Z6c, Z6n, Z6p, R1c, R1n, R1p, R2c, R3c, R6c, R6n, R6p, R6s, O3c, O3h
-
+        integer,parameter,public  :: ppO2o=1, ppN1p=2,                  &
+     & ppN4n=4, ppO4n=5, ppN5s=6, ppN6r=7, ppB1c=8, ppB1n=9, ppB1p=10,  & 
+     & ppP1n=12, ppP1p=13, ppP1l=14, ppP1s=15, ppP2c=16, ppP2n=17,      &
+     & ppP2l=19, ppP2s=0, ppP3c=20, ppP3n=21, ppP3p=22, ppP3l=23,       &
+     & ppP4c=24, ppP4n=25, ppP4p=26, ppP4l=27, ppP4s=0, ppZ3c=28,       &
+     & ppZ3p=30, ppZ4c=31, ppZ4n=32, ppZ4p=33, ppZ5c=34, ppZ5n=35,      &
+     & ppZ6c=37, ppZ6n=38, ppZ6p=39, ppR1c=40, ppR1n=41, ppR1p=42,      &
+     & ppR2c=43, ppR2n=0, ppR2p=0, ppR2s=0, ppR3c=44, ppR3n=0, ppR3p=0, &
+     & ppR6c=45, ppR6n=46, ppR6p=47, ppR6s=48, ppO3c=49, ppO3h=50,      &
+     & ppR3s=0, ppR1s=0, ppZ5p=36, ppZ3n=29, ppP3s=0, ppP2p=18,         &
+     & ppP1c=11, ppN3n=3
+        
+       real(RLEN),public,dimension(:),pointer  :: O2o, N1p, N3n,        &
+     & N6r, B1c, B1n, B1p, P1c, P1n, P1p, P1l, P1s, P2c, P2n, P2p,      &
+     & P3p, P3l, P4c, P4n, P4p, P4l, Z3c, Z3n, Z3p, Z4c, Z4n, Z4p,      &
+     & Z6c, Z6n, Z6p, R1c, R1n, R1p, R2c, R3c, R6c, R6n, R6p, R6s,      &
+     & O3c, O3h, Z5c, Z5n, Z5p, P2l, P3c, P3n, N4n, O4n, N5s
 
 #ifdef INCLUDE_SEAICE
         !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -326,28 +330,28 @@
         ! Constituent parameters:
         !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-        integer,parameter,public :: iiC=1, iiN=2, iiP=3, iiL=4, iiS=5, iiH=6, &
-    iiLastElement=6
+        integer,parameter,public :: iiC=1, iiN=2, iiP=3, iiL=4, iiS=5,  &
+     &   iiH=6, iiLastElement=6
 
 
         !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         ! Group parameters (pel):
         !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-        integer,parameter,public :: iiPelBacteria=1, iiB1=1
-        integer,parameter,public :: iiPhytoPlankton=4, iiP1=1, iiP2=2, iiP3=3, iiP4=4
-        integer,parameter,public :: iiMesoZooPlankton=2, iiZ3=1, iiZ4=2
-        integer,parameter,public :: iiMicroZooPlankton=2, iiZ5=1, iiZ6=2
-        integer,parameter,public :: iiPelDetritus=4, iiR1=1, iiR2=2, iiR3=3, iiR6=4
-        integer,parameter,public :: iiInorganic=1, iiO3=1
+        integer,parameter,public :: iiPelBacteria=1, iiB1=1,            &
+     &    iiPhytoPlankton=4, iiP1=1, iiP2=2, iiP3=3, iiP4=4,            &
+     &    iiMesoZooPlankton=2, iiZ3=1, iiZ4=2,                          &
+     &    iiMicroZooPlankton=2, iiZ5=1, iiZ6=2,                         &
+     &    iiPelDetritus=4, iiR1=1, iiR2=2, iiR3=3, iiR6=4,              &
+     &    iiInorganic=1, iiO3=1
 
 
-        logical,public :: CalcPelBacteria(iiPelBacteria) = .TRUE.
-        logical,public :: CalcPhytoPlankton(iiPhytoPlankton) = .TRUE.
-        logical,public :: CalcMesoZooPlankton(iiMesoZooPlankton) = .TRUE.
-        logical,public :: CalcMicroZooPlankton(iiMicroZooPlankton) = .TRUE.
-        logical,public :: CalcPelDetritus(iiPelDetritus) = .TRUE.
-        logical,public :: CalcInorganic(iiInorganic) = .TRUE.
+        logical,public :: CalcPelBacteria(iiPelBacteria) = .TRUE.,      &
+     &    CalcPhytoPlankton(iiPhytoPlankton) = .TRUE.,                  &
+     &    CalcMesoZooPlankton(iiMesoZooPlankton) = .TRUE.,              &
+     &    CalcMicroZooPlankton(iiMicroZooPlankton) = .TRUE.,            &
+     &    CalcPelDetritus(iiPelDetritus) = .TRUE.,                      &
+     &    CalcInorganic(iiInorganic) = .TRUE.
 
 
 #ifdef INCLUDE_SEAICE
@@ -512,32 +516,37 @@
 ! ELiPPY(iiP4)                                          Large Phytoplankton            W/m2
 
 
-        integer,parameter,public :: ppETW=1, ppESW=2, ppERHO=3, ppEIR=4, &
-    ppESS=5, ppEPR=6, ppDepth=7, ppVolume=8, ppDIC=9, ppArea=10, ppCO2=11, &
-    pppCO2=12, ppHCO3=13, ppCO3=14, ppALK=15, pppH=16, ppOCalc=17, ppOArag=18, &
-    pptotpelc=19, pptotpeln=20, pptotpelp=21, pptotpels=22, ppcxoO2=23, &
-    ppeO2mO2=24, ppChla=25, ppflPTN6r=26, ppflN3O4n=27, ppflN4N3n=28, &
-    ppsediR2=29, ppsediR6=30, ppxEPS=31, ppABIO_eps=32
+        integer,parameter,public :: ppETW=1, ppESW=2,                   &
+     & ppESS=5, ppEPR=6, ppDepth=7, ppVolume=8, ppDIC=9,                &
+     & pppCO2=12, ppHCO3=13, ppCO3=14, ppALK=15, pppH=16,               &
+     & pptotpelc=19, pptotpeln=20, pptotpelp=21, pptotpels=22,          &
+     & ppeO2mO2=24, ppChla=25, ppflPTN6r=26, ppflN3O4n=27,              &
+     & ppsediR2=29, ppsediR6=30, ppxEPS=31, ppABIO_eps=32,              &
+     & ppflN4N3n=28, ppcxoO2=23, ppOCalc=17, ppOArag=18,                &
+     & ppArea=10, ppCO2=11, ppERHO=3, ppEIR=4
+        
+        integer,public ::           ppqpcPPY(iiPhytoPlankton),          &
+     & ppqncPPY(iiPhytoPlankton), ppqscPPY(iiPhytoPlankton),            &
+     & ppqlcPPY(iiPhytoPlankton), ppqpcMEZ(iiMesoZooPlankton),          &
+     & ppqncMEZ(iiMesoZooPlankton), ppqpcMIZ(iiMicroZooPlankton),       &
+     & ppqncMIZ(iiMicroZooPlankton), ppqpcOMT(iiPelDetritus),           &
+     & ppqncOMT(iiPelDetritus), ppqscOMT(iiPelDetritus),                &
+     & ppqpcPBA(iiPelBacteria),                                         &
+     & ppqncPBA(iiPelBacteria), ppsediPPY(iiPhytoPlankton),             &
+     & ppsediMIZ(iiMicroZooPlankton), ppsediMEZ(iiMesoZooPlankton),     &
+     & ppsunPPY(iiPhytoPlankton), ppeiPPY(iiPhytoPlankton),             &
+     & ppELiPPY(iiPhytoPlankton)
 
-        integer,public ::           ppqpcPPY(iiPhytoPlankton), &
-    ppqncPPY(iiPhytoPlankton), ppqscPPY(iiPhytoPlankton), &
-    ppqlcPPY(iiPhytoPlankton), ppqpcMEZ(iiMesoZooPlankton), &
-    ppqncMEZ(iiMesoZooPlankton), ppqpcMIZ(iiMicroZooPlankton), &
-    ppqncMIZ(iiMicroZooPlankton), ppqpcOMT(iiPelDetritus), &
-    ppqncOMT(iiPelDetritus), ppqscOMT(iiPelDetritus), ppqpcPBA(iiPelBacteria), &
-    ppqncPBA(iiPelBacteria), ppsediPPY(iiPhytoPlankton), &
-    ppsediMIZ(iiMicroZooPlankton), ppsediMEZ(iiMesoZooPlankton), &
-    ppsunPPY(iiPhytoPlankton), ppeiPPY(iiPhytoPlankton), &
-    ppELiPPY(iiPhytoPlankton)
-
-   real(RLEN),public,dimension(:),pointer  :: ETW, ESW, ERHO, EIR, ESS, EPR, &
-    Depth, Volume, DIC, Area, CO2, pCO2, HCO3, CO3, ALK, pH, OCalc, OArag, &
-    totpelc, totpeln, totpelp, totpels, cxoO2, eO2mO2, Chla, flPTN6r, flN3O4n, &
-    flN4N3n, sediR2, sediR6, xEPS, ABIO_eps
-
-        real(RLEN),public,dimension(:,:),pointer  :: qpcPPY, qncPPY, qscPPY, &
-    qlcPPY, qpcMEZ, qncMEZ, qpcMIZ, qncMIZ, qpcOMT, qncOMT, qscOMT, qpcPBA, &
-    qncPBA, sediPPY, sediMIZ, sediMEZ, sunPPY, eiPPY, ELiPPY
+        real(RLEN),public,dimension(:),pointer  :: ETW, ESW,            &
+     & Depth, Volume, DIC, Area, CO2, pCO2, HCO3, CO3, ALK, pH,         &
+     & totpelc, totpeln, totpelp, totpels, cxoO2, eO2mO2, Chla,         &
+     & flN4N3n, sediR2, sediR6, xEPS, ABIO_eps,                         &
+     & flPTN6r, flN3O4n, OCalc, OArag, ERHO, EIR, ESS, EPR
+        
+        real(RLEN),public,dimension(:,:),pointer  :: qpcPPY,            &
+     & qlcPPY, qpcMEZ, qncMEZ, qpcMIZ, qncMIZ, qpcOMT, qncOMT,          &
+     & qncPBA, sediPPY, sediMIZ, sediMEZ, sunPPY, eiPPY, ELiPPY,        &
+     & qscOMT, qpcPBA, qncPPY, qscPPY
 
 
         !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -558,14 +567,14 @@
 
 
 
-        integer,parameter,public :: ppEPCO2air=1, ppCO2airflux=2, ppArea2d=3, &
-    ppThereIsLight=4, ppSUNQ=5, pptotsysc=6, pptotsysn=7, ppEWIND=8, &
-    pptotsysp=9, pptotsyss=10, ppEICE=11
+        integer,parameter,public :: ppEPCO2air=1, ppCO2airflux=2,       &
+     & ppThereIsLight=4, ppSUNQ=5, pptotsysc=6, pptotsysn=7,            &
+     & pptotsysp=9, pptotsyss=10, ppEICE=11, ppArea2d=3, ppEWIND=8
 
 
-   real(RLEN),public,dimension(:),pointer  :: EPCO2air, CO2airflux, Area2d, &
-    ThereIsLight, SUNQ, totsysc, totsysn, EWIND, totsysp, totsyss, EICE
-
+       real(RLEN),public,dimension(:),pointer  :: EPCO2air,             &
+     & ThereIsLight, SUNQ, totsysc, totsysn, EWIND, totsysp,            &
+     & CO2airflux, Area2d, totsyss, EICE
 
 
 #ifdef INCLUDE_SEAICE
@@ -598,30 +607,34 @@
         !  boundary fluxes
         !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-        real(RLEN),public,dimension(:),pointer  :: jsurO2o, jsurN1p, jsurN3n, &
-    jsurN4n, jsurO4n, jsurN5s, jsurN6r, jsurB1c, jsurB1n, jsurB1p, jsurP1c, &
-    jsurP1n, jsurP1p, jsurP1l, jsurP1s, jsurP2c, jsurP2n, jsurP2p, jsurP2l, &
-    jsurP3c, jsurP3n, jsurP3p, jsurP3l, jsurP4c, jsurP4n, jsurP4p, jsurP4l, &
-    jsurZ3c, jsurZ3n, jsurZ3p, jsurZ4c, jsurZ4n, jsurZ4p, jsurZ5c, jsurZ5n, &
-    jsurZ5p, jsurZ6c, jsurZ6n, jsurZ6p, jsurR1c, jsurR1n, jsurR1p, jsurR2c, &
-    jsurR3c, jsurR6c, jsurR6n, jsurR6p, jsurR6s, jsurO3c, jsurO3h
+        real(RLEN),public,dimension(:),pointer  :: jsurO2o, jsurN1p,    &
+     & jsurN4n, jsurO4n, jsurN5s, jsurN6r, jsurB1c, jsurB1n, jsurB1p,   &
+     & jsurP1n, jsurP1p, jsurP1l, jsurP1s, jsurP2c, jsurP2n, jsurP2p,   &
+     & jsurP3c, jsurP3n, jsurP3p, jsurP3l, jsurP4c, jsurP4n, jsurP4p,   &
+     & jsurZ3c, jsurZ3n, jsurZ3p, jsurZ4c, jsurZ4n, jsurZ4p, jsurZ5c,   &
+     & jsurZ5p, jsurZ6c, jsurZ6n, jsurZ6p, jsurR1c, jsurR1n, jsurR1p,   &
+     & jsurR3c, jsurR6c, jsurR6n, jsurR6p, jsurR6s, jsurO3c, jsurO3h,   &
+     & jsurR2c, jsurZ5n, jsurP4l, jsurP2l, jsurP1c, jsurN3n
 
-        real(RLEN),public,dimension(:),pointer  :: jbotO2o, jbotN1p, jbotN3n, &
-    jbotN4n, jbotO4n, jbotN5s, jbotN6r, jbotB1c, jbotB1n, jbotB1p, jbotP1c, &
-    jbotP1n, jbotP1p, jbotP1l, jbotP1s, jbotP2c, jbotP2n, jbotP2p, jbotP2l, &
-    jbotP3c, jbotP3n, jbotP3p, jbotP3l, jbotP4c, jbotP4n, jbotP4p, jbotP4l, &
-    jbotZ3c, jbotZ3n, jbotZ3p, jbotZ4c, jbotZ4n, jbotZ4p, jbotZ5c, jbotZ5n, &
-    jbotZ5p, jbotZ6c, jbotZ6n, jbotZ6p, jbotR1c, jbotR1n, jbotR1p, jbotR2c, &
-    jbotR3c, jbotR6c, jbotR6n, jbotR6p, jbotR6s, jbotO3c, jbotO3h
+        
+        real(RLEN),public,dimension(:),pointer  :: jbotO2o, jbotN1p,    &
+     & jbotN4n, jbotO4n, jbotN5s, jbotN6r, jbotB1c, jbotB1n, jbotB1p,   &
+     & jbotP1n, jbotP1p, jbotP1l, jbotP1s, jbotP2c, jbotP2n, jbotP2p,   &
+     & jbotP3c, jbotP3n, jbotP3p, jbotP3l, jbotP4c, jbotP4n, jbotP4p,   &
+     & jbotZ3c, jbotZ3n, jbotZ3p, jbotZ4c, jbotZ4n, jbotZ4p, jbotZ5c,   &
+     & jbotZ5p, jbotZ6c, jbotZ6n, jbotZ6p, jbotR1c, jbotR1n, jbotR1p,   &
+     & jbotR3c, jbotR6c, jbotR6n, jbotR6p, jbotR6s, jbotO3c, jbotO3h,   &
+     & jbotR2c, jbotZ5n, jbotP4l, jbotP2l, jbotP1c, jbotN3n
 
-        real(RLEN),public,dimension(:),pointer  :: jrivO2o, jrivN1p, jrivN3n, &
-    jrivN4n, jrivO4n, jrivN5s, jrivN6r, jrivB1c, jrivB1n, jrivB1p, jrivP1c, &
-    jrivP1n, jrivP1p, jrivP1l, jrivP1s, jrivP2c, jrivP2n, jrivP2p, jrivP2l, &
-    jrivP3c, jrivP3n, jrivP3p, jrivP3l, jrivP4c, jrivP4n, jrivP4p, jrivP4l, &
-    jrivZ3c, jrivZ3n, jrivZ3p, jrivZ4c, jrivZ4n, jrivZ4p, jrivZ5c, jrivZ5n, &
-    jrivZ5p, jrivZ6c, jrivZ6n, jrivZ6p, jrivR1c, jrivR1n, jrivR1p, jrivR2c, &
-    jrivR3c, jrivR6c, jrivR6n, jrivR6p, jrivR6s, jrivO3c, jrivO3h
-
+        
+        real(RLEN),public,dimension(:),pointer  :: jrivO2o, jrivN1p,    &
+     & jrivN4n, jrivO4n, jrivN5s, jrivN6r, jrivB1c, jrivB1n, jrivB1p,   &
+     & jrivP1n, jrivP1p, jrivP1l, jrivP1s, jrivP2c, jrivP2n, jrivP2p,   &
+     & jrivP3c, jrivP3n, jrivP3p, jrivP3l, jrivP4c, jrivP4n, jrivP4p,   &
+     & jrivZ3c, jrivZ3n, jrivZ3p, jrivZ4c, jrivZ4n, jrivZ4p, jrivZ5c,   &
+     & jrivZ5p, jrivZ6c, jrivZ6n, jrivZ6p, jrivR1c, jrivR1n, jrivR1p,   &
+     & jrivR3c, jrivR6c, jrivR6n, jrivR6p, jrivR6s, jrivO3c, jrivO3h,   &
+     & jrivR2c, jrivZ5n, jrivP4l, jrivP2l, jrivP1c, jrivN3n
 
         !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         !  Other 3d-Global Variables 
@@ -662,10 +675,10 @@
         public flux, flux_vector, Source, Source_D3_vector, &
                fixed_quota_flux_vector
 
-        public ppPelBacteria, PelBacteria, ppPhytoPlankton, PhytoPlankton, &
-    ppMesoZooPlankton, MesoZooPlankton, ppMicroZooPlankton, MicroZooPlankton, &
-    ppPelDetritus, PelDetritus, ppInorganic, Inorganic
-
+        public ppPelBacteria, PelBacteria, ppPhytoPlankton,             &
+     & ppMesoZooPlankton, MesoZooPlankton, ppMicroZooPlankton,          &
+     & ppPelDetritus, PelDetritus, ppInorganic, Inorganic,              &
+     & MicroZooPlankton, PhytoPlankton
 
 #if defined INCLUDE_SEAICE
         !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -702,16 +715,16 @@
      integer, intent(IN)            :: n
      integer, intent(IN)            :: constituent
      
-     integer,dimension(1 * iiLastElement ) :: pointers = (/ & 
-             ppB1c ,ppB1n ,ppB1p ,0     ,0     ,0       &
-          /)
+     integer,dimension(1 * iiLastElement ) :: pointers = (/             &
+     &         ppB1c ,ppB1n ,ppB1p ,0     ,0     ,0                     &
+     &     /)
 
      IF( n > 1 .OR. n == 0 ) THEN
        ppPelBacteria = 0
      ELSE IF( constituent > iiLastElement .OR. constituent == 0 ) THEN
        ppPelBacteria = 0
      ELSE
-       ppPelBacteria = pointers( ( (n-1) * iiLastElement ) + constituent )
+       ppPelBacteria = pointers( ( (n-1) * iiLastElement )+constituent )
      ENDIF
    
    END function
@@ -724,19 +737,19 @@
      integer, intent(IN)            :: n
      integer, intent(IN)            :: constituent
      
-     integer,dimension(4 * iiLastElement ) :: pointers = (/ & 
-             ppP1c ,ppP1n ,ppP1p ,ppP1l ,ppP1s ,0     , &
-          ppP2c ,ppP2n ,ppP2p ,ppP2l ,0     ,0     , &
-          ppP3c ,ppP3n ,ppP3p ,ppP3l ,0     ,0     , &
-          ppP4c ,ppP4n ,ppP4p ,ppP4l ,0     ,0       &
-          /)
+     integer,dimension(4 * iiLastElement ) :: pointers = (/             & 
+     &        ppP1c ,ppP1n ,ppP1p ,ppP1l ,ppP1s ,0     ,                &
+     &     ppP2c ,ppP2n ,ppP2p ,ppP2l ,0     ,0     ,                   &
+     &     ppP3c ,ppP3n ,ppP3p ,ppP3l ,0     ,0     ,                   &
+     &     ppP4c ,ppP4n ,ppP4p ,ppP4l ,0     ,0                         &
+     &     /)
 
      IF( n > 4 .OR. n == 0 ) THEN
        ppPhytoPlankton = 0
      ELSE IF( constituent > iiLastElement .OR. constituent == 0 ) THEN
        ppPhytoPlankton = 0
      ELSE
-       ppPhytoPlankton = pointers( ( (n-1) * iiLastElement ) + constituent )
+       ppPhytoPlankton = pointers(((n-1)*iiLastElement ) + constituent )
      ENDIF
    
    END function
@@ -749,10 +762,10 @@
      integer, intent(IN)            :: n
      integer, intent(IN)            :: constituent
      
-     integer,dimension(2 * iiLastElement ) :: pointers = (/ & 
-             ppZ3c ,ppZ3n ,ppZ3p ,0     ,0     ,0     , &
-          ppZ4c ,ppZ4n ,ppZ4p ,0     ,0     ,0       &
-          /)
+     integer,dimension(2 * iiLastElement ) :: pointers = (/             & 
+     &        ppZ3c ,ppZ3n ,ppZ3p ,0     ,0     ,0     ,                &
+     &     ppZ4c ,ppZ4n ,ppZ4p ,0     ,0     ,0                         &
+     &     /)
 
      IF( n > 2 .OR. n == 0 ) THEN
        ppMesoZooPlankton = 0
@@ -772,10 +785,10 @@
      integer, intent(IN)            :: n
      integer, intent(IN)            :: constituent
      
-     integer,dimension(2 * iiLastElement ) :: pointers = (/ & 
-             ppZ5c ,ppZ5n ,ppZ5p ,0     ,0     ,0     , &
-          ppZ6c ,ppZ6n ,ppZ6p ,0     ,0     ,0       &
-          /)
+     integer,dimension(2 * iiLastElement ) :: pointers = (/             & 
+     &        ppZ5c ,ppZ5n ,ppZ5p ,0     ,0     ,0     ,                &
+     &     ppZ6c ,ppZ6n ,ppZ6p ,0     ,0     ,0                         &
+     &     /)
 
      IF( n > 2 .OR. n == 0 ) THEN
        ppMicroZooPlankton = 0
@@ -795,12 +808,12 @@
      integer, intent(IN)            :: n
      integer, intent(IN)            :: constituent
      
-     integer,dimension(4 * iiLastElement ) :: pointers = (/ & 
-             ppR1c ,ppR1n ,ppR1p ,0     ,0     ,0     , &
-          ppR2c ,0     ,0     ,0     ,0     ,0     , &
-          ppR3c ,0     ,0     ,0     ,0     ,0     , &
-          ppR6c ,ppR6n ,ppR6p ,0     ,ppR6s ,0       &
-          /)
+     integer,dimension(4 * iiLastElement ) :: pointers = (/             & 
+     &        ppR1c ,ppR1n ,ppR1p ,0     ,0     ,0     ,                &
+     &     ppR2c ,0     ,0     ,0     ,0     ,0     ,                   &
+     &     ppR3c ,0     ,0     ,0     ,0     ,0     ,                   &
+     &     ppR6c ,ppR6n ,ppR6p ,0     ,ppR6s ,0                         &
+     &     /)
 
      IF( n > 4 .OR. n == 0 ) THEN
        ppPelDetritus = 0
@@ -820,9 +833,9 @@
      integer, intent(IN)            :: n
      integer, intent(IN)            :: constituent
      
-     integer,dimension(1 * iiLastElement ) :: pointers = (/ & 
-             ppO3c ,0     ,0     ,0     ,0     ,ppO3h   &
-          /)
+     integer,dimension(1 * iiLastElement ) :: pointers = (/             & 
+     &        ppO3c ,0     ,0     ,0     ,0     ,ppO3h                  &
+     &     /)
 
      IF( n > 1 .OR. n == 0 ) THEN
        ppInorganic = 0
