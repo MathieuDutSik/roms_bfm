@@ -131,10 +131,11 @@
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   subroutine InitPelBac()
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  namelist /PelBacteria_parameters/ p_version, p_q10, p_chdo, p_sd, p_sd2, p_suhR1, &
-    p_sulR1, p_suR2, p_suR6, p_sum, p_pu_ra, p_pu_ra_o, p_pu_ea_R3, p_srs, &
-    p_suR3, p_qpcPBA, p_qlpc, p_qncPBA, p_qlnc, p_qun, p_qup, p_chn, p_chp, &
-    p_ruen, p_ruep, p_rec
+      namelist /PelBacteria_parameters/ p_version, p_q10, p_chdo,       &
+     &   p_sulR1, p_suR2, p_suR6, p_sum, p_pu_ra, p_pu_ra_o,            &
+     &   p_suR3, p_qpcPBA, p_qlpc, p_qncPBA, p_qlnc, p_qun, p_qup,      &
+     &   p_ruen, p_ruep, p_rec,                                         &
+     &   p_chn, p_chp, p_pu_ea_R3, p_srs, p_sd, p_sd2, p_suhR1
 
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   !BEGIN compute
@@ -158,7 +159,7 @@
          p_sulR1(i) = ZERO
          write(LOGUNIT,*) "#  forcing p_sulR1=0"
          if (p_pu_ea_R3(i) + p_pu_ra(i) .GT. 0.3_RLEN) then
-           write(LOGUNIT,*)"#  Warning: Bacterial growth efficiency is lower than 0.3!"
+           write(LOGUNIT,*)"#  W: Bacterial growth efficiency is lower than 0.3!"
            write(LOGUNIT,*)"#  The release of capsular material is possibly larger than p_pu_ra/4"
          end if
        case ( BACT1 ) ! Vichi et al. 2007
