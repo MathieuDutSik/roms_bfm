@@ -446,7 +446,7 @@ endif
 
 ifdef USE_BFM
  modules  +=	Biology/bfm_links
- includes +=	Biology/bfm_links
+ includes +=	Biology/bfm_links bfm/src/includes
 endif
 
  modules  +=	Master

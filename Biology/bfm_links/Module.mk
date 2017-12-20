@@ -5,9 +5,9 @@
 #   See License_ROMS.txt                                                :::
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-local_sub  := Waves/wwm_pgmcl_links
+local_sub  := Biology/bfm_links
 
-local_lib  := libWWM.a
+local_lib  := libBFM.a
 local_src  := $(wildcard $(local_sub)/*.F)
 
 $(eval $(call make-library,$(local_lib),$(local_src)))

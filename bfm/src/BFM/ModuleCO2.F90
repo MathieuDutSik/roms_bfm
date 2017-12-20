@@ -1,4 +1,4 @@
-#include "cppdefs.h"
+#include "cppdefs_bfm.h"
 
 #if defined INCLUDE_PELCO2 || defined INCLUDE_BENCO2
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-

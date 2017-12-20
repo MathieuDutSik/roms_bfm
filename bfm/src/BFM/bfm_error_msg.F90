@@ -1,5 +1,5 @@
 !$Id: getm_error.F90,v 1.3 2004-04-06 16:54:33 kbk Exp $
-#include "cppdefs.h"
+#include "cppdefs_bfm.h"
 !-----------------------------------------------------------------------
 !BOP
 !
