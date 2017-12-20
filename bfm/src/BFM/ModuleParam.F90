@@ -119,17 +119,17 @@
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
   ! Pelagic model parameters
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-  real(RLEN)   :: &
-      p_small=1.0E-20_RLEN,  &
-      slp0=1013.25_RLEN
-  real(RLEN)   :: &
-      p_pe_R1c=0.60_RLEN  ,     &
-      p_pe_R1n=0.72_RLEN  ,     &
-      p_pe_R1p=0.832_RLEN  ,    &
-      p_pe_R1s=0.06_RLEN  ,  &
-      p_qro=0.5_RLEN,  &  
-      p_qon_dentri=1.25_RLEN, &  
-      p_qon_nitri=1.5_RLEN
+      real(RLEN)   ::                                                   &
+     & p_small=1.0E-20_RLEN,                                            &
+     & slp0=1013.25_RLEN
+       real(RLEN)   ::                                                  &
+     & p_pe_R1c=0.60_RLEN  ,                                            &
+     & p_pe_R1n=0.72_RLEN  ,                                            &
+     & p_pe_R1p=0.832_RLEN  ,                                           &
+     & p_pe_R1s=0.06_RLEN  ,                                            &
+     & p_qro=0.5_RLEN,                                                  &
+     & p_qon_dentri=1.25_RLEN,                                          &
+     & p_qon_nitri=1.5_RLEN
 
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
   ! Benthic model parameters
@@ -148,23 +148,23 @@
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
   ! 0d-parameters 
   integer      :: p_sedlevels=20 
-  real(RLEN)   :: &
-      p_sedsigma=2.0_RLEN, &
-      p_d_tot=0.30_RLEN , &
-      p_poro0=0.4
+      real(RLEN)   ::                                                   &
+     & p_sedsigma=2.0_RLEN,                                             &
+     & p_d_tot=0.30_RLEN ,                                              &
+     & p_poro0=0.4
   ! 1d-parameters
   real(RLEN),public,dimension(:),allocatable   ::  p_p_ae, p_poro      
 #ifdef INCLUDE_BEN
       integer   :: calc_init_bennut_states
-  real(RLEN)   :: &
-      p_InitSink=100.0_RLEN,  &  
-      p_q10diff=1.49_RLEN,  &  
-      p_clDxm=0.001_RLEN, &  
-      p_clD1D2m=0.01_RLEN,    &  
-      p_d_tot_2=0.35_RLEN,  &
-      p_qnQIc, &
-      p_qpQIc, &
-      p_qsQIc
+      real(RLEN)   ::                                                   &
+     & p_InitSink=100.0_RLEN,                                           &
+     & p_q10diff=1.49_RLEN,                                             &
+     & p_clDxm=0.001_RLEN,                                              &
+     & p_clD1D2m=0.01_RLEN,                                             &
+     & p_d_tot_2=0.35_RLEN,                                             &
+     & p_qnQIc,                                                         &
+     & p_qpQIc,                                                         &
+     & p_qsQIc
 #endif
 
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -187,25 +187,25 @@
   use constants
   use global_mem, ONLY: bfm_lwp
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  namelist /Param_parameters/ p_small, p_qro, p_qon_dentri,                   &
-    p_qon_nitri,                                                              &
-    CalcPelagicFlag, CalcBenthicFlag,CalcSeaiceFlag, CalcTransportFlag,       &
-    CalcConservationFlag,CalcPhytoPlankton,CalcMicroZooPlankton,              &
-    CalcPelChemistry,CalcMesoZooPlankton, CalcPelBacteria,                    &
-    AssignPelBenFluxesInBFMFlag, AssignAirPelFluxesInBFMFlag,                 &
-    slp0,                                                                     &
-    p_pe_R1c, p_pe_R1n, p_pe_R1p, p_pe_R1s,                                   &
-    ChlDynamicsFlag, check_fixed_quota
+       namelist /Param_parameters/ p_small, p_qro, p_qon_dentri,        &
+     & p_qon_nitri, CalcTransportFlag,                                  &
+     & CalcPelagicFlag, CalcBenthicFlag,CalcSeaiceFlag,                 &
+     & CalcConservationFlag,CalcPhytoPlankton,CalcMicroZooPlankton,     &
+     & CalcPelChemistry,CalcMesoZooPlankton, CalcPelBacteria,           &
+     & AssignPelBenFluxesInBFMFlag, AssignAirPelFluxesInBFMFlag,        &
+     & slp0,                                                            &
+     & p_pe_R1c, p_pe_R1n, p_pe_R1p, p_pe_R1s,                          &
+     & ChlDynamicsFlag, check_fixed_quota
 #ifdef INCLUDE_BEN
-  namelist /Param_parameters_ben/                                             &
-    p_sedlevels, p_sedsigma,p_d_tot, p_poro0,                                 &
-    CalcBenOrganisms,CalcBenBacteria,                                         &
-    calc_init_bennut_states, p_qnQIc, p_qpQIc, p_qsQIc,                       &
-    p_InitSink, p_d_tot_2, p_clD1D2m, p_clDxm, p_q10diff
+      namelist /Param_parameters_ben/                                   &
+     & p_sedlevels, p_sedsigma,p_d_tot, p_poro0,                        &
+     & CalcBenOrganisms,CalcBenBacteria,                                &
+     & calc_init_bennut_states, p_qnQIc, p_qpQIc, p_qsQIc,              &
+     & p_InitSink, p_d_tot_2, p_clD1D2m, p_clDxm, p_q10diff
 #endif
 #ifdef INCLUDE_SEAICE
-  namelist /Param_parameters_ice/                                             &
-    CalcSeaiceAlgae,CalcSeaiceZoo,CalcSeaiceBacteria
+      namelist /Param_parameters_ice/                                   &
+     & CalcSeaiceAlgae,CalcSeaiceZoo,CalcSeaiceBacteria
 #endif
    integer :: i
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -216,7 +216,8 @@
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
    LEVEL1 "#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
    LEVEL1 "#  Reading BFM parameters .."
-   open(NMLUNIT,file='BFM_General.nml',status='old',action='read',err=100)
+      open(NMLUNIT,file='BFM_General.nml',status='old',                 &
+     & action='read',err=100)
    read(NMLUNIT,nml=Param_parameters,err=101)
 #ifdef INCLUDE_BEN
    read(NMLUNIT,nml=Param_parameters_ben,err=102)

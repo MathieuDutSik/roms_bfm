@@ -50,6 +50,7 @@
    logical                            :: parallel_log = .FALSE.
    integer                            :: parallel_rank = 0
    character(LEN=4)                   :: str
+   REAL(8)                            :: delt_bfm
 
    !---------------------------------------------
    ! Dimension lengths for output

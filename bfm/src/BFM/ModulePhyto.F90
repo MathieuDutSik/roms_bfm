@@ -202,18 +202,19 @@
   subroutine InitPhyto()
   integer :: i
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  namelist /Phyto_parameters/ p_q10, p_sum, p_srs, p_sdmo, p_seo, p_pu_ea, &
-                              p_temp, p_netgrowth,p_limnut, &
-                              p_pu_ra, p_qnlc, p_qplc, p_qslc, &
-                              p_qncPPY, p_qpcPPY, p_qscPPY, p_qlcPPY, &
-                              p_qun, p_qup, p_qus, &
-                              p_xqn, p_xqp, p_sheo, &
-                              p_esNI, p_thdo, p_res, p_lN4, p_chPs, &
-                              p_Contois, p_EpEk_or, p_tochl_relt,   &
-                              p_switchDOC,p_switchSi,p_switchChl,  &
-                              p_alpha_chl, p_sdchl, p_epsChla, p_iswLtyp, &
-                              p_addepth, p_chELiPPY, p_clELiPPY, &
-                              p_ruELiPPY, p_rPIm
+         namelist /Phyto_parameters/ p_q10, p_sum, p_srs,               &
+     &                  p_sdmo, p_seo, p_pu_ea,                         &
+     &                  p_temp, p_netgrowth,p_limnut,                   &
+     &                  p_pu_ra, p_qnlc, p_qplc, p_qslc,                &
+     &                  p_qncPPY, p_qpcPPY, p_qscPPY, p_qlcPPY,         &
+     &                  p_qun, p_qup, p_qus,                            &
+     &                  p_xqn, p_xqp, p_sheo,                           &
+     &                  p_esNI, p_thdo, p_res, p_lN4, p_chPs,           &
+     &                  p_Contois, p_EpEk_or, p_tochl_relt,             &
+     &                  p_switchDOC,p_switchSi,p_switchChl,             &
+     &                  p_alpha_chl, p_sdchl, p_epsChla, p_iswLtyp,     &
+     &                  p_addepth, p_chELiPPY, p_clELiPPY,              &
+     &                  p_ruELiPPY, p_rPIm
 
 #ifdef INCLUDE_PELFE
   namelist /Phyto_parameters_iron/ p_qflc, p_qfcPPY, p_xqf, p_quf
@@ -241,9 +242,10 @@
      select case ( p_switchSi(i) )
        case ( 1 ) ! external limitation
           if (p_chps(i)==ZERO)  &
-          call bfm_error("Pelagic_Ecology.nml","Phyto_parameters p_switchS1=1: "//&
-                         "External silica control is "//&
-                         "selected but half saturation constant p_chps=0")
+          call bfm_error("Pelagic_Ecology.nml",                         &
+     &   "Phyto_parameters p_switchS1=1: "//                            &
+     &   "External silica control is "//                                &
+     &   "selected but half saturation constant p_chps=0")
        case ( 2 ) ! internal limitation
           if (p_qus(i)==ZERO)  &
           call bfm_error("Pelagic_Ecology.nml","Phyto_parameters p_switchS1=2: "//&
