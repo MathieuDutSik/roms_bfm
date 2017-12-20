@@ -597,13 +597,15 @@ contains
    ! variables
    !---------------------------------------------
    ! total number of output states
-   n =  NO_D3_BOX_STATES     + NO_D3_BOX_FLUX     + NO_D3_BOX_DIAGNOSS  + &
-        NO_D2_BOX_DIAGNOSS
+       n =  NO_D3_BOX_STATES     + NO_D3_BOX_FLUX     +                 &
+     &     NO_D3_BOX_DIAGNOSS  +  NO_D2_BOX_DIAGNOSS
 #ifdef INCLUDE_SEAICE
-   n = n + NO_D2_BOX_STATES_ICE + NO_D2_BOX_FLUX_ICE + NO_D2_BOX_DIAGNOSS_ICE
+       n = n + NO_D2_BOX_STATES_ICE + NO_D2_BOX_FLUX_ICE +              &
+     &     NO_D2_BOX_DIAGNOSS_ICE
 #endif
 #ifdef INCLUDE_BEN
-   n = n + NO_D2_BOX_STATES_BEN + NO_D2_BOX_FLUX_BEN + NO_D2_BOX_DIAGNOSS_BEN
+       n = n + NO_D2_BOX_STATES_BEN + NO_D2_BOX_FLUX_BEN +              &
+     &     NO_D2_BOX_DIAGNOSS_BEN
 #endif
 
    allocate(var_ids(1:n),stat=rc)
@@ -669,12 +671,15 @@ contains
    !
    ! if outdelta is negative dinamically set the output to end of the month
    if ( outdelta .lt. 0 ) then
-      julian1 = bfmtime%time0 + ( (bfmtime%stepnow - bfmtime%step0) * bfmtime%timestep / SEC_PER_DAY)
+      julian1 = bfmtime%time0 + ( (bfmtime%stepnow - bfmtime%step0)     &
+     &    * bfmtime%timestep / SEC_PER_DAY)
       call calendar_date(julian1,yyyy,mm,dd,hh,nn)
       call julian_day(yyyy,mm,eomdays(yyyy,mm),24,0,julian2)
        
-      tmptime = int( julian2 - julian1 ) * int(SEC_PER_DAY) / bfmtime%timestep
-      savedelta = savedelta + int( julian2 - julian1 ) * int(SEC_PER_DAY) / bfmtime%timestep
+      tmptime = int( julian2 - julian1 ) * int(SEC_PER_DAY)             &
+     &    / bfmtime%timestep
+      savedelta = savedelta + int( julian2 - julian1 ) *                &
+     &    int(SEC_PER_DAY) / bfmtime%timestep
 
       write(LOGUNIT,*)
       write(LOGUNIT,*) 'update_save_delta : Output will be saved for the real monthly value at step ', savedelta 
@@ -770,7 +775,8 @@ contains
      write(LOGUNIT,*) 'D3STATE: (', ntime, ')'
      do idx = stPelStateS , stPelStateE
         idx_tmp=idx-stPelStateS+1
-        write(LOGUNIT,*) "  ", trim(var_names(idx)), "= ", D3STATE(idx_tmp,:)
+        write(LOGUNIT,*) "  ", trim(var_names(idx)), "= ",              &
+     &      D3STATE(idx_tmp,:)
      end do
      write(LOGUNIT,*)
 
