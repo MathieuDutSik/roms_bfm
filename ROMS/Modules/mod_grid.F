@@ -302,7 +302,7 @@
         integer, allocatable :: NO_BOXES_Z_arr(:)
         integer, allocatable :: NO_BOXES_XY_arr(:)
         integer, allocatable :: NO_BOXES_arr(:)
-
+        logical, allocatable :: AllocatedIJK(:)
         
       CONTAINS
 
