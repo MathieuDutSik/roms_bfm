@@ -26,8 +26,9 @@
   use mem
 #else
   use mem,  ONLY: D3STATE, PhytoPlankton
-  use mem, ONLY: ppPhytoPlankton, D3STATETYPE, Depth, xEPS, EIR, ELiPPY, &
-    iiL, iiC, Source_D3_vector, NO_BOXES, iiBen, iiPel, flux_vector
+        use mem, ONLY: ppPhytoPlankton, D3STATETYPE, Depth, xEPS,       &
+     &  EIR, ELiPPY,                                                    &
+     &  iiL, iiC, Source_D3_vector, NO_BOXES, iiBen, iiPel, flux_vector
 #endif
   use mem_Phyto, ONLY: p_chELiPPY, p_clELiPPY, p_ruELiPPY, p_addepth
 
@@ -111,13 +112,16 @@
 
     case ( NOTRANSPORT )
 
-      rate_ELiPPY  =   p_ruELiPPY(phyto)*( new_ELiPPY(:)- ELiPPY(phyto,:))
+       rate_ELiPPY  =   p_ruELiPPY(phyto)*                              &
+     &            ( new_ELiPPY(:)- ELiPPY(phyto,:))
       call flux_vector( iiPel, iphytol,iphytol, rate_ELiPPY )
 
     case default
 
-      rate_PLi = Source_D3_vector(ppPhytoPlankton(phyto,iiC))* ELiPPY(phyto,:)+ &
-                 p_ruELiPPY(phyto)*( new_ELiPPY- ELiPPY(phyto,:))* PhytoPlankton(phyto,iiC)
+       rate_PLi = Source_D3_vector(ppPhytoPlankton(phyto,iiC)) *        &
+     &      ELiPPY(phyto,:) + p_ruELiPPY(phyto)*                        &
+     &      ( new_ELiPPY- ELiPPY(phyto,:))* PhytoPlankton(phyto,iiC)
+                 
       call flux_vector( iiPel, iphytol,iphytol, rate_PLi )
 
   end select
