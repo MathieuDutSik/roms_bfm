@@ -37,15 +37,15 @@
 #ifdef NOPOINTERS
   use mem
 #else
-  use mem, ONLY: R6c, R6n, R6p, R6s, O2o, N1p, N3n, N4n, N5s, N6r, &
-    R1c, R1n, R1p, PhytoPlankton, ppPhytoPlankton,iiPhytoPlankton,  &
-    MicroZooPlankton, ppMicroZooPlankton,iiMicroZooPlankton
-  use mem, ONLY: ppR6c, ppR6n, ppR6p, ppR6s, ppO2o, ppN1p, &
-    ppN3n, ppN4n, ppN5s, ppN6r, ppR1c, ppR1n, ppR1p, &
-    NO_BOXES_XY, ERHO, BoxNumberXY, Depth, &
-    jbotO2o, jbotN1p, jbotN3n, jbotN4n, jbotN5s, jbotN6r, jbotR6c, jbotR6n, &
-    jbotR6p, jbotR6s, jbotR1c, jbotR1n, jbotR1p, PELBOTTOM, &
-    iiP1, iiC, iiN, iiP, iiL, iiS, iiBen, iiPel, flux
+      use mem, ONLY: R6c, R6n, R6p, R6s, O2o, N1p, N3n, N4n, N5s, N6r,  &
+     & R1c, R1n, R1p, PhytoPlankton, ppPhytoPlankton,iiPhytoPlankton,   &
+     & MicroZooPlankton, ppMicroZooPlankton,iiMicroZooPlankton
+      use mem, ONLY: ppR6c, ppR6n, ppR6p, ppR6s, ppO2o, ppN1p,          &
+     & ppN3n, ppN4n, ppN5s, ppN6r, ppR1c, ppR1n, ppR1p,                 &
+     & NO_BOXES_XY, ERHO, BoxNumberXY, Depth, jbotR6n,                  &
+     & jbotO2o, jbotN1p, jbotN3n, jbotN4n, jbotN5s, jbotN6r, jbotR6c,   &
+     & jbotR6p, jbotR6s, jbotR1c, jbotR1n, jbotR1p, PELBOTTOM,          &
+     & iiP1, iiC, iiN, iiP, iiL, iiS, iiBen, iiPel, flux
 #ifdef INCLUDE_BEN
   use mem, ONLY: jPIY3c, jZIY3c, ZI_Fc, jRIY3c, jRIY3n, jRIY3p, jRIY3s
 #endif
@@ -135,28 +135,28 @@
             PELBOTTOM(j,BoxNumberXY)  =  PELBOTTOM(j,BoxNumberXY)  -uptake
             j = ppPhytoPlankton(i,iiN)
             lcl_PhytoPlankton => PhytoPlankton(i,iiN)
-            PELBOTTOM(j,BoxNumberXY) =  PELBOTTOM(j,BoxNumberXY)  &
-                              -uptake* lcl_PhytoPlankton(kbot)/ Pc
+            PELBOTTOM(j,BoxNumberXY) =  PELBOTTOM(j,BoxNumberXY)        &
+     &                        -uptake* lcl_PhytoPlankton(kbot)/ Pc
             j = ppPhytoPlankton(i,iiP)
             lcl_PhytoPlankton => PhytoPlankton(i,iiP)
-            PELBOTTOM(j,BoxNumberXY) =  PELBOTTOM(j,BoxNumberXY)  &
-                              -uptake* lcl_PhytoPlankton(kbot)/ Pc
+            PELBOTTOM(j,BoxNumberXY) =  PELBOTTOM(j,BoxNumberXY)        &
+     &                         -uptake* lcl_PhytoPlankton(kbot)/ Pc
             j = ppPhytoPlankton(i,iiL)
             lcl_PhytoPlankton => PhytoPlankton(i,iiL)
-            PELBOTTOM(j,BoxNumberXY) =  PELBOTTOM(j,BoxNumberXY)  &
-                              -uptake* lcl_PhytoPlankton(kbot)/ Pc
+            PELBOTTOM(j,BoxNumberXY) =  PELBOTTOM(j,BoxNumberXY)        &
+     &                         -uptake* lcl_PhytoPlankton(kbot)/ Pc
             j = ppPhytoPlankton(i,iiS)
             if ( j> 0) then
                lcl_PhytoPlankton => PhytoPlankton(i,iiS)
-               PELBOTTOM(j,BoxNumberXY) =  PELBOTTOM(j,BoxNumberXY)  &
-                              -uptake* lcl_PhytoPlankton(kbot)/ Pc
+               PELBOTTOM(j,BoxNumberXY) =  PELBOTTOM(j,BoxNumberXY)     &
+     &                         -uptake* lcl_PhytoPlankton(kbot)/ Pc
             end if
 #ifdef INCLUDE_PELFE
             j = ppPhytoPlankton(i,iiF)
             if ( j> 0) then
                lcl_PhytoPlankton => PhytoPlankton(i,iiF)
-               PELBOTTOM(j,BoxNumberXY) =  PELBOTTOM(j,BoxNumberXY)  &
-                              -uptake* lcl_PhytoPlankton(kbot)/ Pc
+               PELBOTTOM(j,BoxNumberXY) =  PELBOTTOM(j,BoxNumberXY)     &
+     &                         -uptake* lcl_PhytoPlankton(kbot)/ Pc
             end if
 #endif
          end if
@@ -175,14 +175,14 @@
             j = ppMicroZooPlankton(i,iiN)
             if ( j> 0) then
               lcl_MicroZooPlankton => MicroZooPlankton(i,iiN)
-              PELBOTTOM(j,BoxNumberXY) =  -uptake* lcl_MicroZooPlankton(kbot)/ &
-                                          ZI_fc(BoxNumberXY)
+              PELBOTTOM(j,BoxNumberXY) =                                &   
+     &       -uptake* lcl_MicroZooPlankton(kbot)/ ZI_fc(BoxNumberXY)
             endif
             j = ppMicroZooPlankton(i,iiP)
             if ( j> 0) then
               lcl_MicroZooPlankton => MicroZooPlankton(i,iiP)
-              PELBOTTOM(j,BoxNumberXY) =  -uptake* lcl_MicroZooPlankton(kbot)/ &
-                                          ZI_fc(BoxNumberXY)
+              PELBOTTOM(j,BoxNumberXY) =                                &
+     &         -uptake* lcl_MicroZooPlankton(kbot)/ ZI_fc(BoxNumberXY)
             endif
          else
             PELBOTTOM(ppMicroZooPlankton(i,iiC),:)  = ZERO
@@ -197,14 +197,14 @@
       ! Net detritus Fluxes to Benthic from Pelagic by Y3
       ! net flux= uptake - excretion of food : flux may be negative!
       ! -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-      call flux(kbot, iiPel, ppR6c, ppR6c, -( jRIY3c(BoxNumberXY)/ &
-         Depth(kbot)) )
-      call flux(kbot, iiPel, ppR6n, ppR6n, -( jRIY3n(BoxNumberXY)/ &
-         Depth(kbot)) )
-      call flux(kbot, iiPel, ppR6p, ppR6p, -( jRIY3p(BoxNumberXY)/ &
-         Depth(kbot)) )
-      call flux(kbot, iiPel, ppR6s, ppR6s, -( jRIY3s(BoxNumberXY)/ &
-         Depth(kbot)) )
+      call flux(kbot, iiPel, ppR6c, ppR6c, -( jRIY3c(BoxNumberXY)/      &
+     &     Depth(kbot)) )
+      call flux(kbot, iiPel, ppR6n, ppR6n, -( jRIY3n(BoxNumberXY)/      &
+     &     Depth(kbot)) )
+      call flux(kbot, iiPel, ppR6p, ppR6p, -( jRIY3p(BoxNumberXY)/      &
+     &     Depth(kbot)) )
+      call flux(kbot, iiPel, ppR6s, ppR6s, -( jRIY3s(BoxNumberXY)/      &
+     &     Depth(kbot)) )
    end do ! loop over NO_BOXES_XY
   end if ! benthic model includes benthos
 #endif

@@ -25,8 +25,8 @@
   use mem
 #else
   use mem, ONLY: R6c, PhytoPlankton, Chla
-  use mem, ONLY: ppR6c, ppPhytoPlankton, xEPS, ABIO_eps, ESS, iiPhytoPlankton, &
-                 iiC, iiL, NO_BOXES, iiBen, iiPel, flux_vector
+       use mem, ONLY: ppR6c, ppPhytoPlankton, xEPS, ABIO_eps, ESS,      &
+     &  iiPhytoPlankton, iiC, iiL, NO_BOXES, iiBen, iiPel, flux_vector
 #endif
   use mem_Phyto, ONLY: p_qlcPPY, p_epsChla
   use mem_Param, ONLY: p_small, ChlDynamicsFlag

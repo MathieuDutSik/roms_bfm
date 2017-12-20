@@ -23,12 +23,13 @@
 #ifdef NOPOINTERS
   use mem
 #else
-  use mem, ONLY:  R6c, R6n, R6p, R1c, R1n, R1p, R2c, O2o, N6r, &
-    N4n, N1p, N3n, R3c, iiR1, iiR6, D3STATE
-  use mem, ONLY: iiPelBacteria, ppPelBacteria, iiC, iiN, iiP, ppR6c, &
-    ppR6n, ppR6p, ppR1c, ppR1n, ppR1p, &
-    ppR2c, ppO2o, ppN6r, ppN4n, ppN1p, ppN3n, ppR3c, flPTN6r, Depth, ETW, &
-    qncPBA, qpcPBA, eO2mO2, qpcOMT, qncOMT, NO_BOXES, iiBen, iiPel, flux_vector
+      use mem, ONLY:  R6c, R6n, R6p, R1c, R1n, R1p, R2c, O2o, N6r,      &
+     &    N4n, N1p, N3n, R3c, iiR1, iiR6, D3STATE
+      use mem, ONLY: iiPelBacteria, ppPelBacteria, iiC, iiN,            &
+     &    ppR6n, ppR6p, ppR1c, ppR1n, ppR1p, iiP, ppR6c,                &
+     &    ppR2c, ppO2o, ppN6r, ppN4n, ppN1p, ppN3n, ppR3c,              &
+     &    flPTN6r, Depth, ETW, qncPBA, qpcPBA, eO2mO2, qpcOMT,          &
+     &    qncOMT, NO_BOXES, iiBen, iiPel, flux_vector
 #ifdef INCLUDE_PELCO2
   use mem, ONLY: ppO3c
 #endif
@@ -36,8 +37,8 @@
   use constants,  ONLY: MW_C, ONE_PER_DAY
   use mem_Param,  ONLY: p_pe_R1c, p_pe_R1n, p_pe_R1p, p_qro, p_small
   use mem_PelBac
-  use mem_globalfun,   ONLY: eTq_vector, MM_power_vector, insw_vector, &
-                             MM_vector
+  use mem_globalfun,   ONLY: eTq_vector, MM_power_vector, insw_vector,  &
+     &                        MM_vector
 !  
 !
 ! !AUTHORS
@@ -82,14 +83,15 @@
   integer       :: i
   integer       :: ppbacc, ppbacn, ppbacp
   integer, save :: first =0
-  real(RLEN),allocatable,save,dimension(:) :: runn,runp,et,eO2,r,flN6rPBA,rrc,  &
-                                          rd,ruR1c,ruR1n,ruR1p,ruR2c,ruR3c,  &
-                                          ruR6c,ruR6p,ruR6n,cqun3,rump,  &
-                                          rumn,rumn3,rumn4,ren,rep,reR2c, &
-                                          reR3c,rut,rum,run,sun,rug,suR1, &
-                                          suR1n,suR1p,suR2,cuR6,cuR1,iN1p, &
-                                          iNIn,iN,eN1p,eN4n, &
-                                          huln, hulp, bacc
+          real(RLEN),allocatable,save,dimension(:) :: runn,             &
+     &    runp,et,eO2,r,flN6rPBA,rrc,                                   &
+     &    rd,ruR1c,ruR1n,ruR1p,ruR2c,ruR3c,                             &
+     &    ruR6c,ruR6p,ruR6n,cqun3,rump,                                 &
+     &    rumn,rumn3,rumn4,ren,rep,reR2c,                               &
+     &    reR3c,rut,rum,run,sun,rug,suR1,                               &
+     &    suR1n,suR1p,suR2,cuR6,cuR1,iN1p,                              &
+     &    iNIn,iN,eN1p,eN4n,                                            &
+     &    huln, hulp, bacc
   real(RLEN),allocatable,save,dimension(:) ::  misn,misp,rupp,rupn
   integer :: AllocStatus
 #ifndef INCLUDE_PELCO2

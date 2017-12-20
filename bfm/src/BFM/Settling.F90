@@ -30,12 +30,13 @@
 #ifdef NOPOINTERS
   use mem
 #else
-  use mem,  ONLY: R1c, R2c, R6c, R1n, R6n, R1p, R6p, R6s, PhytoPlankton, D3STATE
-  use mem, ONLY: ppR1c, ppR6c, ppR1n, ppR6n, ppR1p, ppR6p, &
-    ppR6s, ppPhytoPlankton, &
-    NO_BOXES_XY, BoxNumberXY, Depth, jbotR6c, jbotR6n, jbotR6p, &
-    jbotR6s, jbotR1c, jbotR1n, jbotR1p, sediPPY, sediR2, sediR6, iiPhytoPlankton, &
-    iiC, iiN, iiP, iiL, iiS, iiBen, iiPel, PELBOTTOM, flux
+         use mem,  ONLY: R1c, R2c, R6c, R1n, R6n, R1p, R6p, R6s,        &
+     &  PhytoPlankton, D3STATE
+         use mem, ONLY: ppR1c, ppR6c, ppR1n, ppR6n, ppR1p, ppR6p,       &
+     &  ppR6s, ppPhytoPlankton, sediR6, iiPhytoPlankton,                &
+     &  NO_BOXES_XY, BoxNumberXY, Depth, jbotR6c, jbotR6n, jbotR6p,     &
+     &  jbotR6s, jbotR1c, jbotR1n, jbotR1p, sediPPY, sediR2,            &
+     &  iiC, iiN, iiP, iiL, iiS, iiBen, iiPel, PELBOTTOM, flux
 #ifdef INCLUDE_PELFE
   use mem, ONLY: iiF,R6f,ppR6f,jbotR6f
 #endif

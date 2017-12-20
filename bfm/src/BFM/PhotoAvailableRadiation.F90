@@ -45,8 +45,8 @@
   use mem
 #else
   use mem, ONLY: D3STATE, PhytoPlankton
-  use mem, ONLY: ppPhytoPlankton, D3STATETYPE, EIR, xEPS, Depth, ELiPPY, eiPPY, &
-                 iiC, iiL, NO_BOXES, iiBen, iiPel, flux_vector
+       use mem, ONLY: ppPhytoPlankton, D3STATETYPE, EIR, xEPS, Depth,   &
+     &     ELiPPY, eiPPY, iiC, iiL, NO_BOXES, iiBen, iiPel, flux_vector
 #endif
   use mem_PAR
   use mem_Phyto, ONLY: p_iswLtyp
@@ -204,13 +204,15 @@
       END WHERE
 
       rampcontrol  =   2* int(insw_vector(  pirrz_afternoon- ONE))
-      rampcontrol = min( 2, rampcontrol+ int(insw_vector( pirr0_afternoon- ONE)))
+      rampcontrol = min( 2, rampcontrol+                                &
+     &     int(insw_vector( pirr0_afternoon- ONE)))
 
       WHERE (( rampcontrol)==2)
           corr_irrb  =   ONE
 
         ELSEWHERE (( rampcontrol)==1)
-          corr_irrb  =  ( ONE+ log(  pirr0_afternoon)- pirrz_afternoon)/ xd
+          corr_irrb  =  ( ONE+ log(  pirr0_afternoon) -                 &
+     &              pirrz_afternoon)/ xd
 
         ELSEWHERE (( rampcontrol)==0)
           corr_irrb  =  ( pirr0_afternoon- pirrz_afternoon)/ xd
@@ -237,28 +239,28 @@
 
     case ( 6 )
       ! Smith II
-      f_0_noon = log( ONE+ sqrt( (pirr0_noon* exp( ONE))**(- &
-        2.0E+00_RLEN)+ ONE))
-      f_z_noon = log( exfac+ sqrt( (pirr0_noon* exp( ONE))**(- &
-        2.0E+00_RLEN)+ exfac* exfac))
-      f_0_afternoon = log( ONE+ sqrt( (pirr0_afternoon* exp( &
-        ONE))**(- 2.0E+00_RLEN)+ ONE))
-      f_z_afternoon = log( exfac+ sqrt( (pirr0_afternoon* exp( ONE))**(- &
-        2.0E+00_RLEN)+ exfac* exfac))
+      f_0_noon = log( ONE+ sqrt( (pirr0_noon* exp( ONE))**(-            &
+     &    2.0E+00_RLEN)+ ONE))
+      f_z_noon = log( exfac+ sqrt( (pirr0_noon* exp( ONE))**(-          &
+     &   2.0E+00_RLEN)+ exfac* exfac))
+      f_0_afternoon = log( ONE+ sqrt( (pirr0_afternoon* exp(            &
+     &   ONE))**(- 2.0E+00_RLEN)+ ONE))
+      f_z_afternoon = log(exfac+sqrt( (pirr0_afternoon* exp( ONE))**(-  &
+     &   2.0E+00_RLEN)+ exfac* exfac))
       corr_irra  =  ( f_0_noon- f_z_noon)/ xd
       corr_irrb  =  ( f_0_afternoon- f_z_afternoon)/ xd
 
   end select
+!rectangular integration or Simpson integration
 
   select case ( LightPeriodFlag)
 
     case ( 1 )
-      !rectangular integration:
       eiPPY(phyto,:)  =   min(  ONE,  corr_mean)
 
     case ( 3 )
-      !   Simpson integration is used as default:
-      eiPPY(phyto,:)  =  ( corr_irra+ 4.0E+00_RLEN* corr_irrb)/ 6.0E+00_RLEN
+       eiPPY(phyto,:)  =  ( corr_irra+ 4.0E+00_RLEN* corr_irrb)         &
+     &   / 6.0E+00_RLEN
 
   end select
 

@@ -41,12 +41,12 @@
 ! !LOCAL VARIABLES:
    logical :: use_seaice_data
 
-   namelist /forcings_nml/ forcing_method,ltype,lw,ls,sw,ss,tw,ts,tde, & 
-            ww,ws,CO2inc,botdep_c,botdep_n,botdep_p,botdep_si,botox_o,  &
-            forcing_file, &
-            use_seaice_data, seaice_file, &
-            use_external_data, data_file, &
-            use_event_data, event_file
+       namelist /forcings_nml/ forcing_method,ltype,lw,ls,sw,           &
+     &   ww,ws,CO2inc,botdep_c,botdep_n,botdep_p,botdep_si,botox_o,     &
+     &   forcing_file, ss,tw,ts,tde,                                    &
+     &   use_seaice_data, seaice_file,                                  &
+     &   use_external_data, data_file,                                  &
+     &   use_event_data, event_file
 !
 ! !LOCAL VARIABLES:
 !EOP
@@ -71,8 +71,8 @@
        botdep_n    = 0.0
        botdep_p    = 0.0
        botdep_si   = 0.0
-       open(namlst,file='Standalone.nml',status='old',action='read', &
-            err=100)
+       open(namlst,file='Standalone.nml',status='old',action='read',    &
+     &      err=100)
        read(namlst,nml=forcings_nml,err=102)
        close(namlst)
     select case (forcing_method)
@@ -80,7 +80,8 @@
     case (2) ! input data
        LEVEL2 'Reading forcing data from:'
        LEVEL3 trim(forcing_file)
-       open(unit_forcing,file=forcing_file,action='read',status='old',err=106)
+       open(unit_forcing,file=forcing_file,action='read',               &
+     &      status='old',err=106)
     case (3) ! interactive air-sea fluxes
       !call init_air_sea(data_file,latitude, longitude)
     end select
@@ -88,7 +89,8 @@
     if (use_seaice_data) then
        LEVEL2 'Reading sea-ice forcing data from:'
        LEVEL3 trim(seaice_file)
-       open(unit_seaice,file=seaice_file,action='read',status='old',err=108)
+       open(unit_seaice,file=seaice_file,action='read',                 &
+     &    status='old',err=108)
     else
        LEVEL2 'Skipping sea-ice forcing data'
     end if
@@ -103,7 +105,8 @@
     if (use_event_data) then
        LEVEL2 'Reading event data from:'
        LEVEL3 trim(event_file)
-        open(unit_event,file=event_file,action='read',status='old',err=109)
+       open(unit_event,file=event_file,action='read',                   &
+     &  status='old',err=109)
     end if
 
    return
