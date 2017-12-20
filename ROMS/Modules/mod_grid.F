@@ -298,6 +298,12 @@
 
         TYPE (T_GRID), allocatable :: GRID(:)
 
+
+        integer, allocatable :: NO_BOXES_Z_arr(:)
+        integer, allocatable :: NO_BOXES_XY_arr(:)
+        integer, allocatable :: NO_BOXES_arr(:)
+
+        
       CONTAINS
 
       SUBROUTINE allocate_grid (ng, LBi, UBi, LBj, UBj, LBij, UBij)

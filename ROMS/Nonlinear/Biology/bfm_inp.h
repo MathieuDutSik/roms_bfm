@@ -46,7 +46,6 @@
       integer :: namlst=10
       integer eProd, idx, Nwetpoint
       integer NO_BOXES_Z_max, NO_BOXES_XY_max
-# include "set_bounds.h"
 !
 !-----------------------------------------------------------------------
 !  Initialize.
@@ -64,82 +63,4 @@
 !-----------------------------------------------------------------------
 !
       
-      allocate(NO_BOXES_Z_arr(Ngrids), stat=istat)
-      allocate(NO_BOXES_XY_arr(Ngrids), stat=istat)
-      allocate(NO_BOXES_arr(Ngrids), stat=istat)
-      allocate(ListArrayWet(Ngrids), stat=istat)
-      NO_BOXES_XY_max = 0
-      NO_BOXES_Z_max = 0
-      DO ng=1,Ngrids
-         NO_BOXES_Z_arr(ng) = N(ng)
-         Nwetpoint=0
-         DO j=Jstr-1,JendR
-            DO i=Istr-1,IendR
-#ifdef MASKING
-               IF (GRIDS(ng) % rmask(i,j) .eq. 1) THEN
-#endif
-                  Nwetpoint=Nwetpoint + 1
-#ifdef MASKING
-               END IF
-#endif
-            END DO
-         END DO
-         NO_BOXES_XY_arr(ng) = Nwetpoint
-         IF (Nwetpoint .gt. NO_BOXES_XY_max) THEN
-            NO_BOXES_XY_max = Nwetpoint
-         END IF
-         IF (N(ng) .gt. NO_BOXES_Z_max) THEN
-            NO_BOXES_Z_max = N(ng)
-         END IF
-         eProd = Nwetpoint * N(ng)
-         NO_BOXES_arr(ng) = eProd
-         ListArrayWet(ng) % Nwetpoint = Nwetpoint
-         allocate(ListArrayWet(ng) % ListI(Nwetpoint), stat=istat)
-         allocate(ListArrayWet(ng) % ListJ(Nwetpoint), stat=istat)
-!
-         idx=0
-         DO j=Jstr-1,JendR
-            DO i=Istr-1,IendR
-#ifdef MASKING
-               IF (GRIDS(ng) % rmask(i,j) .eq. 1) THEN
-#endif
-                  ListArrayWet(ng) % ListI(idx) = i
-                  ListArrayWet(ng) % ListJ(idx) = j
-#ifdef MASKING
-               END IF
-#endif
-            END DO
-         END DO
-!
-      END DO
-!
-      NO_BOXES_XY = NO_BOXES_XY_max
-      NO_BOXES_X = NO_BOXES_XY_max
-      NO_BOXES_Y = 1
-      NO_BOXES_Z = NO_BOXES_Z_max
-      NO_BOXES = NO_BOXES_XY * NO_BOXES_Z
-      NO_STATES   = NO_D3_BOX_STATES * NO_BOXES + NO_BOXES_XY
-      
-! Initialise the BFM with standalone settings
-      call init_bfm(namlst)
-! Initialise state variable names and diagnostics
-      call set_var_info_bfm
-! Allocate memory and give initial values
-! to the pelagic system
-! We need the variable well set for this to work.
-      call init_var_bfm(bio_setup)
-! Initialize internal constitutents of functional groups
-      call init_organic_constituents()
-
-!     Need to set up bfmtime adequately for the runs.
-!     Need also to set up the wind.
-      call init_envforcing_bfm
-!     Read restart file (if flag)
-!     Overwrite previous initialization
-!     Initialise the diagnostic variables
-      call CalcVerticalExtinction( )
-      call CalcChlorophylla( )
-
-      
-
       END SUBROUTINE read_BioPar
