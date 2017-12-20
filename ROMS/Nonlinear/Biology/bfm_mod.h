@@ -91,7 +91,6 @@
       integer, allocatable :: ListJ(:)
       END TYPE ARRAY_WET
 !
-      integer, allocatable :: NO_BOXES_Z(:), NO_BOXES_XY(:), NO_BOXES(:)
       type(ARRAY_WET), allocatable :: ListArrayWet(:)
       
       CONTAINS
