@@ -241,16 +241,17 @@
      write(LOGUNIT,*) "#  Checking Phyto parameters for group:",i
      select case ( p_switchSi(i) )
        case ( 1 ) ! external limitation
-          if (p_chps(i)==ZERO)  &
-          call bfm_error("Pelagic_Ecology.nml",                         &
+          if (p_chps(i)==ZERO)                                          &
+     &    call bfm_error("Pelagic_Ecology.nml",                         &
      &   "Phyto_parameters p_switchS1=1: "//                            &
      &   "External silica control is "//                                &
      &   "selected but half saturation constant p_chps=0")
        case ( 2 ) ! internal limitation
-          if (p_qus(i)==ZERO)  &
-          call bfm_error("Pelagic_Ecology.nml","Phyto_parameters p_switchS1=2: "//&
-                         "Internal silica control is "//&
-                         "selected but membrane affinity p_qus=0")
+          if (p_qus(i)==ZERO)                                           &
+     &     call bfm_error("Pelagic_Ecology.nml",                        &
+     &        "Phyto_parameters p_switchS1=2: "//                       &
+     &        "Internal silica control is "//                           &
+     &        "selected but membrane affinity p_qus=0")
      end select
      if (p_netgrowth(i)) then
         p_switchDOC(i) = 2

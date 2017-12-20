@@ -83,25 +83,25 @@ subroutine correct_flux_output(mode, nr0,zlev,nlev,out)
   nr=nr0
   out(:) = D3FLUX_FUNC(nr0,:)
   do idx_i=stPelStateS, stPelStateE
-     origin      = idx_i
-     destination = idx_i
-     if( allocated( D3FLUX_MATRIX(origin,destination)%p ) ) then
+       origin      = idx_i
+       destination = idx_i
+       if( allocated( D3FLUX_MATRIX(origin,destination)%p ) ) then
         do idx_j=1, SIZE(D3FLUX_MATRIX(origin,destination)%p)
-           if( ABS(D3FLUX_MATRIX(origin,destination)%p(idx_j)) .eq. nr0 ) then
-              if( D3FLUX_MATRIX(origin,destination)%dir(idx_j) == 0  ) then ! "A->B" => (out flow) => flux < ZERO => D3SINK
-                 out(BOTindices) = out(BOTindices) - &
-                      SIGN( 1, D3FLUX_MATRIX(origin,destination)%p(idx_j) ) * &
-                      max(ZERO, PELBOTTOM(origin,:)) / Depth(BOTindices)
-                 out(SRFindices) = out(SRFindices) - &
-                      SIGN( 1, D3FLUX_MATRIX(origin,destination)%p(idx_j) ) * &
-                      max(ZERO, PELSURFACE(origin,:)) / Depth(SRFindices)
-              else ! "A<-B" => (in flow) => flux > ZERO => D3SOURCE
-                 out(BOTindices) = out(BOTindices) + &
-                      SIGN( 1, D3FLUX_MATRIX(origin,destination)%p(idx_j) ) * &
-                      min(ZERO, PELBOTTOM(origin,:)) / Depth(BOTindices)
-                 out(SRFindices) = out(SRFindices) + &
-                      SIGN( 1, D3FLUX_MATRIX(origin,destination)%p(idx_j) ) * &
-                      min(ZERO, PELSURFACE(origin,:)) / Depth(SRFindices)
+    if( ABS(D3FLUX_MATRIX(origin,destination)%p(idx_j)) .eq. nr0 ) then
+       if( D3FLUX_MATRIX(origin,destination)%dir(idx_j) == 0  ) then ! "A->B" => (out flow) => flux < ZERO => D3SINK
+            out(BOTindices) = out(BOTindices) -                         &
+     &    SIGN( 1, D3FLUX_MATRIX(origin,destination)%p(idx_j) ) *       &
+     &     max(ZERO, PELBOTTOM(origin,:)) / Depth(BOTindices)
+           out(SRFindices) = out(SRFindices) -                          &
+     &    SIGN( 1, D3FLUX_MATRIX(origin,destination)%p(idx_j) ) *       &
+     &     max(ZERO, PELSURFACE(origin,:)) / Depth(SRFindices)
+       else ! "A<-B" => (in flow) => flux > ZERO => D3SOURCE
+            out(BOTindices) = out(BOTindices) +                         &
+     &    SIGN( 1, D3FLUX_MATRIX(origin,destination)%p(idx_j) ) *       &
+     &     min(ZERO, PELBOTTOM(origin,:)) / Depth(BOTindices)
+            out(SRFindices) = out(SRFindices) +                         &
+     &    SIGN( 1, D3FLUX_MATRIX(origin,destination)%p(idx_j) ) *       &
+     &     min(ZERO, PELSURFACE(origin,:)) / Depth(SRFindices)
               endif
            end if
         end do
