@@ -5,7 +5,11 @@
 ! !IROUTINE: Light and other environmental forcings used in the BFM
 !
 ! !INTERFACE
-   subroutine envforcing_bfm(step)
+#ifdef BFM_COUPLING
+    subroutine envforcing_bfm(ng, tile, step)
+#else
+    subroutine envforcing_bfm(step)
+#endif
 !
 ! !DESCRIPTION
 ! This routine sets the environmental forcings according to user
@@ -41,12 +45,18 @@
 !   MERCHANTEABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 !   GNU General Public License for more details.
 !
-! !LOCAL VARIABLES:
-   integer        :: step
+   ! !LOCAL VARIABLES:
+#ifdef BFM_COUPLING
+   integer, intent(in)  :: ng, tile
+#endif
+   integer, intent(intout)  :: step
 
 !EOP
 !-----------------------------------------------------------------------
 !BOC
+#ifdef BFM_COUPLING
+    call set_bfm_fields_from_roms(ng, tile)
+#else
     select case (forcing_method)
     case (1) ! analytical forcings
       call analytical_forcing
@@ -56,6 +66,7 @@
     case (3) ! interactive air-sea fluxes
 !      call do_air_sea(timesec,startime)
     end select
+#endif    
     ! Assign external data
     call external_data
     ! Assign external event data

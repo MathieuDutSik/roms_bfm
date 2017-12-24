@@ -106,7 +106,7 @@ subroutine analytical_forcing
       case (1) ! Broadband
          EIR(:) = wlight*p_PAR/E2W
       case (2) ! RGB
-         EIR(:) = p_PARRGB*(wlight+p_small)/E2W
+         EIR(:) = p_PARRGB*(wlight+p_small)  /  E2W
          EIRR(:) = EIR(:) * exp ( -R_eps(:) )
          EIRG(:) = EIR(:) * exp ( -G_eps(:) )
          EIRB(:) = EIR(:) * exp ( -B_eps(:) )

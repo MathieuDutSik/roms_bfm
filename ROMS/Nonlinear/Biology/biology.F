@@ -119,7 +119,7 @@
 #  include <ecosim.h>
 # elif defined HYPOXIA_SRM
 #  include <hypoxia_srm.h>
-# elif defined BFM
+# elif defined BFM_COUPLING
 #  include <bfm.h>
 # elif defined NEMURO
 #  include <nemuro.h>
