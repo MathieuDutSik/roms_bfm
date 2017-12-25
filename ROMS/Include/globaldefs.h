@@ -543,7 +543,7 @@
 
 #if defined BIO_FENNEL  || defined ECOSIM      || \
     defined HYPOXIA_SRM || defined NEMURO      || \
-    defined NPZD_FRANKS || defined NPZD_IRON   || defined BFM || \
+    defined NPZD_FRANKS || defined NPZD_IRON   || defined BFM_COUPLING || \
     defined NPZD_POWELL || defined RED_TIDE
 # define BIOLOGY
 #endif

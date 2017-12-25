@@ -109,7 +109,7 @@
 ** Process BFM 
 */
 
-#ifdef BFM
+#ifdef BFM_COUPLING
   USE_BFM := on
 #else
   USE_BFM :=
