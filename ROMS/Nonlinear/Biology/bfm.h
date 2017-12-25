@@ -94,6 +94,22 @@
       RETURN
       END SUBROUTINE biology
 !
+      subroutine envforcing_bfm(ng, tile, step)
+      use global_mem, only: RLEN
+      use envforcing
+      IMPLICIT NONE
+      integer, intent(in)  :: ng, tile
+      integer, intent(inout)  :: step
+      call set_bfm_fields_from_roms(ng, tile)
+      ! Assign external data
+      call external_data
+      ! Assign external event data
+      call event_data
+#ifdef INCLUDE_SEAICE
+      call external_seaice
+#endif
+      if (init_forcing_vars) init_forcing_vars=.false.
+      end subroutine envforcing_bfm
 !-----------------------------------------------------------------------
 ! Use Magnus formula from https://en.wikipedia.org/wiki/Dew_point
 ! in order to get the dew point temperature.
@@ -105,6 +121,8 @@
       USE mod_scalars
       USE mod_stepping
       USE api_bfm
+      USE envforcing, only : botdep_c, botdep_n, botdep_p,              &
+     &    botdep_si, daylength
       USE mod_forces
 #ifdef INCLUDE_PELCO2
       use mem_CO2, only: AtmCO20, AtmCO2, AtmSLP, AtmTDP
@@ -121,7 +139,8 @@
       REAL(R8) lat
       REAL(RLEN) b_dew, c_dew
       REAL(RLEN) eTempDewPoint
-      REAL(RLEN) eTemp, eSalt
+      REAL(r8) eTemp, eSalt
+      REAL(r8) wlight
       REAL(r8) ux, uy
       integer k
 # include "set_bounds.h"
@@ -132,7 +151,7 @@
          j = ListArrayWet(ng) % ListJ(idx)
          lat = GRID(ng) % latp(i,j)
          ! The 
-         SUNQ(idx) = daylength(REAL(dyear, r8), lat)
+         SUNQ(idx) = daylength(REAL(Rclock % yday, r8), lat)
          ! The temperature and salinity
          eTemp = OCEAN(ng) % t(i, j, N(ng), nrhs(ng), itemp)
          eSalt = OCEAN(ng) % t(i, j, N(ng), nrhs(ng), isalt)
@@ -415,7 +434,7 @@
 !     or to use a better integration method
 !
       step = -1 ! not used      
-      call envforcing_bfm(step) 
+      call envforcing_bfm(ng, tile, step) 
       call CalcVerticalExtinction( ) !     Compute extinction coefficient
       call EcologyDynamics           !     Compute reaction terms
 
