@@ -44,8 +44,6 @@
       character (len=256), dimension(200) :: Cval
 
       integer :: namlst=10
-      integer eProd, idx, Nwetpoint
-      integer NO_BOXES_Z_max, NO_BOXES_XY_max
 !
 !-----------------------------------------------------------------------
 !  Initialize.

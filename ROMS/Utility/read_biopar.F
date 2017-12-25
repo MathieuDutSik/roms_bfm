@@ -25,6 +25,8 @@
 #  include <nemuro_inp.h>
 # elif defined NPZD_FRANKS
 #  include <npzd_Franks_inp.h>
+# elif defined BFM_COUPLING
+#  include <bfm_inp.h>
 # elif defined NPZD_IRON
 #  include <npzd_iron_inp.h>
 # elif defined NPZD_POWELL
