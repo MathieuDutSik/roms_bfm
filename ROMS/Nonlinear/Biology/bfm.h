@@ -221,6 +221,7 @@
       USE mod_biology
       USE api_bfm
       USE mem
+      USE init_var_bfm_local, only : init_organic_constituents
       IMPLICIT NONE
       integer, intent(in) :: ng, tile
       logical, SAVE :: IsInitArray = .FALSE.
