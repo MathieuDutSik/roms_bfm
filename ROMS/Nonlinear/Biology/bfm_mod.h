@@ -112,7 +112,7 @@
 !  Set number of biological tracers.
 !-----------------------------------------------------------------------
 !
-      NBT=48
+      NBT=64
 
 #if defined DIAGNOSTICS && defined DIAGNOSTICS_BIO
 !

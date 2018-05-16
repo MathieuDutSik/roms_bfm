@@ -916,10 +916,13 @@
 !-----------------------------------------------------------------------
 !
       DO ng=1,Ngrids
+        Print *, 'ng=', ng
         I_padd=(Lm(ng)+2)/2-(Lm(ng)+1)/2
         J_padd=(Mm(ng)+2)/2-(Mm(ng)+1)/2
         Im(ng)=Lm(ng)+I_padd
         Jm(ng)=Mm(ng)+J_padd
+        Print *, 'NAT=', NAT, ' NBT=', NBT
+        Print *, 'NST=', NST, ' NPT=', NPT
         NT(ng)=NAT+NBT+NST+NPT
 #ifdef FLOATS
 # ifdef FLOAT_OYSTER

@@ -665,6 +665,7 @@
 #endif
       integer :: Lvar, Ntiles, i, ic, ie, is, j, ng
       integer :: gtype, tile, varid
+      integer :: TheId
 
       real(r8), parameter :: spv = 0.0_r8
       real(r8) :: offset, scale
@@ -1592,7 +1593,7 @@
 #  include <ecosim_var.h>
 # elif defined HYPOXIA_SRM
 #  include <hypoxia_srm_var.h>
-# elif defined BFM
+# elif defined BFM_COUPLING
 #  include <bfm_var.h>
 # elif defined NEMURO
 #  include <nemuro_var.h>
@@ -2224,6 +2225,12 @@
 !-----------------------------------------------------------------------
 !
       DO i=NAT+1,MT
+        TheId = idTvar(i)
+        Print *, 'FIS : i=', i, ' TheId=', TheId
+      END DO
+      Print *, 'NAT=', NAT, ' MT=', MT
+      DO i=NAT+1,MT
+        Print *, 'i=', i
         varid=varid+1
         IF (varid.gt.MV) THEN
           WRITE (stdout,60) MV, varid
@@ -2234,6 +2241,8 @@
           Fscale(varid,ng)=1.0_r8
           Iinfo(1,varid,ng)=r2dvar
         END DO
+        TheId = idTvar(i)
+        Print *, 'TheId=', TheId
         WRITE (Vname(1,varid),'(a,a)')                                  &
      &        TRIM(ADJUSTL(Vname(1,idTvar(i)))), '_sflux'
         WRITE (Vname(2,varid),'(a,a)')                                  &

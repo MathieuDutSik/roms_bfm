@@ -29,11 +29,20 @@
               idTvar(iNO3_)=varid
             CASE ('idTvar(iNH4_)')
               idTvar(iNH4_)=varid
+            CASE ('idTvar(iO4n_)')
+              idTvar(iO4n_)=varid
             CASE ('idTvar(iSiOH)')
               idTvar(iSiOH)=varid
+            CASE ('idTvar(iN6r_)')
+              idTvar(iN6r_)=varid
 
             CASE ('idTvar(iB1c_)')
               idTvar(iB1c_)=varid
+            CASE ('idTvar(iB1n_)')
+              idTvar(iB1n_)=varid
+            CASE ('idTvar(iB1p_)')
+              idTvar(iB1p_)=varid
+
             CASE ('idTvar(iP1c_)')
               idTvar(iP1c_)=varid
             CASE ('idTvar(iP1n_)')
@@ -74,12 +83,31 @@
 
             CASE ('idTvar(iZ3c_)')
               idTvar(iZ3c_)=varid
+            CASE ('idTvar(iZ3n_)')
+              idTvar(iZ3n_)=varid
+            CASE ('idTvar(iZ3p_)')
+              idTvar(iZ3p_)=varid
+
             CASE ('idTvar(iZ4c_)')
               idTvar(iZ4c_)=varid
+            CASE ('idTvar(iZ4n_)')
+              idTvar(iZ4n_)=varid
+            CASE ('idTvar(iZ4p_)')
+              idTvar(iZ4p_)=varid
+
             CASE ('idTvar(iZ5c_)')
               idTvar(iZ5c_)=varid
+            CASE ('idTvar(iZ5n_)')
+              idTvar(iZ5n_)=varid
+            CASE ('idTvar(iZ5p_)')
+              idTvar(iZ5p_)=varid
+
             CASE ('idTvar(iZ6c_)')
               idTvar(iZ6c_)=varid
+            CASE ('idTvar(iZ6n_)')
+              idTvar(iZ6n_)=varid
+            CASE ('idTvar(iZ6p_)')
+              idTvar(iZ6p_)=varid
 
             CASE ('idTvar(iR1c_)')
               idTvar(iR1c_)=varid
@@ -91,6 +119,9 @@
             CASE ('idTvar(iR2c_)')
               idTvar(iR2c_)=varid
 
+            CASE ('idTvar(iR3c_)')
+              idTvar(iR3c_)=varid
+
             CASE ('idTvar(iR6c_)')
               idTvar(iR6c_)=varid
             CASE ('idTvar(iR6n_)')
@@ -100,12 +131,19 @@
             CASE ('idTvar(iR6s_)')
               idTvar(iR6s_)=varid
 
+            CASE ('idTvar(iO3c_)')
+              idTvar(iO3c_)=varid
+            CASE ('idTvar(iO3h_)')
+              idTvar(iO3h_)=varid
+
+
+
             CASE ('idTvar(iEIR_)')
               idTvar(iEIR_)=varid
             CASE ('idTvar(iDIC_)')
               idTvar(iDIC_)=varid
-            CASE ('idTvar(ixEPS)')
-              idTvar(ixEPS)=varid
+            CASE ('idTvar(iChlo)')
+              idTvar(iChlo)=varid
 
             CASE ('idTvar(siP1_)')
               idTvar(siP1_)=varid
@@ -129,7 +167,8 @@
               idTvar(ruPTc)=varid
             CASE ('idTvar(ruZTc)')
               idTvar(ruZTc)=varid
-	      
+            CASE ('idTvar(ixEPS)')
+              idTvar(ixEPS)=varid
 	      
 /*
 **  Biological tracers open boundary conditions.

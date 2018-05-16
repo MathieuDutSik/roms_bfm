@@ -48,7 +48,7 @@ ifdef USE_NETCDF4
 else
     NETCDF_INCDIR ?= /usr/local/include
     NETCDF_LIBDIR ?= /usr/local/lib
-             LIBS := -L$(NETCDF_LIBDIR) -lnetcdf
+             LIBS := -L$(NETCDF_LIBDIR)
 endif
 
 ifdef USE_ARPACK

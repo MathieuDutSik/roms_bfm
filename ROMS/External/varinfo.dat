@@ -3217,7 +3217,7 @@
   1.0d0
 
 !
-!  Variables in BFM
+!  Variables in BFM_COUPLING
 !
 
 'NitrogenSink'                                     ! Input/Output
