@@ -383,7 +383,7 @@
       character (len=   7) :: string(4)
       character (len=  21) :: frmt
       character (len=  70) :: line
-      character (len=2816) :: lbc_att
+      character (len=10000) :: lbc_att
 !
 !-----------------------------------------------------------------------
 !  Write lateral boundary conditions global attribute.
