@@ -3526,7 +3526,7 @@
   'r3dvar'
   1.0d0
 
-'LabileDOM_c'                                      ! Input/Output
+'LabileDOM1_c'                                     ! Input/Output
   'Labile Dissolved Organic Matter (Carbon)'
   'milligram meter-3'                              ! [mg/m3]
   'LabileDOM, scalar, series'
@@ -3535,7 +3535,7 @@
   'r3dvar'
   1.0d0
 
-'LabileDOM_n'                                      ! Input/Output
+'LabileDOM1_n'                                     ! Input/Output
   'Labile Dissolved Organic Matter (Nitrogen)'
   'millimole meter-3'                              ! [millimole/m3]
   'LabileDOM, scalar, series'
@@ -3544,7 +3544,7 @@
   'r3dvar'
   1.0d0
 
-'LabileDOM_p'                                      ! Input/Output
+'LabileDOM1_p'                                     ! Input/Output
   'Labile Dissolved Organic Matter (Phosphate)'
   'millimole meter-3'                              ! [millimole/m3]
   'LabileDOM, scalar, series'
@@ -3553,7 +3553,7 @@
   'r3dvar'
   1.0d0
 
-'LabileDOM_c'                                      ! Input/Output
+'LabileDOM2_c'                                     ! Input/Output
   'Semi-labile Dissolved Organic Carbon'
   'milligram meter-3'                              ! [mg/m3]
   'SemiLabile, scalar, series'
