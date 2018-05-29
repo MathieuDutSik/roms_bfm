@@ -2226,11 +2226,11 @@
 !
       DO i=NAT+1,MT
         TheId = idTvar(i)
-        Print *, 'FIS : i=', i, ' TheId=', TheId
+!        Print *, 'FIS : i=', i, ' TheId=', TheId
       END DO
       Print *, 'NAT=', NAT, ' MT=', MT
       DO i=NAT+1,MT
-        Print *, 'i=', i
+!        Print *, 'i=', i
         varid=varid+1
         IF (varid.gt.MV) THEN
           WRITE (stdout,60) MV, varid

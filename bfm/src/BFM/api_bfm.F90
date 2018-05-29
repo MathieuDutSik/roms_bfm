@@ -609,8 +609,12 @@ contains
      &     NO_D2_BOX_DIAGNOSS_BEN
 #endif
 
+   Print *, ' n=', n
    allocate(var_ids(1:n),stat=rc)
-   if (rc /= 0) stop 'init_bfm(): Error allocating var_ids'
+   IF (rc /= 0) THEN
+     Print *, 'rc=', rc
+     stop 'init_bfm(): Error allocating var_ids'
+   END IF
    var_ids=0;
    allocate(var_ave(1:n),stat=rc)
    if (rc /= 0) stop 'init_bfm(): Error allocating var_ave'

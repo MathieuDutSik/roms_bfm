@@ -38,6 +38,7 @@
   ! Local Variables
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   integer  :: i
+  integer siz
 !
 ! !AUTHORS
 !   Piet Ruardij
@@ -139,14 +140,33 @@
   ! velocity. This needs to be removed if there is no bottom level.
   ! Check also Settling.F90
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+  Print *, 'sediR2, step 1'
   sediR2(:)     = ZERO
+  Print *, 'sediR2, step 2'
+  siz = size(BOTindices)
+  Print *, ' size(BOTindices)=', siz
+  Print *, 'Before allocation test'
+  Print *, 'allocated(BOTindices)=', allocated(BOTindices)
+  Print *, ' After allocation test'
+
+
+!  DO i=1,siz
+!    Print *, 'i=', i, ' BOTindices(i)=', BOTindices(i)
+!  END DO
+  Print *, 'After the I loop'
+!  Print *, 'BOTindices=', BOTindices
   sediR2(BOTindices) = ZERO
+  Print *, 'sediR2, step 3'
+  Print *, 'sediR6, step 1'
   sediR6(:)  =   p_rR6m
+  Print *, 'sediR6, step 2'
   sediR6(BOTindices) = p_burvel_R6
+  Print *, 'sediR6, step 3'
   do i = 1 , ( iiPhytoPlankton)
     sediPPY(i,:)  =   p_rPIm( i)
     sediPPY(i,BOTindices)  =   p_burvel_PI
   end do
+  Print *, 'sediR6, step 4'
 
   end subroutine PelGlobalDynamics
 !EOC

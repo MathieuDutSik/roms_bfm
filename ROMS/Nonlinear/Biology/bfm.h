@@ -230,6 +230,7 @@
       integer, SAVE :: NO_BOXES_Z_max = 0
       integer Nwetpoint, eProd
       integer idx, i, j
+      integer idxBOT, idxSRF, eN, iNode
       integer istat
       integer bio_setup_loc
       integer, parameter :: namlst = 10
@@ -239,14 +240,14 @@
       OPEN(file_id, FILE="bfm_input.nml")
       READ(file_id, NML = PROC)
       CLOSE(file_id)
-      if (.NOT. IsInitArray) THEN
-         IsInitArray=.TRUE.
-         allocate(AllocatedIJK(Ngrids))
-         AllocatedIJK(:) = .FALSE.
-         allocate(NO_BOXES_Z_arr(Ngrids), stat=istat)
-         allocate(NO_BOXES_XY_arr(Ngrids), stat=istat)
-         allocate(NO_BOXES_arr(Ngrids), stat=istat)
-         allocate(ListArrayWet(Ngrids), stat=istat)
+      IF (.NOT. IsInitArray) THEN
+        IsInitArray=.TRUE.
+        allocate(AllocatedIJK(Ngrids))
+        AllocatedIJK(:) = .FALSE.
+        allocate(NO_BOXES_Z_arr(Ngrids), stat=istat)
+        allocate(NO_BOXES_XY_arr(Ngrids), stat=istat)
+        allocate(NO_BOXES_arr(Ngrids), stat=istat)
+        allocate(ListArrayWet(Ngrids), stat=istat)
       END IF
       IF (.NOT. AllocatedIJK(ng)) THEN
         AllocatedIJK(ng) = .TRUE.
@@ -270,19 +271,35 @@
         IF (N(ng) .gt. NO_BOXES_Z_max) THEN
           NO_BOXES_Z_max = N(ng)
         END IF
-        eProd = Nwetpoint * N(ng)
+        NO_BOXES_XY = NO_BOXES_XY_max
+        NO_BOXES_X  = NO_BOXES_XY_max
+        NO_BOXES_Y  = 1
+        NO_BOXES_Z  = NO_BOXES_Z_max
+        !
+        eProd = Nwetpoint * NO_BOXES_Z
         NO_BOXES_XY = Nwetpoint
         NO_BOXES_arr(ng) = eProd
         ListArrayWet(ng) % Nwetpoint = Nwetpoint
         allocate(ListArrayWet(ng) % ListI(Nwetpoint), stat=istat)
         allocate(ListArrayWet(ng) % ListJ(Nwetpoint), stat=istat)
-!     
+! The arrays of bottom and surface
+        allocate(BOTindices(Nwetpoint), stat=istat)
+        allocate(SRFindices(Nwetpoint), stat=istat)
+        eN = NO_BOXES_Z_arr(ng)
+        DO iNode=1,Nwetpoint
+          idxBOT = 1  + eN * (iNode-1)
+          idxSRF = eN + eN * (iNode-1)
+          BOTindices(iNode) = idxBOT
+          SRFindices(iNode) = idxSRF
+        END DO
+! The WET arrays.
         idx=0
         DO j=Jstr-1,JendR
           DO i=Istr-1,IendR
 #ifdef MASKING
             IF (GRID(ng) % rmask(i,j) .eq. 1) THEN
 #endif
+               idx = idx + 1
                ListArrayWet(ng) % ListI(idx) = i
                ListArrayWet(ng) % ListJ(idx) = j
 #ifdef MASKING
@@ -290,6 +307,7 @@
 #endif
           END DO
         END DO
+        
         IF ((NO_BOXES_XY_max .ne. 0).and.                               &
      &       (NO_BOXES_XY_max .gt. NO_BOXES_XY)) THEN
           Print *, 'NO_BOXES_XY_max=', NO_BOXES_XY_max
@@ -297,10 +315,6 @@
           Print *, 'We have a problem of allocation'
           STOP
         END IF
-        NO_BOXES_XY = NO_BOXES_XY_max
-        NO_BOXES_X  = NO_BOXES_XY_max
-        NO_BOXES_Y  = 1
-        NO_BOXES_Z  = NO_BOXES_Z_max
         NO_BOXES    = NO_BOXES_XY * NO_BOXES_Z
         NO_STATES   = NO_D3_BOX_STATES * NO_BOXES + NO_BOXES_XY
       END IF
@@ -408,8 +422,9 @@
 # endif
       real(r8), intent(inout) :: t(LBi:UBi,LBj:UBj,UBk,3,UBt)
 #endif
+      real(r8) eVal
       integer iNode, i, j, k, idx, itrc, ibio
-      integer iVar, iVarB, iZ
+      integer iVar, iZ
       integer step
 !
 !  Setting up the dimensions and initializing BFM if needed
@@ -419,15 +434,28 @@
 !  Assigning the STATE variables from the t array
 !  ! We need to determine if the diagnostics need to be recomputed.
 !
+      Print *, ' size(D3STATE,1) = ', size(D3STATE,1)
+      Print *, ' size(D3STATE,2) = ', size(D3STATE,2)
+      Print *, ' size(t,1)=', size(t,1)
+      Print *, ' size(t,2)=', size(t,2)
+      Print *, ' size(t,3)=', size(t,3)
+      Print *, ' size(t,4)=', size(t,4)
+      Print *, ' size(t,5)=', size(t,5)
       DO iNode=1,NO_BOXES_XY
          i = ListArrayWet(ng) % ListI(iNode)
          j = ListArrayWet(ng) % ListJ(iNode)
          DO k=1,NO_BOXES_Z
+            iZ = k
             idx = iZ + NO_BOXES_Z * (iNode-1)
+!            Print *, '1: iZ=', iZ, ' iNode=', iNode, ' k=', k, ' idx=', idx
             DO iVar=stPelStateS, stPelStateE
                itrc = iVar - stPelStateS + 1
                ibio = idbio(itrc)
-               D3STATE(iVarB, idx) = t(i, j, k, nstp, ibio)
+!               Print *, 'iVar=', iVar, ' itrc=', itrc, ' ibio=', ibio
+!               Print *, 'i=', i, ' j=', j, ' k=', k, ' nstp=', nstp
+               eVal = t(i, j, k, nstp, ibio)
+!               Print *, ' eVal=', eVal
+               D3STATE(itrc, idx) = eVal
             END DO
          END DO
       END DO
@@ -464,11 +492,14 @@
          i = ListArrayWet(ng) % ListI(iNode)
          j = ListArrayWet(ng) % ListJ(iNode)
          DO k=1,NO_BOXES_Z
+            iZ = k
             idx = iZ + NO_BOXES_Z * (iNode-1)
+!            Print *, '2: iZ=', iZ, ' iNode=', iNode, ' k=', k, ' idx=', idx
             DO iVar=stPelStateS, stPelStateE
                itrc = iVar - stPelStateS + 1
                ibio = idbio(itrc)
-               t(i, j, k, nnew, ibio) = D3STATE(iVarB, idx)
+!               Print *, 'iVar=', iVar, ' itrc=', itrc, ' ibio=', ibio
+               t(i, j, k, nnew, ibio) = D3STATE(itrc, idx)
             END DO
          END DO
       END DO
