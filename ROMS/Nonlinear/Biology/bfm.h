@@ -319,6 +319,7 @@
         NO_STATES   = NO_D3_BOX_STATES * NO_BOXES + NO_BOXES_XY
       END IF
       IF (.NOT. IsInitBFM) THEN
+        IsInitBFM = .TRUE.
         ! Initialise the BFM with standalone settings
         call init_bfm(namlst)
         ! Initialise state variable names and diagnostics
@@ -434,13 +435,13 @@
 !  Assigning the STATE variables from the t array
 !  ! We need to determine if the diagnostics need to be recomputed.
 !
-      Print *, ' size(D3STATE,1) = ', size(D3STATE,1)
-      Print *, ' size(D3STATE,2) = ', size(D3STATE,2)
-      Print *, ' size(t,1)=', size(t,1)
-      Print *, ' size(t,2)=', size(t,2)
-      Print *, ' size(t,3)=', size(t,3)
-      Print *, ' size(t,4)=', size(t,4)
-      Print *, ' size(t,5)=', size(t,5)
+!      Print *, ' size(D3STATE,1) = ', size(D3STATE,1)
+!      Print *, ' size(D3STATE,2) = ', size(D3STATE,2)
+!      Print *, ' size(t,1)=', size(t,1)
+!      Print *, ' size(t,2)=', size(t,2)
+!      Print *, ' size(t,3)=', size(t,3)
+!      Print *, ' size(t,4)=', size(t,4)
+!      Print *, ' size(t,5)=', size(t,5)
       DO iNode=1,NO_BOXES_XY
          i = ListArrayWet(ng) % ListI(iNode)
          j = ListArrayWet(ng) % ListJ(iNode)

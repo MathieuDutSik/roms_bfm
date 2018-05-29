@@ -366,7 +366,7 @@ contains
 !EOP
 !-----------------------------------------------------------------------
 !BOC
-
+   Print *, 'Beginning of init_bfm'
 
    !---------------------------------------------
    ! Provide sensible values for namelist parameters
@@ -610,6 +610,7 @@ contains
 #endif
 
    Print *, ' n=', n
+   Print *, 'allocated(var_ids)=', allocated(var_ids)
    allocate(var_ids(1:n),stat=rc)
    IF (rc /= 0) THEN
      Print *, 'rc=', rc

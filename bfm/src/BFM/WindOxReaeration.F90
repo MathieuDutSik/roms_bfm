@@ -145,15 +145,15 @@
     !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     !
 !    Print *, 'kun=', kun
-    Print *, 'size(ice)=', size(ice)
-    Print *, 'size(cxoO2)=', size(cxoO2)
-    Print *, 'size(O2o)=', size(O2o)
-    Print *, 'size(kun)=', size(kun)
-    Print *, 'size(O2AIRFlux)=', size(O2AIRFlux)
+!    Print *, 'size(ice)=', size(ice)
+!    Print *, 'size(cxoO2)=', size(cxoO2)
+!    Print *, 'size(O2o)=', size(O2o)
+!    Print *, 'size(kun)=', size(kun)
+!    Print *, 'size(O2AIRFlux)=', size(O2AIRFlux)
 !    Print *, 'allocated(ice)=', allocated(ice)
 !    Print *, 'allocated(cxoO2)=', allocated(cxoO2)
 !    Print *, 'allocated(O2o)=', allocated(O2o)
-    Print *, 'allocated(O2AIRFlux)=', allocated(O2AIRFlux)
+!    Print *, 'allocated(O2AIRFlux)=', allocated(O2AIRFlux)
     O2AIRFlux(:) = (ONE-ice(:)) * kun * ( cxoO2(SRFindices)- O2o(SRFindices)) 
     ! Update flux
     jsurO2o(:)  = jsurO2o(:) + O2AIRFlux(:)
