@@ -234,10 +234,10 @@
       integer bio_setup_loc
       integer, parameter :: namlst = 10
       integer, parameter :: file_id = 1453
-      NAMELIST /standalone_nml/ delt_bfm
+      NAMELIST /PROC/ delt_bfm
 # include "set_bounds.h"
       OPEN(file_id, FILE="bfm_input.nml")
-      READ(file_id, NML=standalone_nml)
+      READ(file_id, NML = PROC)
       CLOSE(file_id)
       if (.NOT. IsInitArray) THEN
          IsInitArray=.TRUE.
@@ -271,6 +271,7 @@
           NO_BOXES_Z_max = N(ng)
         END IF
         eProd = Nwetpoint * N(ng)
+        NO_BOXES_XY = Nwetpoint
         NO_BOXES_arr(ng) = eProd
         ListArrayWet(ng) % Nwetpoint = Nwetpoint
         allocate(ListArrayWet(ng) % ListI(Nwetpoint), stat=istat)
@@ -291,6 +292,8 @@
         END DO
         IF ((NO_BOXES_XY_max .ne. 0).and.                               &
      &       (NO_BOXES_XY_max .gt. NO_BOXES_XY)) THEN
+          Print *, 'NO_BOXES_XY_max=', NO_BOXES_XY_max
+          Print *, 'NO_BOXES_XY=', NO_BOXES_XY
           Print *, 'We have a problem of allocation'
           STOP
         END IF
@@ -422,7 +425,7 @@
          DO k=1,NO_BOXES_Z
             idx = iZ + NO_BOXES_Z * (iNode-1)
             DO iVar=stPelStateS, stPelStateE
-               itrc=iVar - stPelStateS + 1
+               itrc = iVar - stPelStateS + 1
                ibio = idbio(itrc)
                D3STATE(iVarB, idx) = t(i, j, k, nstp, ibio)
             END DO
@@ -463,7 +466,7 @@
          DO k=1,NO_BOXES_Z
             idx = iZ + NO_BOXES_Z * (iNode-1)
             DO iVar=stPelStateS, stPelStateE
-               itrc=iVar - stPelStateS + 1
+               itrc = iVar - stPelStateS + 1
                ibio = idbio(itrc)
                t(i, j, k, nnew, ibio) = D3STATE(iVarB, idx)
             END DO

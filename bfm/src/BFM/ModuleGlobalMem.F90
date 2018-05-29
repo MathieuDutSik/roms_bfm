@@ -107,6 +107,9 @@
                 trim(what)," in ",trim(infile)
     end select
     write(LOGUNIT,*) "***********  RUN TIME ERROR END  ***********"
+    Print *, 'code=', code
+    Print *, 'what=', what
+    Print *, 'infile=', infile
     stop "BFM error (see logfile)"
   end subroutine error_msg_prn
   

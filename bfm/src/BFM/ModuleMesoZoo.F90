@@ -108,8 +108,9 @@
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   subroutine InitMesoZoo()
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  namelist /MesoZoo_parameters/ p_q10, p_srs, p_paPPY, p_paMIZ, p_paMEZ, p_sd, &
-    p_sum, p_vum, p_puI, p_peI, p_sdo, p_sds, p_qpcMEZ, p_qncMEZ, p_clO2o
+        namelist /MesoZoo_parameters/ p_q10, p_srs, p_paPPY, p_paMIZ,   &
+     &      p_paMEZ, p_sd, p_sum, p_vum, p_puI, p_peI,                  &
+     &      p_sdo, p_sds, p_qpcMEZ, p_qncMEZ, p_clO2o
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   !BEGIN compute
 
@@ -118,9 +119,11 @@
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   write(LOGUNIT,*) "#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
   write(LOGUNIT,*) "#  Reading MesoZoo parameters.."
-  open(NMLUNIT,file='Pelagic_Ecology.nml',status='old',action='read',err=100)
+  Print *, 'Before reading Pelagic_Ecology_1 iiMesoZooPlankton=', iiMesoZooPlankton
+  open(NMLUNIT,file='Pelagic_Ecology_1.nml',status='old',action='read',err=100)
   read(NMLUNIT,nml=MesoZoo_parameters,err=101)
   close(NMLUNIT)
+  Print *, ' After reading Pelagic_Ecology_1'
   write(LOGUNIT,*) "#  Namelist is:"
   write(LOGUNIT,nml=MesoZoo_parameters)
 
