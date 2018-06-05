@@ -215,7 +215,84 @@
       END SUBROUTINE
 !
 !-----------------------------------------------------------------------
-      SUBROUTINE INIT_BFM_SYSTEM_VARIABLE(ng, tile)
+      SUBROUTINE COPY_T_to_D3STATE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, eTimeIdx, t)
+      USE mod_param
+      USE mod_biology
+      USE mod_ncparam
+      USE mod_scalars
+      USE mem
+      USE api_bfm
+      IMPLICIT NONE
+      integer, intent(in) :: LBi, UBi, LBj, UBj, UBk, UBt
+      integer, intent(in) :: ng, tile, eTimeIdx
+#ifdef ASSUMED_SHAPE
+      real(r8), intent(inout) :: t(LBi:,LBj:,:,:,:)
+#else
+      real(r8), intent(inout) :: t(LBi:UBi,LBj:UBj,UBk,3,UBt)
+#endif
+      integer iNode, i, j, k, iZ, idx
+      integer iVar, itrc, ibio
+      REAL(r8) eVal
+# include "set_bounds.h"
+      DO iNode=1,NO_BOXES_XY
+         i = ListArrayWet(ng) % ListI(iNode)
+         j = ListArrayWet(ng) % ListJ(iNode)
+         DO k=1,NO_BOXES_Z
+            iZ = k
+            idx = iZ + NO_BOXES_Z * (iNode-1)
+!            Print *, '1: iZ=', iZ, ' iNode=', iNode, ' k=', k, ' idx=', idx
+            DO iVar=stPelStateS, stPelStateE
+               itrc = iVar - stPelStateS + 1
+               ibio = idbio(itrc)
+!               Print *, 'iVar=', iVar, ' itrc=', itrc, ' ibio=', ibio
+!               Print *, 'i=', i, ' j=', j, ' k=', k, ' nstp=', nstp
+               eVal = t(i, j, k, eTimeIdx, ibio)
+!               Print *, ' eVal=', eVal
+               D3STATE(itrc, idx) = eVal
+            END DO
+         END DO
+      END DO
+      END SUBROUTINE
+
+      SUBROUTINE COPY_D3STATE_to_T(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, eTimeIdx, t)
+      USE mod_param
+      USE mod_biology
+      USE mod_ncparam
+      USE mod_scalars
+      USE mem
+      USE api_bfm
+      IMPLICIT NONE
+      integer, intent(in) :: LBi, UBi, LBj, UBj, UBk, UBt
+      integer, intent(in) :: ng, tile, eTimeIdx
+#ifdef ASSUMED_SHAPE
+      real(r8), intent(inout) :: t(LBi:,LBj:,:,:,:)
+#else
+      real(r8), intent(inout) :: t(LBi:UBi,LBj:UBj,UBk,3,UBt)
+#endif
+      integer iNode, i, j, k, iZ, idx
+      integer iVar, itrc, ibio
+      REAL(r8) eVal
+# include "set_bounds.h"
+      DO iNode=1,NO_BOXES_XY
+         i = ListArrayWet(ng) % ListI(iNode)
+         j = ListArrayWet(ng) % ListJ(iNode)
+         DO k=1,NO_BOXES_Z
+            iZ = k
+            idx = iZ + NO_BOXES_Z * (iNode-1)
+!            Print *, '2: iZ=', iZ, ' iNode=', iNode, ' k=', k, ' idx=', idx
+            DO iVar=stPelStateS, stPelStateE
+               itrc = iVar - stPelStateS + 1
+               ibio = idbio(itrc)
+!               Print *, 'iVar=', iVar, ' itrc=', itrc, ' ibio=', ibio
+               t(i, j, k, eTimeIdx, ibio) = D3STATE(itrc, idx)
+            END DO
+         END DO
+      END DO
+      END SUBROUTINE
+
+
+
+      SUBROUTINE INIT_BFM_SYSTEM_VARIABLE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, eTimeIdx, t)
       USE mod_grid
       USE mod_param
       USE mod_biology
@@ -223,7 +300,14 @@
       USE mem
       USE init_var_bfm_local, only : init_organic_constituents
       IMPLICIT NONE
+      integer, intent(in) :: LBi, UBi, LBj, UBj, UBk, UBt
       integer, intent(in) :: ng, tile
+      integer, intent(in) :: eTimeIdx
+#ifdef ASSUMED_SHAPE
+      real(r8), intent(inout) :: t(LBi:,LBj:,:,:,:)
+#else
+      real(r8), intent(inout) :: t(LBi:UBi,LBj:UBj,UBk,3,UBt)
+#endif
       logical, SAVE :: IsInitArray = .FALSE.
       logical, SAVE :: IsInitBFM = .FALSE.
       integer, SAVE :: NO_BOXES_XY_max = 0
@@ -235,7 +319,7 @@
       integer bio_setup_loc
       integer, parameter :: namlst = 10
       integer, parameter :: file_id = 1453
-      NAMELIST /PROC/ delt_bfm
+      NAMELIST /PROC/ delt_bfm, AnalyticalInitD3STATE
 # include "set_bounds.h"
       OPEN(file_id, FILE="bfm_input.nml")
       READ(file_id, NML = PROC)
@@ -328,9 +412,12 @@
         ! to the pelagic system
         ! We need the variable well set for this to work.
         bio_setup_loc=1
-        call init_var_bfm(bio_setup_loc)
+        call init_var_bfm(bio_setup_loc, AnalyticalInitD3STATE)
         ! Initialize internal constitutents of functional groups
-        call init_organic_constituents()
+        call init_organic_constituents(AnalyticalInitD3STATE)
+        IF (CopyInitialToD3STATE) THEN
+          CALL COPY_T_to_D3STATE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, eTimeIdx, t)
+        END IF
         ! Need to set up bfmtime adequately for the runs.
         ! Need also to set up the wind.
         call init_envforcing_bfm
@@ -425,12 +512,13 @@
 #endif
       real(r8) eVal
       integer iNode, i, j, k, idx, itrc, ibio
-      integer iVar, iZ
+      integer iVar, iZ, eTimeIdx
       integer step
 !
 !  Setting up the dimensions and initializing BFM if needed
 !
-      CALL INIT_BFM_SYSTEM_VARIABLE(ng, tile)
+      eTimeIdx = nstp
+      CALL INIT_BFM_SYSTEM_VARIABLE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, eTimeIdx, t)
 !
 !  Assigning the STATE variables from the t array
 !  ! We need to determine if the diagnostics need to be recomputed.
@@ -442,37 +530,21 @@
 !      Print *, ' size(t,3)=', size(t,3)
 !      Print *, ' size(t,4)=', size(t,4)
 !      Print *, ' size(t,5)=', size(t,5)
-      DO iNode=1,NO_BOXES_XY
-         i = ListArrayWet(ng) % ListI(iNode)
-         j = ListArrayWet(ng) % ListJ(iNode)
-         DO k=1,NO_BOXES_Z
-            iZ = k
-            idx = iZ + NO_BOXES_Z * (iNode-1)
-!            Print *, '1: iZ=', iZ, ' iNode=', iNode, ' k=', k, ' idx=', idx
-            DO iVar=stPelStateS, stPelStateE
-               itrc = iVar - stPelStateS + 1
-               ibio = idbio(itrc)
-!               Print *, 'iVar=', iVar, ' itrc=', itrc, ' ibio=', ibio
-!               Print *, 'i=', i, ' j=', j, ' k=', k, ' nstp=', nstp
-               eVal = t(i, j, k, nstp, ibio)
-!               Print *, ' eVal=', eVal
-               D3STATE(itrc, idx) = eVal
-            END DO
-         END DO
-      END DO
+      IF (SourceTermD3STATE) THEN
+        CALL COPY_T_to_D3STATE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, nstp, t)
 !
-!     Now the time stepping operations 
-!     Right now we do Euler forward algorithm
-!     It is probably needed to subdivide further the time interval
-!     or to use a better integration method
+!       Now the time stepping operations 
+!       Right now we do Euler forward algorithm
+!       It is probably needed to subdivide further the time interval
+!       or to use a better integration method
 !
-      step = -1 ! not used      
-      call envforcing_bfm(ng, tile, step) 
-      call CalcVerticalExtinction( ) !     Compute extinction coefficient
-      call EcologyDynamics           !     Compute reaction terms
+        step = -1 ! not used      
+        call envforcing_bfm(ng, tile, step) 
+        call CalcVerticalExtinction( ) !     Compute extinction coefficient
+        call EcologyDynamics           !     Compute reaction terms
 
-      DO j=1,NO_D3_BOX_STATES
-         IF (D3STATETYPE(j).ge.0) THEN
+        DO j=1,NO_D3_BOX_STATES
+          IF (D3STATETYPE(j).ge.0) THEN
 #ifndef EXPLICIT_SINK
             D3STATE(j,1:NO_BOXES) = D3STATE(j,1:NO_BOXES) +             &
      &          delt_bfm * D3SOURCE(j,1:NO_BOXES)
@@ -484,29 +556,13 @@
                END DO
             END DO
 #endif
-         END IF
-      END DO
+          END IF
+        END DO
 !
-!     Now copying back the field values
+!       Now copying back the field values
 !
-      DO iNode=1,NO_BOXES_XY
-         i = ListArrayWet(ng) % ListI(iNode)
-         j = ListArrayWet(ng) % ListJ(iNode)
-         DO k=1,NO_BOXES_Z
-            iZ = k
-            idx = iZ + NO_BOXES_Z * (iNode-1)
-!            Print *, '2: iZ=', iZ, ' iNode=', iNode, ' k=', k, ' idx=', idx
-            DO iVar=stPelStateS, stPelStateE
-               itrc = iVar - stPelStateS + 1
-               ibio = idbio(itrc)
-!               Print *, 'iVar=', iVar, ' itrc=', itrc, ' ibio=', ibio
-               t(i, j, k, nnew, ibio) = D3STATE(itrc, idx)
-            END DO
-         END DO
-      END DO
-! Need to put code for the diagnostics. We do not put yet the dlux. Maybe never.
-
+        CALL COPY_D3STATE_to_T(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, nnew, t)
+!       Need to put code for the diagnostics. We do not put yet the dlux. Maybe never.
+      END IF
       
-      
-      RETURN
       END SUBROUTINE biology_tile

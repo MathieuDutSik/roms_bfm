@@ -85,7 +85,7 @@ MODULE init_var_bfm_local
 ! !ROUTINE: Initialise constituents of BFM variables
 !
 ! !INTERFACE:
-   subroutine init_organic_constituents()
+   subroutine init_organic_constituents(InitD3STATE)
 !
 ! !DESCRIPTION:
 !  Call the initialization of internal ratios for the living
@@ -113,6 +113,7 @@ MODULE init_var_bfm_local
    use mem_SeaiceZoo
 #endif
    IMPLICIT NONE
+   logical, intent(in) :: InitD3STATE
 !
 ! !INPUT PARAMETERS:
 !
@@ -126,40 +127,40 @@ MODULE init_var_bfm_local
    ! Initialise other pelagic internal components
    ! with Redfield
    !---------------------------------------------
-
-   do i = 1 , ( iiPelBacteria )
-     call init_constituents( c=PelBacteria(i,iiC), &
-       n=D3STATE(ppPelBacteria(i,iiN),:),  &
-       p=D3STATE(ppPelBacteria(i,iiP),:),  &
-       nc=p_qncPBA(i),  pc=p_qpcPBA(i) )
-   end do
-   do i = 1 , ( iiPhytoPlankton )
-     call init_constituents( c=PhytoPlankton(i,iiC), &
-       n=D3STATE(ppPhytoPlankton(i,iiN),:),  &
-       p=D3STATE(ppPhytoPlankton(i,iiP),:),  &
-       l=D3STATE(ppPhytoPlankton(i,iiL),:),  &
-       s=D3STATE(ppPhytoPlankton(i,iiS),:),  &
-       nc=p_qncPPY(i),  pc=p_qpcPPY(i),  lc=p_qlcPPY(i),  sc=p_qscPPY(i) )
-   end do
-   do i = 1 , ( iiMesoZooPlankton )
-     call init_constituents( c=MesoZooPlankton(i,iiC), &
-       n=D3STATE(ppMesoZooPlankton(i,iiN),:),  &
-       p=D3STATE(ppMesoZooPlankton(i,iiP),:),  &
-       nc=p_qncMEZ(i),  pc=p_qpcMEZ(i) )
-   end do
-   do i = 1 , ( iiMicroZooPlankton )
-     call init_constituents( c=MicroZooPlankton(i,iiC), &
-       n=D3STATE(ppMicroZooPlankton(i,iiN),:),  &
-       p=D3STATE(ppMicroZooPlankton(i,iiP),:),  &
-       nc=p_qncMIZ(i),  pc=p_qpcMIZ(i) )
-   end do
-   do i = 1 , ( iiPelDetritus )
-     call init_constituents( c=PelDetritus(i,iiC), &
-       n=D3STATE(ppPelDetritus(i,iiN),:),  &
-       p=D3STATE(ppPelDetritus(i,iiP),:),  &
-       s=D3STATE(ppPelDetritus(i,iiS),:) )
-   end do
-
+   IF (InitD3STATE) THEN
+     do i = 1 , ( iiPelBacteria )
+       call init_constituents( c=PelBacteria(i,iiC), &
+         n=D3STATE(ppPelBacteria(i,iiN),:),  &
+         p=D3STATE(ppPelBacteria(i,iiP),:),  &
+         nc=p_qncPBA(i),  pc=p_qpcPBA(i) )
+     end do
+     do i = 1 , ( iiPhytoPlankton )
+       call init_constituents( c=PhytoPlankton(i,iiC), &
+         n=D3STATE(ppPhytoPlankton(i,iiN),:),  &
+         p=D3STATE(ppPhytoPlankton(i,iiP),:),  &
+         l=D3STATE(ppPhytoPlankton(i,iiL),:),  &
+         s=D3STATE(ppPhytoPlankton(i,iiS),:),  &
+         nc=p_qncPPY(i),  pc=p_qpcPPY(i),  lc=p_qlcPPY(i),  sc=p_qscPPY(i) )
+     end do
+     do i = 1 , ( iiMesoZooPlankton )
+       call init_constituents( c=MesoZooPlankton(i,iiC), &
+         n=D3STATE(ppMesoZooPlankton(i,iiN),:),  &
+         p=D3STATE(ppMesoZooPlankton(i,iiP),:),  &
+         nc=p_qncMEZ(i),  pc=p_qpcMEZ(i) )
+     end do
+     do i = 1 , ( iiMicroZooPlankton )
+       call init_constituents( c=MicroZooPlankton(i,iiC), &
+         n=D3STATE(ppMicroZooPlankton(i,iiN),:),  &
+         p=D3STATE(ppMicroZooPlankton(i,iiP),:),  &
+         nc=p_qncMIZ(i),  pc=p_qpcMIZ(i) )
+     end do
+     do i = 1 , ( iiPelDetritus )
+       call init_constituents( c=PelDetritus(i,iiC), &
+         n=D3STATE(ppPelDetritus(i,iiN),:),  &
+         p=D3STATE(ppPelDetritus(i,iiP),:),  &
+         s=D3STATE(ppPelDetritus(i,iiS),:) )
+     end do
+   END IF
 
 #ifdef INCLUDE_BEN
    !---------------------------------------------
@@ -193,7 +194,7 @@ END MODULE init_var_bfm_local
 ! !ROUTINE: Initialise BFM variables
 !
 ! !INTERFACE:
-   subroutine init_var_bfm(setup)
+   subroutine init_var_bfm(setup, InitD3STATE)
 !
 ! !DESCRIPTION:
 !  Allocate BFM variables and give initial values of
@@ -241,7 +242,8 @@ END MODULE init_var_bfm_local
    IMPLICIT NONE
 !
 ! !INPUT PARAMETERS:
-   integer,          intent(in)        :: setup
+   integer, intent(in) :: setup
+   logical, intent(in) :: InitD3STATE
 
 !
 ! !REVISION HISTORY:
@@ -693,8 +695,10 @@ END MODULE init_var_bfm_local
    do j = 1, iiPelBacteria
      if (.NOT.CalcPelBacteria(j)) then
        do i = 1,iiLastElement
-         if ( ppPelBacteria(j,i) /= 0 ) then 
-           D3STATE(ppPelBacteria(j,i),:) = p_small
+         if ( ppPelBacteria(j,i) /= 0 ) then
+           IF (InitD3STATE) THEN
+             D3STATE(ppPelBacteria(j,i),:) = p_small
+           END IF
            D3STATETYPE(ppPelBacteria(j,i)) = OFF
 #if defined key_obcbfm
            D3STATEOBC(ppPelBacteria(j,i)) = NOOBCSTATES
@@ -707,8 +711,10 @@ END MODULE init_var_bfm_local
    do j = 1, iiPhytoPlankton
      if (.NOT.CalcPhytoPlankton(j)) then
        do i = 1,iiLastElement
-         if ( ppPhytoPlankton(j,i) /= 0 ) then 
-           D3STATE(ppPhytoPlankton(j,i),:) = p_small
+         if ( ppPhytoPlankton(j,i) /= 0 ) then
+           IF (InitD3STATE) THEN
+             D3STATE(ppPhytoPlankton(j,i),:) = p_small
+           END IF
            D3STATETYPE(ppPhytoPlankton(j,i)) = OFF
 #if defined key_obcbfm
            D3STATEOBC(ppPhytoPlankton(j,i)) = NOOBCSTATES
@@ -721,8 +727,10 @@ END MODULE init_var_bfm_local
    do j = 1, iiMesoZooPlankton
      if (.NOT.CalcMesoZooPlankton(j)) then
        do i = 1,iiLastElement
-         if ( ppMesoZooPlankton(j,i) /= 0 ) then 
-           D3STATE(ppMesoZooPlankton(j,i),:) = p_small
+         if ( ppMesoZooPlankton(j,i) /= 0 ) then
+           IF (InitD3STATE) THEN
+             D3STATE(ppMesoZooPlankton(j,i),:) = p_small
+           END IF
            D3STATETYPE(ppMesoZooPlankton(j,i)) = OFF
 #if defined key_obcbfm
            D3STATEOBC(ppMesoZooPlankton(j,i)) = NOOBCSTATES
@@ -736,7 +744,9 @@ END MODULE init_var_bfm_local
      if (.NOT.CalcMicroZooPlankton(j)) then
        do i = 1,iiLastElement
          if ( ppMicroZooPlankton(j,i) /= 0 ) then 
-           D3STATE(ppMicroZooPlankton(j,i),:) = p_small
+           IF (InitD3STATE) THEN
+             D3STATE(ppMicroZooPlankton(j,i),:) = p_small
+           END IF
            D3STATETYPE(ppMicroZooPlankton(j,i)) = OFF
 #if defined key_obcbfm
            D3STATEOBC(ppMicroZooPlankton(j,i)) = NOOBCSTATES
@@ -750,7 +760,9 @@ END MODULE init_var_bfm_local
      if (.NOT.CalcPelDetritus(j)) then
        do i = 1,iiLastElement
          if ( ppPelDetritus(j,i) /= 0 ) then 
-           D3STATE(ppPelDetritus(j,i),:) = p_small
+           IF (InitD3STATE) THEN
+             D3STATE(ppPelDetritus(j,i),:) = p_small
+           END IF
            D3STATETYPE(ppPelDetritus(j,i)) = OFF
 #if defined key_obcbfm
            D3STATEOBC(ppPelDetritus(j,i)) = NOOBCSTATES
@@ -764,7 +776,9 @@ END MODULE init_var_bfm_local
      if (.NOT.CalcInorganic(j)) then
        do i = 1,iiLastElement
          if ( ppInorganic(j,i) /= 0 ) then 
-           D3STATE(ppInorganic(j,i),:) = p_small
+           IF (InitD3STATE) THEN
+             D3STATE(ppInorganic(j,i),:) = p_small
+           END IF
            D3STATETYPE(ppInorganic(j,i)) = OFF
 #if defined key_obcbfm
            D3STATEOBC(ppInorganic(j,i)) = NOOBCSTATES
