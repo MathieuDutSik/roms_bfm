@@ -142,6 +142,7 @@
                 END DO
               END DO
             CASE ('Hout(idTvar)')
+              Print *, 'NBT=', NBT
               Npts=load_l(Nval, Cval, NBT*Ngrids, Ltrc)
               DO ng=1,Ngrids
                 DO itrc=1,NBT
