@@ -319,7 +319,7 @@
       integer bio_setup_loc
       integer, parameter :: namlst = 10
       integer, parameter :: file_id = 1453
-      NAMELIST /PROC/ delt_bfm, AnalyticalInitD3STATE
+      NAMELIST /PROC/ delt_bfm, AnalyticalInitD3STATE, CopyInitialToD3STATE, SourceTermD3STATE
 # include "set_bounds.h"
       OPEN(file_id, FILE="bfm_input.nml")
       READ(file_id, NML = PROC)

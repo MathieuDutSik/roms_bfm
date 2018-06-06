@@ -215,71 +215,12 @@
         DO ng=1,Ngrids
           IF (Lbiology(ng)) THEN
             WRITE (out,50) ng
-            WRITE (out,60) BioIter(ng), 'BioIter',                      &
-     &            'Number of iterations for nonlinear convergence.'
-            WRITE (out,70) Gmax(ng), 'Gmax',                            &
-     &            'Maximum grow rate at optimal T/S (1/day).'
-            WRITE (out,70) Dg(ng), 'Dg',                                &
-     &            'Depth of sediment for cysts germination (cm).'
-            WRITE (out,80) Kn(ng), 'Kn',                                &
-     &            'Half-saturation for nutrient limited growth',        &
-     &            '(millimole/m3).'
-            WRITE (out,70) G_eff(ng), 'G_eff',                          &
-     &            'Growth efficiency (m2/Watts/day).'
-            WRITE (out,70) G_r(ng), 'G_r',                              &
-     &            'Maintanenance respiration rate (1/day).'
-            WRITE (out,80) srad_Cdepth(ng), 'srad_Cdepth',              &
-     &            'Average shortwave radiation for critical depth',     &
-     &            'in growth function (Watts/m2).'
-            WRITE (out,80) AttW(ng), 'AttW',                            &
-     &            'Mean diffuse attenuation coefficient in water',      &
-     &            'colunm (1/m).'
-            WRITE (out,80) AttS(ng), 'AttS',                            &
-     &            'Mean diffuse attenuation coefficient in sediment',   &
-     &            '(1/mm).'
-            WRITE (out,80) E_light(ng), 'E_light',                      &
-     &            'Light level for germination under light conditions', &
-     &            '(Watt/m2).'
-            WRITE (out,80) E_dark(ng), 'E_dark',                        &
-     &            'Light level for germination under dark conditions',  &
-     &            '(Watt/m2).'
-            WRITE (out,80) Tmin_growth(ng), 'Tmin_growth',              &
-     &            'Coldest temperature used in growth factor cubic',    &
-     &            'polynomial term (Cesius).'
-            WRITE (out,80) DIN_Cdepth(ng), 'DIN_Cdepth',                &
-     &            'Dissolved Inorganic Nutrient concentration',         &
-     &            'below of growth critical depth (millimoles/m3)'
-            WRITE (out,80) wDino(ng), 'wDino',                          &
-     &            'Dinoflagellate upward swimming/migration rate',      &
-     &            '(positive, m/day).'
-            WRITE (out,80) Mor_a(ng), 'Mor_a',                          &
-     &            'Mortality rate equation, Q10 amplitude term',        &
-     &            '(1/day).'
-            WRITE (out,80) Mor_b(ng), 'Mor_b',                          &
-     &            'Mortality rate equation, Q10 intercept term',        &
-     &            '(1/day).'
-            WRITE (out,80) Mor_Q10(ng), 'Mor_Q10',                      &
-     &            'Mortality rate equation, Q10 reaction rate base',    &
-     &            '(nondimensional).'
-            WRITE (out,80) Mor_T0(ng), 'Mor_T0',                        &
-     &            'Mortality rate equation, background temperature',    &
-     &            '(Celsius).'
 #ifdef TS_DIF2
             DO itrc=1,NBT
               i=idbio(itrc)
               WRITE (out,90) nl_tnu2(i,ng), 'nl_tnu2', i,               &
      &              'NLM Horizontal, harmonic mixing coefficient',      &
      &              '(m2/s) for tracer ', i, TRIM(Vname(1,idTvar(i)))
-# ifdef ADJOINT
-              WRITE (out,90) ad_tnu2(i,ng), 'ad_tnu2', i,               &
-     &              'ADM Horizontal, harmonic mixing coefficient',      &
-     &              '(m2/s) for tracer ', i, TRIM(Vname(1,idTvar(i)))
-# endif
-# if defined TANGENT || defined TL_IOMS
-              WRITE (out,90) tl_tnu2(i,ng), 'tl_tnu2', i,               &
-     &              'TLM Horizontal, harmonic mixing coefficient',      &
-     &              '(m2/s) for tracer ', i, TRIM(Vname(1,idTvar(i)))
-# endif
             END DO
 #endif
 #ifdef TS_DIF4
@@ -288,16 +229,6 @@
               WRITE (out,90) nl_tnu4(i,ng), 'nl_tnu4', i,               &
      &              'NLM Horizontal, biharmonic mixing coefficient',    &
      &              '(m4/s) for tracer ', i, TRIM(Vname(1,idTvar(i)))
-# ifdef ADJOINT
-              WRITE (out,90) ad_tnu4(i,ng), 'ad_tnu4', i,               &
-     &              'ADM Horizontal, biharmonic mixing coefficient',    &
-     &              '(m4/s) for tracer ', i, TRIM(Vname(1,idTvar(i)))
-# endif
-# if defined TANGENT || defined TL_IOMS
-              WRITE (out,90) tl_tnu4(i,ng), 'tl_tnu4', i,               &
-     &              'TLM Horizontal, biharmonic mixing coefficient',    &
-     &              '(m4/s) for tracer ', i, TRIM(Vname(1,idTvar(i)))
-# endif
             END DO
 #endif
             DO itrc=1,NBT
@@ -318,21 +249,6 @@
      &             'Background vertical mixing coefficient (m2/s)',     &
      &             'for tracer ', i, TRIM(Vname(1,idTvar(i)))
             END DO
-#ifdef FORWARD_MIXING
-            DO itrc=1,NBT
-              i=idbio(itrc)
-# ifdef ADJOINT
-              WRITE (out,90) ad_Akt_fac(i,ng), 'ad_Akt_fac', i,         &
-     &              'ADM basic state vertical mixing scale factor',     &
-     &              'for tracer ', i, TRIM(Vname(1,idTvar(i)))
-# endif
-# if defined TANGENT || defined TL_IOMS
-              WRITE (out,90) tl_Akt_fac(i,ng), 'tl_Akt_fac', i,         &
-     &              'TLM basic state vertical mixing scale factor',     &
-     &              'for tracer ', i, TRIM(Vname(1,idTvar(i)))
-# endif
-            END DO
-#endif
             DO itrc=1,NBT
               i=idbio(itrc)
               WRITE (out,90) Tnudg(i,ng), 'Tnudg', i,                   &
@@ -414,135 +330,6 @@
      &              TRIM(Vname(1,idTvar(i)))
               END DO
             END IF
-#if defined AVERAGES    || \
-   (defined AD_AVERAGES && defined ADJOINT) || \
-   (defined RP_AVERAGES && defined TL_IOMS) || \
-   (defined TL_AVERAGES && defined TANGENT)
-            IF ((nAVG(ng).gt.0).and.ANY(Aout(:,ng))) THEN
-              WRITE (out,'(1x)')
-              DO itrc=1,NBT
-                i=idbio(itrc)
-                IF (Aout(idTvar(i),ng)) WRITE (out,110)                 &
-     &              Aout(idTvar(i),ng), 'Aout(idTvar)',                 &
-     &              'Write out averaged tracer ', i,                    &
-     &              TRIM(Vname(1,idTvar(i)))
-              END DO
-              DO itrc=1,NBT
-                i=idbio(itrc)
-                IF (Aout(idTTav(i),ng)) WRITE (out,110)                 &
-     &              Aout(idTTav(i),ng), 'Aout(idTTav)',                 &
-     &              'Write out averaged <t*t> for tracer ', i,          &
-     &              TRIM(Vname(1,idTvar(i)))
-              END DO
-              DO itrc=1,NBT
-                i=idbio(itrc)
-                IF (Aout(idUTav(i),ng)) WRITE (out,110)                 &
-     &              Aout(idUTav(i),ng), 'Aout(idUTav)',                 &
-     &              'Write out averaged <u*t> for tracer ', i,          &
-     &              TRIM(Vname(1,idTvar(i)))
-              END DO
-              DO itrc=1,NBT
-                i=idbio(itrc)
-                IF (Aout(idVTav(i),ng)) WRITE (out,110)                 &
-     &              Aout(idVTav(i),ng), 'Aout(idVTav)',                 &
-     &              'Write out averaged <v*t> for tracer ', i,          &
-     &              TRIM(Vname(1,idTvar(i)))
-              END DO
-              DO itrc=1,NBT
-                i=idbio(itrc)
-                IF (Aout(iHUTav(i),ng)) WRITE (out,110)                 &
-     &              Aout(iHUTav(i),ng), 'Aout(iHUTav)',                 &
-     &              'Write out averaged <Huon*t> for tracer ', i,       &
-     &              TRIM(Vname(1,idTvar(i)))
-              END DO
-              DO itrc=1,NBT
-                i=idbio(itrc)
-                IF (Aout(iHVTav(i),ng)) WRITE (out,110)                 &
-     &              Aout(iHVTav(i),ng), 'Aout(iHVTav)',                 &
-     &              'Write out averaged <Hvom*t> for tracer ', i,       &
-     &              TRIM(Vname(1,idTvar(i)))
-              END DO
-            END IF
-#endif
-#ifdef DIAGNOSTICS_TS
-            IF ((nDIA(ng).gt.0).and.ANY(Dout(:,ng))) THEN
-              WRITE (out,'(1x)')
-              DO i=1,NBT
-                itrc=idbio(i)
-                IF (Dout(idDtrc(itrc,iTrate),ng))                       &
-     &            WRITE (out,110) .TRUE., 'Dout(iTrate)',               &
-     &              'Write out rate of change of tracer ', itrc,        &
-     &              TRIM(Vname(1,idTvar(itrc)))
-              END DO
-              DO i=1,NBT
-                itrc=idbio(i)
-                IF (Dout(idDtrc(itrc,iThadv),ng))                       &
-     &            WRITE (out,110) .TRUE., 'Dout(iThadv)',               &
-     &              'Write out horizontal advection, tracer ', itrc,    &
-     &              TRIM(Vname(1,idTvar(itrc)))
-              END DO
-              DO i=1,NBT
-                itrc=idbio(i)
-                IF (Dout(idDtrc(itrc,iTxadv),ng))                       &
-     &            WRITE (out,110) .TRUE., 'Dout(iTxadv)',               &
-     &              'Write out horizontal X-advection, tracer ', itrc,  &
-     &              TRIM(Vname(1,idTvar(itrc)))
-              END DO
-              DO i=1,NBT
-                itrc=idbio(i)
-                IF (Dout(idDtrc(itrc,iTyadv),ng))                       &
-     &            WRITE (out,110) .TRUE., 'Dout(iTyadv)',               &
-     &              'Write out horizontal Y-advection, tracer ', itrc,  &
-     &              TRIM(Vname(1,idTvar(itrc)))
-              END DO
-              DO i=1,NBT
-                itrc=idbio(i)
-                IF (Dout(idDtrc(itrc,iTvadv),ng))                       &
-     &            WRITE (out,110) .TRUE., 'Dout(iTvadv)',               &
-     &              'Write out vertical advection, tracer ', itrc,      &
-     &              TRIM(Vname(1,idTvar(itrc)))
-              END DO
-# if defined TS_DIF2 || defined TS_DIF4
-              DO i=1,NBT
-                itrc=idbio(i)
-                IF (Dout(idDtrc(itrc,iThdif),ng))                       &
-     &            WRITE (out,110) .TRUE., 'Dout(iThdif)',               &
-     &              'Write out horizontal diffusion, tracer ', itrc,    &
-     &              TRIM(Vname(1,idTvar(itrc)))
-              END DO
-              DO i=1,NBT
-                itrc=idbio(i)
-                IF (Dout(idDtrc(i,iTxdif),ng))                          &
-     &            WRITE (out,110) .TRUE., 'Dout(iTxdif)',               &
-     &              'Write out horizontal X-diffusion, tracer ', itrc,  &
-     &              TRIM(Vname(1,idTvar(itrc)))
-              END DO
-              DO i=1,NBT
-                itrc=idbio(i)
-                IF (Dout(idDtrc(itrc,iTydif),ng))                       &
-     &            WRITE (out,110) .TRUE., 'Dout(iTydif)',               &
-     &              'Write out horizontal Y-diffusion, tracer ', itrc,  &
-     &              TRIM(Vname(1,idTvar(itrc)))
-              END DO
-#  if defined MIX_GEO_TS || defined MIX_ISO_TS
-              DO i=1,NBT
-                itrc=idbio(i)
-                IF (Dout(idDtrc(itrc,iTsdif),ng))                       &
-     &            WRITE (out,110) .TRUE., 'Dout(iTsdif)',               &
-     &              'Write out horizontal S-diffusion, tracer ', itrc,  &
-     &              TRIM(Vname(1,idTvar(itrc)))
-              END DO
-#  endif
-# endif
-              DO i=1,NBT
-                itrc=idbio(i)
-                IF (Dout(idDtrc(itrc,iTvdif),ng))                       &
-     &            WRITE (out,110) .TRUE., 'Dout(iTvdif)',               &
-     &              'Write out vertical diffusion, tracer ', itrc,      &
-     &              TRIM(Vname(1,idTvar(itrc)))
-              END DO
-            END IF
-#endif
           END IF
         END DO
       END IF
@@ -552,8 +339,6 @@
 !-----------------------------------------------------------------------
 !
       DO ng=1,Ngrids
-        AttS(ng)=1000.0_r8*AttS(ng)                   ! 1/mm to 1/m
-        Dg(ng)=0.01_r8*Dg(ng)                         ! cm to m
 #ifdef DAILY_SHORTWAVE
         Fscale(idAsrf,ng)=Fscale(idAsrf,ng)/(rho0*Cp)
 #endif

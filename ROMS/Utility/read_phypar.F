@@ -1295,6 +1295,7 @@
                 RETURN
               END IF
               Npts=load_l(Nval, Cval, NAT*Ngrids, Ltracer)
+              Print *, 'NAT=', NAT
               DO ng=1,Ngrids
                 DO itrc=1,NAT
                   i=idTvar(itrc)
