@@ -53,6 +53,7 @@
    REAL(8)                            :: delt_bfm
    LOGICAL                            :: AnalyticalInitD3STATE = .TRUE.
    LOGICAL                            :: CopyInitialToD3STATE = .TRUE.
+   LOGICAL                            :: CopyD3STATEtoInitial = .TRUE.
    LOGICAL                            :: SourceTermD3STATE = .TRUE.
 
    !---------------------------------------------

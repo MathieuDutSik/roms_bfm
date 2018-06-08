@@ -1,4 +1,46 @@
 #include "cppdefs.h"
+      SUBROUTINE Print_t_average (ng, tile)
+      USE mod_ocean
+      USE mod_scalars
+      USE mod_grid
+      USE mod_stepping
+      USE mod_ncparam
+      implicit none
+      integer, intent(in) :: ng, tile
+      integer :: LBi, UBi, LBj, UBj
+      integer i1, i2, i3, siz1, siz2, siz3
+      real(r8) eVal, eAvg, eSum, eMin, eMax
+      integer itrc
+# include "set_bounds.h"
+      LBi=LBOUND(GRID(ng)%h,DIM=1)
+      UBi=UBOUND(GRID(ng)%h,DIM=1)
+      LBj=LBOUND(GRID(ng)%h,DIM=2)
+      UBj=UBOUND(GRID(ng)%h,DIM=2)
+      Print *, 'NOUT=', NOUT
+      siz1 = size(OCEAN(ng) % t, 1)
+      siz2 = size(OCEAN(ng) % t, 2)
+      siz3 = size(OCEAN(ng) % t, 3)
+      Print *, 'siz1=', siz1, ' siz2=', siz2, ' siz3=', siz3
+      DO itrc=1,NT(ng)
+        IF (Hout(idTvar(itrc),ng)) THEN
+          eSum =  0
+          eMin =  100000
+          eMax = -100000
+          DO i1=1,siz1
+            DO i2=1,siz2
+              DO i3=1,siz3
+                eVal = OCEAN(ng) % t(i1-1,i2-1,i3,NOUT,itrc)
+                eSum = eSum + eVal
+                IF (eVal .lt. eMin) eMin = eVal
+                IF (eVal .gt. eMax) eMax = eVal
+              END DO
+            END DO
+          END DO
+          eAvg = eSum / (siz1*siz2*siz3)
+          Print *, ' itrc=', itrc, ' avg/min/max=', eAvg, eMin, eMax
+        END IF
+      END DO
+      END SUBROUTINE
       SUBROUTINE wrt_his (ng, tile)
 !
 !svn $Id: wrt_his.F 858 2017-07-31 23:02:30Z arango $
@@ -75,6 +117,8 @@
 #ifdef SOLVE3D
       integer :: i, itrc, j, k
 #endif
+      integer i1, i2, i3, siz1, siz2, siz3
+      real(r8) eVal, eAvg, eSum, eMin, eMax
       real(r8) :: scale
 
       real(r8), allocatable :: Ur2d(:,:)

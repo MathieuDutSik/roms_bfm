@@ -233,7 +233,7 @@
       integer iNode, i, j, k, iZ, idx
       integer iVar, itrc, ibio
       REAL(r8) eVal
-# include "set_bounds.h"
+      Print *, 'CP_T_D3 : stPelStateS=', stPelStateS, ' stPelStateE=', stPelStateE
       DO iNode=1,NO_BOXES_XY
          i = ListArrayWet(ng) % ListI(iNode)
          j = ListArrayWet(ng) % ListJ(iNode)
@@ -272,7 +272,7 @@
       integer iNode, i, j, k, iZ, idx
       integer iVar, itrc, ibio
       REAL(r8) eVal
-# include "set_bounds.h"
+      Print *, 'CP_D3_T : stPelStateS=', stPelStateS, ' stPelStateE=', stPelStateE
       DO iNode=1,NO_BOXES_XY
          i = ListArrayWet(ng) % ListI(iNode)
          j = ListArrayWet(ng) % ListJ(iNode)
@@ -291,8 +291,67 @@
       END SUBROUTINE
 
 
+      SUBROUTINE PRINT_AVERAGE_D3STATE(ng, tile)
+      USE mod_param
+      USE mod_biology
+      USE mod_ncparam
+      USE mod_scalars
+      USE mem
+      USE api_bfm
+      IMPLICIT NONE
+      integer, intent(in) :: ng, tile
+      integer iNode, i, j, k, iZ, idx
+      integer iVar, itrc, ibio, siz, TotalNb
+      REAL(r8), allocatable :: ArrSum(:), ArrMin(:), ArrMax(:)
+      REAL(r8) eVal, eAvg, eMin, eMax
+!      Print *, 'PRINT_AVERAGE: stPelStateS=', stPelStateS, ' stPelStateE=', stPelStateE
+!      Print *, 'stPelFluxS=', stPelFluxS, ' stPelFluxE=', stPelFluxE
+      DO iVar=stPelStateS, stPelStateE
+        itrc = iVar - stPelStateS + 1
+        ibio = idbio(itrc)
+        Print *, 'iVar=', iVar, ' itrc=', itrc, ' ibio=', ibio
+      END DO
+      Print *, 'Computing the average NO_BOXES_XY/Z=', NO_BOXES_XY, NO_BOXES_Z
+      siz = stPelStateE + 1 - stPelStateS
+      Allocate(ArrSum(siz), ArrMin(siz), ArrMax(siz))
+      DO i=1,siz
+        ArrSum(i) = 0
+        ArrMin(i) =  100000
+        ArrMax(i) = -100000
+      END DO
+      DO iNode=1,NO_BOXES_XY
+         DO k=1,NO_BOXES_Z
+            iZ = k
+            idx = iZ + NO_BOXES_Z * (iNode-1)
+            DO iVar=stPelStateS, stPelStateE
+               itrc = iVar - stPelStateS + 1
+               ibio = idbio(itrc)
+               eVal = D3STATE(itrc, idx)
+               ArrSum(itrc) = ArrSum(itrc) + eVal
+               IF (eVal .lt. ArrMin(itrc)) THEN
+                 ArrMin(itrc) = eVal
+               END IF
+               IF (eVal .gt. ArrMax(itrc)) THEN
+                 ArrMax(itrc) = eVal
+               END IF
+            END DO
+         END DO
+      END DO
+      TotalNb = NO_BOXES_Z * NO_BOXES_XY
+      DO i=1,siz
+        eAvg = ArrSum(i) / TotalNb
+        eMin = ArrMin(i)
+        eMax = ArrMax(i)
+        Print *, 'i=', i, ' avg/min/max=', eAvg, eMin, eMax
+      END DO
+      deallocate(ArrSum, ArrMin, ArrMax)
+      END SUBROUTINE
 
-      SUBROUTINE INIT_BFM_SYSTEM_VARIABLE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, eTimeIdx, t)
+
+
+
+
+      SUBROUTINE INIT_BFM_SYSTEM_VARIABLE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, eNstp, eNew, t)
       USE mod_grid
       USE mod_param
       USE mod_biology
@@ -302,7 +361,7 @@
       IMPLICIT NONE
       integer, intent(in) :: LBi, UBi, LBj, UBj, UBk, UBt
       integer, intent(in) :: ng, tile
-      integer, intent(in) :: eTimeIdx
+      integer, intent(in) :: eNstp, eNew
 #ifdef ASSUMED_SHAPE
       real(r8), intent(inout) :: t(LBi:,LBj:,:,:,:)
 #else
@@ -319,8 +378,11 @@
       integer bio_setup_loc
       integer, parameter :: namlst = 10
       integer, parameter :: file_id = 1453
-      NAMELIST /PROC/ delt_bfm, AnalyticalInitD3STATE, CopyInitialToD3STATE, SourceTermD3STATE
+      NAMELIST /PROC/ delt_bfm, AnalyticalInitD3STATE, CopyInitialToD3STATE, CopyD3STATEtoInitial, SourceTermD3STATE
 # include "set_bounds.h"
+      Print *, 'LBi=', LBi, ' UBi=', UBi
+      Print *, 'LBj=', LBj, ' UBj=', UBj
+      Print *, 'UBk=', UBk, ' UBt=', UBt
       OPEN(file_id, FILE="bfm_input.nml")
       READ(file_id, NML = PROC)
       CLOSE(file_id)
@@ -415,8 +477,22 @@
         call init_var_bfm(bio_setup_loc, AnalyticalInitD3STATE)
         ! Initialize internal constitutents of functional groups
         call init_organic_constituents(AnalyticalInitD3STATE)
+        Print *, 'Printing average of D3STATE'
+        CALL PRINT_AVERAGE_D3STATE(ng, tile)
+        Print *, 'CopyInitialToD3STATE=', CopyInitialToD3STATE
+        Print *, 'CopyD3STATEtoInitial=', CopyD3STATEtoInitial
+        IF (CopyD3STATEtoInitial) THEN
+          Print *, 'copying D3STATE to T'
+          Print *, 'eNstp=', eNstp, ' eNew=', eNew
+          CALL COPY_D3STATE_to_T(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, eNew, t)
+          Print *, 'Printing T average in INIT_BFM_SYSTEM_VARIABLE'
+          CALL Print_t_average(ng, tile)
+
+!          CALL COPY_D3STATE_to_T(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, eNstp, t)
+        END IF
         IF (CopyInitialToD3STATE) THEN
-          CALL COPY_T_to_D3STATE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, eTimeIdx, t)
+          Print *, 'copying T to D3STATE'
+          CALL COPY_T_to_D3STATE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, eNew, t)
         END IF
         ! Need to set up bfmtime adequately for the runs.
         ! Need also to set up the wind.
@@ -512,13 +588,13 @@
 #endif
       real(r8) eVal
       integer iNode, i, j, k, idx, itrc, ibio
-      integer iVar, iZ, eTimeIdx
+      integer iVar, iZ
       integer step
 !
 !  Setting up the dimensions and initializing BFM if needed
 !
-      eTimeIdx = nstp
-      CALL INIT_BFM_SYSTEM_VARIABLE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, eTimeIdx, t)
+      Print *, 'nstp=', nstp, 'nnew=', nnew
+      CALL INIT_BFM_SYSTEM_VARIABLE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, nstp, nnew, t)
 !
 !  Assigning the STATE variables from the t array
 !  ! We need to determine if the diagnostics need to be recomputed.
@@ -530,6 +606,12 @@
 !      Print *, ' size(t,3)=', size(t,3)
 !      Print *, ' size(t,4)=', size(t,4)
 !      Print *, ' size(t,5)=', size(t,5)
+
+       Print *, 'Printing T average in biology_tile'
+       CALL Print_t_average(ng, tile)
+
+!      Print *, 'Printing D3STATE before Source term integration'
+!      CALL PRINT_AVERAGE_D3STATE(ng, tile)
       IF (SourceTermD3STATE) THEN
         CALL COPY_T_to_D3STATE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, nstp, t)
 !

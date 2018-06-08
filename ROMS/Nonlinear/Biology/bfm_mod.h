@@ -150,10 +150,12 @@
 !-----------------------------------------------------------------------
 !
       ic=NAT+NPT+NCS+NNS
+      Print *, 'ic=', ic
       DO i=1,NBT
         idbio(i)=ic+i
       END DO
       iOxyg = ic+1
+      Print *, 'iOxyg=', iOxyg
       iPO4_ = ic+2
       iNO3_ = ic+3
       iNH4_ = ic+4
