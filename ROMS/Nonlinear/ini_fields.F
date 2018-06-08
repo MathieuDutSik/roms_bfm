@@ -596,6 +596,7 @@
 !-----------------------------------------------------------------------
 !
       ic=0
+      Print *, 'ini_fields, nstp=', nstp, ' nnew=', nnew
       IF (.not.PerfectRST(ng)) THEN
         DO itrc=1,NT(ng)
           IF (LtracerCLM(itrc,ng).and.LnudgeTCLM(itrc,ng)) THEN

@@ -1,12 +1,12 @@
 #include "cppdefs.h"
-      SUBROUTINE Print_t_average (ng, tile)
+      SUBROUTINE Print_t_average (ng, tile, TheIdx)
       USE mod_ocean
       USE mod_scalars
       USE mod_grid
       USE mod_stepping
       USE mod_ncparam
       implicit none
-      integer, intent(in) :: ng, tile
+      integer, intent(in) :: ng, tile, TheIdx
       integer :: LBi, UBi, LBj, UBj
       integer i1, i2, i3, siz1, siz2, siz3
       real(r8) eVal, eAvg, eSum, eMin, eMax
@@ -16,7 +16,7 @@
       UBi=UBOUND(GRID(ng)%h,DIM=1)
       LBj=LBOUND(GRID(ng)%h,DIM=2)
       UBj=UBOUND(GRID(ng)%h,DIM=2)
-      Print *, 'NOUT=', NOUT
+      Print *, 'NOUT=', NOUT, ' NT(ng)=', NT(ng), ' TheIdx=', TheIdx
       siz1 = size(OCEAN(ng) % t, 1)
       siz2 = size(OCEAN(ng) % t, 2)
       siz3 = size(OCEAN(ng) % t, 3)
@@ -29,7 +29,7 @@
           DO i1=1,siz1
             DO i2=1,siz2
               DO i3=1,siz3
-                eVal = OCEAN(ng) % t(i1-1,i2-1,i3,NOUT,itrc)
+                eVal = OCEAN(ng) % t(i1-1,i2-1,i3,TheIdx,itrc)
                 eSum = eSum + eVal
                 IF (eVal .lt. eMin) eMin = eVal
                 IF (eVal .gt. eMax) eMax = eVal

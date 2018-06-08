@@ -484,9 +484,13 @@
         IF (CopyD3STATEtoInitial) THEN
           Print *, 'copying D3STATE to T'
           Print *, 'eNstp=', eNstp, ' eNew=', eNew
+
+          Print *, 'Printing T avg in INIT_BFM_SYSTEM_VARIABLE, Before'
+          CALL Print_t_average(ng, tile, eNew)
+
           CALL COPY_D3STATE_to_T(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, eNew, t)
-          Print *, 'Printing T average in INIT_BFM_SYSTEM_VARIABLE'
-          CALL Print_t_average(ng, tile)
+          Print *, 'Printing T avg in INIT_BFM_SYSTEM_VARIABLE, After'
+          CALL Print_t_average(ng, tile, eNew)
 
 !          CALL COPY_D3STATE_to_T(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, eNstp, t)
         END IF
@@ -608,7 +612,8 @@
 !      Print *, ' size(t,5)=', size(t,5)
 
        Print *, 'Printing T average in biology_tile'
-       CALL Print_t_average(ng, tile)
+       CALL Print_t_average(ng, tile, nstp)
+       CALL Print_t_average(ng, tile, nnew)
 
 !      Print *, 'Printing D3STATE before Source term integration'
 !      CALL PRINT_AVERAGE_D3STATE(ng, tile)
