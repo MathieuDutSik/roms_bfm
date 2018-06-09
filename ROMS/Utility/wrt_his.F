@@ -1028,6 +1028,11 @@
 !
 !  Write out tracer type variables.
 !
+      Print *, 'Printing data for NOUT'
+      CALL Print_t_average (ng, tile, NOUT)
+      Print *, 'Printing data for 3 - NOUT'
+      CALL Print_t_average (ng, tile, 3-NOUT)
+
       DO itrc=1,NT(ng)
         IF (Hout(idTvar(itrc),ng)) THEN
           scale=1.0_r8

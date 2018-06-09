@@ -100,7 +100,7 @@
       IMPLICIT NONE
       integer, intent(in)  :: ng, tile
       integer, intent(inout)  :: step
-      call set_bfm_fields_from_roms(ng, tile)
+      call SET_BFM_FIELDS_FROM_ROMS(ng, tile)
       ! Assign external data
       call external_data
       ! Assign external event data
@@ -347,11 +347,220 @@
       deallocate(ArrSum, ArrMin, ArrMax)
       END SUBROUTINE
 
+      SUBROUTINE COMPUTE_LOCAL_NB_WET(ng, tile, Nwetpoint)
+      USE mod_grid
+      USE mod_param
+      USE mod_biology
+      USE api_bfm
+      USE mem
+      implicit none
+      integer, intent(in) :: ng, tile
+      integer, intent(out) :: Nwetpoint
+      integer i, j
+# include "set_bounds.h"
+      Nwetpoint=0
+      DO j=Jstr-1,JendR
+        DO i=Istr-1,IendR
+#ifdef MASKING
+          IF (GRID(ng) % rmask(i,j) .eq. 1) THEN
+#endif
+             Nwetpoint=Nwetpoint + 1
+#ifdef MASKING
+          END IF
+#endif
+        END DO
+      END DO
+      END SUBROUTINE
+!
+!
+!
+      SUBROUTINE COMPUTE_NO_BOXES_XY_Z_ALL
+      use mod_grid
+      USE mod_biology
+      use api_bfm
+      USE mem
+      implicit none
+      integer tile
+      integer nl, ig, ng, eProd
+      integer, parameter :: file_id = 1453
+      integer istat
+      LOGICAL DoNestLayer
+      integer Nwetpoint
+      NAMELIST /PROC/ delt_bfm, AnalyticalInitD3STATE, CopyInitialToD3STATE, CopyD3STATEtoInitial, SourceTermD3STATE
+      OPEN(file_id, FILE="bfm_input.nml")
+      READ(file_id, NML = PROC)
+      CLOSE(file_id)
+      DoNestLayer = .TRUE.
+      !
+      nl=0
+      allocate(NO_BOXES_Z_arr(Ngrids), stat=istat)
+      allocate(NO_BOXES_XY_arr(Ngrids), stat=istat)
+      allocate(NO_BOXES_arr(Ngrids), stat=istat)
+      allocate(ListArrayWet(Ngrids), stat=istat)
+      NEST_LAYER : DO WHILE (DoNestLayer)
+        nl = nl + 1
+        IF ((nl.le.0).or.(nl.gt.NestLayers)) EXIT
+        DO ig=1,GridsInLayer(nl)
+          ng=GridNumber(ig,nl)
+          tile = MyRank
+          CALL COMPUTE_LOCAL_NB_WET(ng, tile, Nwetpoint)
+          eProd = Nwetpoint * N(ng)
+          NO_BOXES_XY_arr(ng) = Nwetpoint
+          NO_BOXES_Z_arr(ng) = N(ng)
+          NO_BOXES_arr(ng) = eProd
+          ListArrayWet(ng) % Nwetpoint = Nwetpoint
+        END DO
+      END DO NEST_LAYER
+      NO_BOXES_Y  = 1
+      NO_BOXES_Z = maxval(NO_BOXES_Z_arr)
+      NO_BOXES_XY = maxval(NO_BOXES_XY_arr)
+      NO_BOXES_X = NO_BOXES_XY
+      NO_BOXES    = NO_BOXES_XY * NO_BOXES_Z
+      NO_STATES   = NO_D3_BOX_STATES * NO_BOXES + NO_BOXES_XY
+      !
+      allocate(BOTindices(Nwetpoint), stat=istat)
+      allocate(SRFindices(Nwetpoint), stat=istat)
+      END SUBROUTINE
+
+      SUBROUTINE SET_BOT_SURFINDICES(ng)
+      use mod_grid
+      use api_bfm
+      implicit none
+      integer, intent(in) :: ng
+      integer eN, iNode, idxBOT, idxSRF
+      eN = NO_BOXES_Z_arr(ng)
+      DO iNode=1,NO_BOXES_XY_arr(ng)
+        idxBOT = 1  + eN * (iNode-1)
+        idxSRF = eN + eN * (iNode-1)
+        BOTindices(iNode) = idxBOT
+        SRFindices(iNode) = idxSRF
+      END DO
+      END SUBROUTINE
+!
+!
+!
+      SUBROUTINE FULL_INIT_OF_BFM_MODEL
+      implicit none
+      CALL Allocate_GRID_ARRAY
+      CALL INIT_BFM_MODEL
+      CALL INIT_BFM_SYSTEM_VARIABLE
+      END SUBROUTINE
 
 
 
+      SUBROUTINE Allocate_GRID_ARRAY
+      use mod_grid
+      use mod_param
+      implicit none
+      integer nl, ig, ng
+      LOGICAL DoNestLayer
+      DoNestLayer = .TRUE.
+      nl=0
+      NEST_LAYER : DO WHILE (DoNestLayer)
+        nl = nl + 1
+        IF ((nl.le.0).or.(nl.gt.NestLayers)) EXIT
+        DO ig=1,GridsInLayer(nl)
+          ng=GridNumber(ig,nl)
+          CALL Allocate_GRID_ARRAY_LOCAL(ng, tile)
+        END DO
+      END DO NEST_LAYER
+      END SUBROUTINE
 
-      SUBROUTINE INIT_BFM_SYSTEM_VARIABLE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, eNstp, eNew, t)
+
+      SUBROUTINE Allocate_GRID_ARRAY_LOCAL(ng, tile)
+      use mod_biology
+      use mod_grid
+      use mod_param
+      implicit none
+      integer, intent(in) :: ng, tile
+      integer idx, j, i, Nwetpoint, istat
+#include "set_bounds.h"
+      Nwetpoint = ListArrayWet(ng) % Nwetpoint
+      allocate(ListArrayWet(ng) % ListI(Nwetpoint), stat=istat)
+      allocate(ListArrayWet(ng) % ListJ(Nwetpoint), stat=istat)
+! The WET arrays.
+      idx=0
+      DO j=Jstr-1,JendR
+        DO i=Istr-1,IendR
+#ifdef MASKING
+          IF (GRID(ng) % rmask(i,j) .eq. 1) THEN
+#endif
+            idx = idx + 1
+            ListArrayWet(ng) % ListI(idx) = i
+            ListArrayWet(ng) % ListJ(idx) = j
+#ifdef MASKING
+          END IF
+#endif
+        END DO
+      END DO
+      END SUBROUTINE
+
+      SUBROUTINE INIT_BFM_MODEL
+      USE mod_grid
+      USE mod_param
+      USE mod_biology
+      USE api_bfm
+      USE mem
+      USE init_var_bfm_local, only : init_organic_constituents
+      IMPLICIT NONE
+      integer bio_setup_loc
+      integer, parameter :: namlst = 10
+      ! Initialise the BFM with standalone settings
+      call init_bfm(namlst)
+      ! Initialise state variable names and diagnostics
+      call set_var_info_bfm
+      ! Allocate memory and give initial values
+      ! to the pelagic system
+      ! We need the variable well set for this to work.
+      bio_setup_loc=1
+      call init_var_bfm(bio_setup_loc, AnalyticalInitD3STATE)
+      ! Initialize internal constitutents of functional groups
+      call init_organic_constituents(AnalyticalInitD3STATE)
+      ! Need to set up bfmtime adequately for the runs.
+      ! Need also to set up the wind.
+      call init_envforcing_bfm
+      ! Read restart file (if flag)
+      ! Overwrite previous initialization
+      ! Initialise the diagnostic variables
+      call CalcVerticalExtinction( )
+      call CalcChlorophylla( )
+      END SUBROUTINE
+
+
+
+      SUBROUTINE INIT_BFM_SYSTEM_VARIABLE
+      use mod_grid
+      use mod_param
+      implicit none
+      integer nl, ig, ng, tile
+      LOGICAL DoNestLayer
+      DoNestLayer = .TRUE.
+      !
+      nl=0
+      NEST_LAYER : DO WHILE (DoNestLayer)
+        nl = nl + 1
+        IF ((nl.le.0).or.(nl.gt.NestLayers)) EXIT
+        DO ig=1,GridsInLayer(nl)
+          ng=GridNumber(ig,nl)
+          DO tile=first_tile(ng),last_tile(ng),+1
+            CALL INIT_BFM_SYSTEM_VARIABLE_LOCAL(ng, tile)
+          END DO
+        END DO
+      END DO NEST_LAYER
+      END SUBROUTINE
+
+
+
+      SUBROUTINE INIT_BFM_SYSTEM_VARIABLE_LOCAL(ng, tile)
+      use mod_param
+      use mod_ocean
+      implicit none
+      integer, intent(in) :: ng, tile
+# include "tile.h"
+      CALL INIT_BFM_SYSTEM_VARIABLE_LOCAL_tile(LBi, UBi, LBj, UBj, N(ng), NT(ng), ng, tile, OCEAN(ng) % t)
+      END SUBROUTINE
+
+      SUBROUTINE INIT_BFM_SYSTEM_VARIABLE_LOCAL_tile(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, t)
       USE mod_grid
       USE mod_param
       USE mod_biology
@@ -361,154 +570,41 @@
       IMPLICIT NONE
       integer, intent(in) :: LBi, UBi, LBj, UBj, UBk, UBt
       integer, intent(in) :: ng, tile
-      integer, intent(in) :: eNstp, eNew
 #ifdef ASSUMED_SHAPE
       real(r8), intent(inout) :: t(LBi:,LBj:,:,:,:)
 #else
       real(r8), intent(inout) :: t(LBi:UBi,LBj:UBj,UBk,3,UBt)
 #endif
-      logical, SAVE :: IsInitArray = .FALSE.
-      logical, SAVE :: IsInitBFM = .FALSE.
-      integer, SAVE :: NO_BOXES_XY_max = 0
-      integer, SAVE :: NO_BOXES_Z_max = 0
-      integer Nwetpoint, eProd
       integer idx, i, j
       integer idxBOT, idxSRF, eN, iNode
-      integer istat
       integer bio_setup_loc
-      integer, parameter :: namlst = 10
-      integer, parameter :: file_id = 1453
-      NAMELIST /PROC/ delt_bfm, AnalyticalInitD3STATE, CopyInitialToD3STATE, CopyD3STATEtoInitial, SourceTermD3STATE
 # include "set_bounds.h"
       Print *, 'LBi=', LBi, ' UBi=', UBi
       Print *, 'LBj=', LBj, ' UBj=', UBj
       Print *, 'UBk=', UBk, ' UBt=', UBt
-      OPEN(file_id, FILE="bfm_input.nml")
-      READ(file_id, NML = PROC)
-      CLOSE(file_id)
-      IF (.NOT. IsInitArray) THEN
-        IsInitArray=.TRUE.
-        allocate(AllocatedIJK(Ngrids))
-        AllocatedIJK(:) = .FALSE.
-        allocate(NO_BOXES_Z_arr(Ngrids), stat=istat)
-        allocate(NO_BOXES_XY_arr(Ngrids), stat=istat)
-        allocate(NO_BOXES_arr(Ngrids), stat=istat)
-        allocate(ListArrayWet(Ngrids), stat=istat)
+      !
+      Print *, 'Printing average of D3STATE'
+      CALL PRINT_AVERAGE_D3STATE(ng, tile)
+      Print *, 'CopyInitialToD3STATE=', CopyInitialToD3STATE
+      Print *, 'CopyD3STATEtoInitial=', CopyD3STATEtoInitial
+      IF (CopyD3STATEtoInitial) THEN
+        Print *, 'copying D3STATE to T'
+
+        Print *, 'Printing T avg in INIT_BFM_SYSTEM_VARIABLE, Before'
+        CALL Print_t_average(ng, tile, 1)
+        CALL Print_t_average(ng, tile, 2)
+
+        CALL COPY_D3STATE_to_T(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, 1, t)
+        CALL COPY_D3STATE_to_T(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, 2, t)
+        Print *, 'Printing T avg in INIT_BFM_SYSTEM_VARIABLE, After'
+        CALL Print_t_average(ng, tile, 1)
+        CALL Print_t_average(ng, tile, 2)
       END IF
-      IF (.NOT. AllocatedIJK(ng)) THEN
-        AllocatedIJK(ng) = .TRUE.
-        NO_BOXES_Z_arr(ng) = N(ng)
-        Nwetpoint=0
-        DO j=Jstr-1,JendR
-          DO i=Istr-1,IendR
-#ifdef MASKING
-            IF (GRID(ng) % rmask(i,j) .eq. 1) THEN
-#endif
-               Nwetpoint=Nwetpoint + 1
-#ifdef MASKING
-            END IF
-#endif
-          END DO
-        END DO
-        NO_BOXES_XY_arr(ng) = Nwetpoint
-        IF (Nwetpoint .gt. NO_BOXES_XY_max) THEN
-          NO_BOXES_XY_max = Nwetpoint
-        END IF
-        IF (N(ng) .gt. NO_BOXES_Z_max) THEN
-          NO_BOXES_Z_max = N(ng)
-        END IF
-        NO_BOXES_XY = NO_BOXES_XY_max
-        NO_BOXES_X  = NO_BOXES_XY_max
-        NO_BOXES_Y  = 1
-        NO_BOXES_Z  = NO_BOXES_Z_max
-        !
-        eProd = Nwetpoint * NO_BOXES_Z
-        NO_BOXES_XY = Nwetpoint
-        NO_BOXES_arr(ng) = eProd
-        ListArrayWet(ng) % Nwetpoint = Nwetpoint
-        allocate(ListArrayWet(ng) % ListI(Nwetpoint), stat=istat)
-        allocate(ListArrayWet(ng) % ListJ(Nwetpoint), stat=istat)
-! The arrays of bottom and surface
-        allocate(BOTindices(Nwetpoint), stat=istat)
-        allocate(SRFindices(Nwetpoint), stat=istat)
-        eN = NO_BOXES_Z_arr(ng)
-        DO iNode=1,Nwetpoint
-          idxBOT = 1  + eN * (iNode-1)
-          idxSRF = eN + eN * (iNode-1)
-          BOTindices(iNode) = idxBOT
-          SRFindices(iNode) = idxSRF
-        END DO
-! The WET arrays.
-        idx=0
-        DO j=Jstr-1,JendR
-          DO i=Istr-1,IendR
-#ifdef MASKING
-            IF (GRID(ng) % rmask(i,j) .eq. 1) THEN
-#endif
-               idx = idx + 1
-               ListArrayWet(ng) % ListI(idx) = i
-               ListArrayWet(ng) % ListJ(idx) = j
-#ifdef MASKING
-            END IF
-#endif
-          END DO
-        END DO
-        
-        IF ((NO_BOXES_XY_max .ne. 0).and.                               &
-     &       (NO_BOXES_XY_max .gt. NO_BOXES_XY)) THEN
-          Print *, 'NO_BOXES_XY_max=', NO_BOXES_XY_max
-          Print *, 'NO_BOXES_XY=', NO_BOXES_XY
-          Print *, 'We have a problem of allocation'
-          STOP
-        END IF
-        NO_BOXES    = NO_BOXES_XY * NO_BOXES_Z
-        NO_STATES   = NO_D3_BOX_STATES * NO_BOXES + NO_BOXES_XY
-      END IF
-      IF (.NOT. IsInitBFM) THEN
-        IsInitBFM = .TRUE.
-        ! Initialise the BFM with standalone settings
-        call init_bfm(namlst)
-        ! Initialise state variable names and diagnostics
-        call set_var_info_bfm
-        ! Allocate memory and give initial values
-        ! to the pelagic system
-        ! We need the variable well set for this to work.
-        bio_setup_loc=1
-        call init_var_bfm(bio_setup_loc, AnalyticalInitD3STATE)
-        ! Initialize internal constitutents of functional groups
-        call init_organic_constituents(AnalyticalInitD3STATE)
-        Print *, 'Printing average of D3STATE'
-        CALL PRINT_AVERAGE_D3STATE(ng, tile)
-        Print *, 'CopyInitialToD3STATE=', CopyInitialToD3STATE
-        Print *, 'CopyD3STATEtoInitial=', CopyD3STATEtoInitial
-        IF (CopyD3STATEtoInitial) THEN
-          Print *, 'copying D3STATE to T'
-          Print *, 'eNstp=', eNstp, ' eNew=', eNew
-
-          Print *, 'Printing T avg in INIT_BFM_SYSTEM_VARIABLE, Before'
-          CALL Print_t_average(ng, tile, eNew)
-
-          CALL COPY_D3STATE_to_T(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, eNew, t)
-          Print *, 'Printing T avg in INIT_BFM_SYSTEM_VARIABLE, After'
-          CALL Print_t_average(ng, tile, eNew)
-
-!          CALL COPY_D3STATE_to_T(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, eNstp, t)
-        END IF
-        IF (CopyInitialToD3STATE) THEN
-          Print *, 'copying T to D3STATE'
-          CALL COPY_T_to_D3STATE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, eNew, t)
-        END IF
-        ! Need to set up bfmtime adequately for the runs.
-        ! Need also to set up the wind.
-        call init_envforcing_bfm
-        ! Read restart file (if flag)
-        ! Overwrite previous initialization
-        ! Initialise the diagnostic variables
-        call CalcVerticalExtinction( )
-        call CalcChlorophylla( )
+      IF (CopyInitialToD3STATE) THEN
+        Print *, 'copying T to D3STATE'
+        CALL COPY_T_to_D3STATE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, 1, t)
       END IF
       END SUBROUTINE
-
 
 
       
@@ -594,11 +690,6 @@
       integer iNode, i, j, k, idx, itrc, ibio
       integer iVar, iZ
       integer step
-!
-!  Setting up the dimensions and initializing BFM if needed
-!
-      Print *, 'nstp=', nstp, 'nnew=', nnew
-      CALL INIT_BFM_SYSTEM_VARIABLE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, nstp, nnew, t)
 !
 !  Assigning the STATE variables from the t array
 !  ! We need to determine if the diagnostics need to be recomputed.
