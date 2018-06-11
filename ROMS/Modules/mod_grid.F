@@ -298,11 +298,13 @@
 
         TYPE (T_GRID), allocatable :: GRID(:)
 
+        TYPE INT_ARR
+        integer, allocatable :: ArrInt(:)
+        END TYPE INT_ARR
 
-        integer, allocatable :: NO_BOXES_Z_arr(:)
-        integer, allocatable :: NO_BOXES_XY_arr(:)
-        integer, allocatable :: NO_BOXES_arr(:)
-        logical, allocatable :: AllocatedIJK(:)
+        TYPE(INT_ARR), allocatable :: NO_BOXES_Z_arr(:)
+        TYPE(INT_ARR), allocatable :: NO_BOXES_XY_arr(:)
+        TYPE(INT_ARR), allocatable :: NO_BOXES_arr(:)
         
       CONTAINS
 

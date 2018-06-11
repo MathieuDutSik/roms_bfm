@@ -85,12 +85,19 @@
 !
 !  Biological parameters.
 !
-      TYPE ARRAY_WET
+      TYPE ARRAY_WET_TILE
+      integer tile
       integer Nwetpoint
       integer, allocatable :: ListI(:)
       integer, allocatable :: ListJ(:)
-      END TYPE ARRAY_WET
+      END TYPE ARRAY_WET_TILE
 !
+!
+!
+      TYPE ARRAY_WET
+      type(ARRAY_WET_TILE), allocatable :: TheArr(:)
+      END TYPE ARRAY_WET
+
       type(ARRAY_WET), allocatable :: ListArrayWet(:)
       
       CONTAINS

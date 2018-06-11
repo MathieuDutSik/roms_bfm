@@ -120,6 +120,7 @@
       USE mod_ocean
       USE mod_scalars
       USE mod_stepping
+      USE mod_parallel
       USE api_bfm
       USE envforcing, only : botdep_c, botdep_n, botdep_p,              &
      &    botdep_si, daylength
@@ -134,6 +135,7 @@
       use constants,  only: E2W
       IMPLICIT NONE
       integer, intent(in) :: ng, tile
+      integer tileS
       integer idx, idxB, i, j
       REAL(r8) :: ONE = 1.0_r8
       REAL(R8) lat
@@ -146,9 +148,10 @@
 # include "set_bounds.h"
       b_dew=18.678_r8
       c_dew=157.14_r8
+      tileS = tile - first_tile(ng) + 1
       DO idx=1,NO_BOXES_XY
-         i = ListArrayWet(ng) % ListI(idx)
-         j = ListArrayWet(ng) % ListJ(idx)
+         i = ListArrayWet(ng) % TheArr(tileS) % ListI(idx)
+         j = ListArrayWet(ng) % TheArr(tileS) % ListJ(idx)
          lat = GRID(ng) % latp(i,j)
          ! The 
          SUNQ(idx) = daylength(REAL(Rclock % yday, r8), lat)
@@ -220,6 +223,7 @@
       USE mod_biology
       USE mod_ncparam
       USE mod_scalars
+      USE mod_parallel
       USE mem
       USE api_bfm
       IMPLICIT NONE
@@ -231,12 +235,14 @@
       real(r8), intent(inout) :: t(LBi:UBi,LBj:UBj,UBk,3,UBt)
 #endif
       integer iNode, i, j, k, iZ, idx
-      integer iVar, itrc, ibio
+      integer iVar, itrc, ibio, NO_BOXES_XY_loc, tileS
       REAL(r8) eVal
       Print *, 'CP_T_D3 : stPelStateS=', stPelStateS, ' stPelStateE=', stPelStateE
-      DO iNode=1,NO_BOXES_XY
-         i = ListArrayWet(ng) % ListI(iNode)
-         j = ListArrayWet(ng) % ListJ(iNode)
+      tileS = tile - first_tile(ng) + 1
+      NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
+      DO iNode=1,NO_BOXES_XY_loc
+         i = ListArrayWet(ng) % TheArr(tileS) % ListI(iNode)
+         j = ListArrayWet(ng) % TheArr(tileS) % ListJ(iNode)
          DO k=1,NO_BOXES_Z
             iZ = k
             idx = iZ + NO_BOXES_Z * (iNode-1)
@@ -259,6 +265,7 @@
       USE mod_biology
       USE mod_ncparam
       USE mod_scalars
+      USE mod_parallel
       USE mem
       USE api_bfm
       IMPLICIT NONE
@@ -270,12 +277,14 @@
       real(r8), intent(inout) :: t(LBi:UBi,LBj:UBj,UBk,3,UBt)
 #endif
       integer iNode, i, j, k, iZ, idx
-      integer iVar, itrc, ibio
+      integer iVar, itrc, ibio, NO_BOXES_XY_loc, tileS
       REAL(r8) eVal
       Print *, 'CP_D3_T : stPelStateS=', stPelStateS, ' stPelStateE=', stPelStateE
-      DO iNode=1,NO_BOXES_XY
-         i = ListArrayWet(ng) % ListI(iNode)
-         j = ListArrayWet(ng) % ListJ(iNode)
+      tileS = tile - first_tile(ng) + 1
+      NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
+      DO iNode=1,NO_BOXES_XY_loc
+         i = ListArrayWet(ng) % TheArr(tileS) % ListI(iNode)
+         j = ListArrayWet(ng) % TheArr(tileS) % ListJ(iNode)
          DO k=1,NO_BOXES_Z
             iZ = k
             idx = iZ + NO_BOXES_Z * (iNode-1)
@@ -378,17 +387,19 @@
       use mod_grid
       USE mod_biology
       use api_bfm
+      USE mod_parallel
       USE mem
       implicit none
-      integer tile
+      integer tile, tileS
       integer nl, ig, ng, eProd
       integer, parameter :: file_id = 1453
       integer istat
       LOGICAL DoNestLayer
-      integer Nwetpoint
-      NAMELIST /PROC/ delt_bfm, AnalyticalInitD3STATE, CopyInitialToD3STATE, CopyD3STATEtoInitial, SourceTermD3STATE
+      integer Nwetpoint, tileLen
+      integer NO_BOXES_Z_max, NO_BOXES_XY_max
+      NAMELIST /SETTING_BFM_COUPL/ delt_bfm, AnalyticalInitD3STATE, CopyInitialToD3STATE, CopyD3STATEtoInitial, SourceTermD3STATE
       OPEN(file_id, FILE="bfm_input.nml")
-      READ(file_id, NML = PROC)
+      READ(file_id, NML = SETTING_BFM_COUPL)
       CLOSE(file_id)
       DoNestLayer = .TRUE.
       !
@@ -397,23 +408,35 @@
       allocate(NO_BOXES_XY_arr(Ngrids), stat=istat)
       allocate(NO_BOXES_arr(Ngrids), stat=istat)
       allocate(ListArrayWet(Ngrids), stat=istat)
+      NO_BOXES_Z_max  = 0
+      NO_BOXES_XY_max = 0
       NEST_LAYER : DO WHILE (DoNestLayer)
         nl = nl + 1
         IF ((nl.le.0).or.(nl.gt.NestLayers)) EXIT
         DO ig=1,GridsInLayer(nl)
           ng=GridNumber(ig,nl)
-          tile = MyRank
-          CALL COMPUTE_LOCAL_NB_WET(ng, tile, Nwetpoint)
-          eProd = Nwetpoint * N(ng)
-          NO_BOXES_XY_arr(ng) = Nwetpoint
-          NO_BOXES_Z_arr(ng) = N(ng)
-          NO_BOXES_arr(ng) = eProd
-          ListArrayWet(ng) % Nwetpoint = Nwetpoint
+          tileLen = 1 + last_tile(ng) - first_tile(ng)
+          allocate(NO_BOXES_Z_arr(ng) % ArrInt(tileLen), stat=istat)
+          allocate(NO_BOXES_XY_arr(ng) % ArrInt(tileLen), stat=istat)
+          allocate(NO_BOXES_arr(ng) % ArrInt(tileLen), stat=istat)
+          allocate(ListArrayWet(ng) % TheArr(tileLen), stat=istat)
+          DO tile=first_tile(ng),last_tile(ng),+1
+            tileS = tile - first_tile(ng) + 1
+            CALL COMPUTE_LOCAL_NB_WET(ng, tile, Nwetpoint)
+            eProd = Nwetpoint * N(ng)
+            !
+            NO_BOXES_XY_arr(ng) % ArrInt(tileS) = Nwetpoint
+            NO_BOXES_Z_arr(ng) % ArrInt(tileS) = N(ng)
+            IF (Nwetpoint .gt. NO_BOXES_XY_max) NO_BOXES_XY_max = Nwetpoint
+            IF (N(ng) .gt. NO_BOXES_Z_max) NO_BOXES_Z_max = N(ng)
+            NO_BOXES_arr(ng) % ArrInt(tileS) = eProd
+            ListArrayWet(ng) % TheArr(tileS) % Nwetpoint = Nwetpoint
+          END DO
         END DO
       END DO NEST_LAYER
       NO_BOXES_Y  = 1
-      NO_BOXES_Z = maxval(NO_BOXES_Z_arr)
-      NO_BOXES_XY = maxval(NO_BOXES_XY_arr)
+      NO_BOXES_Z = NO_BOXES_Z_max
+      NO_BOXES_XY = NO_BOXES_XY_max
       NO_BOXES_X = NO_BOXES_XY
       NO_BOXES    = NO_BOXES_XY * NO_BOXES_Z
       NO_STATES   = NO_D3_BOX_STATES * NO_BOXES + NO_BOXES_XY
@@ -422,14 +445,18 @@
       allocate(SRFindices(Nwetpoint), stat=istat)
       END SUBROUTINE
 
-      SUBROUTINE SET_BOT_SURFINDICES(ng)
+      SUBROUTINE SET_BOT_SURFINDICES(ng, tile)
       use mod_grid
       use api_bfm
+      use mod_parallel
       implicit none
-      integer, intent(in) :: ng
+      integer, intent(in) :: ng, tile
       integer eN, iNode, idxBOT, idxSRF
-      eN = NO_BOXES_Z_arr(ng)
-      DO iNode=1,NO_BOXES_XY_arr(ng)
+      integer tileS, NO_BOXES_XY_loc
+      tileS = tile - first_tile(ng) + 1
+      eN = NO_BOXES_Z_arr(ng) % ArrInt(tileS)
+      NO_BOXES_XY_loc = NO_BOXES_XY_arr(ng) % ArrInt(tileS)
+      DO iNode=1,NO_BOXES_XY_loc
         idxBOT = 1  + eN * (iNode-1)
         idxSRF = eN + eN * (iNode-1)
         BOTindices(iNode) = idxBOT
@@ -451,8 +478,9 @@
       SUBROUTINE Allocate_GRID_ARRAY
       use mod_grid
       use mod_param
+      USE mod_parallel
       implicit none
-      integer nl, ig, ng
+      integer nl, ig, ng, tile
       LOGICAL DoNestLayer
       DoNestLayer = .TRUE.
       nl=0
@@ -461,7 +489,9 @@
         IF ((nl.le.0).or.(nl.gt.NestLayers)) EXIT
         DO ig=1,GridsInLayer(nl)
           ng=GridNumber(ig,nl)
-          CALL Allocate_GRID_ARRAY_LOCAL(ng, tile)
+          DO tile=first_tile(ng),last_tile(ng),+1
+            CALL Allocate_GRID_ARRAY_LOCAL(ng, tile)
+          END DO
         END DO
       END DO NEST_LAYER
       END SUBROUTINE
@@ -471,13 +501,16 @@
       use mod_biology
       use mod_grid
       use mod_param
+      USE mod_parallel
       implicit none
       integer, intent(in) :: ng, tile
+      integer tileS
       integer idx, j, i, Nwetpoint, istat
 #include "set_bounds.h"
-      Nwetpoint = ListArrayWet(ng) % Nwetpoint
-      allocate(ListArrayWet(ng) % ListI(Nwetpoint), stat=istat)
-      allocate(ListArrayWet(ng) % ListJ(Nwetpoint), stat=istat)
+      tileS = tile - first_tile(ng) + 1
+      Nwetpoint = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
+      allocate(ListArrayWet(ng) % TheArr(tileS) % ListI(Nwetpoint), stat=istat)
+      allocate(ListArrayWet(ng) % TheArr(tileS) % ListJ(Nwetpoint), stat=istat)
 ! The WET arrays.
       idx=0
       DO j=Jstr-1,JendR
@@ -486,8 +519,8 @@
           IF (GRID(ng) % rmask(i,j) .eq. 1) THEN
 #endif
             idx = idx + 1
-            ListArrayWet(ng) % ListI(idx) = i
-            ListArrayWet(ng) % ListJ(idx) = j
+            ListArrayWet(ng) % TheArr(tileS) % ListI(idx) = i
+            ListArrayWet(ng) % TheArr(tileS) % ListJ(idx) = j
 #ifdef MASKING
           END IF
 #endif
@@ -531,6 +564,7 @@
       SUBROUTINE INIT_BFM_SYSTEM_VARIABLE
       use mod_grid
       use mod_param
+      USE mod_parallel
       implicit none
       integer nl, ig, ng, tile
       LOGICAL DoNestLayer
