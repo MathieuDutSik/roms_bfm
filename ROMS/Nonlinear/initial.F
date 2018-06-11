@@ -950,6 +950,14 @@
         iic(ng)=ntstart(ng)-1
         time(ng)=time(ng)-dt(ng)
       END DO
+!
+!-----------------------------------------------------------------------
+!     Initialization of the grids of the BFM model
+!-----------------------------------------------------------------------
+!
+#ifdef BFM_COUPLING
+      CALL FULL_INIT_OF_BFM_MODEL
+#endif
 
 #ifdef PROFILE
 !

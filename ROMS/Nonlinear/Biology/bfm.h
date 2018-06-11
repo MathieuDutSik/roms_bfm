@@ -416,6 +416,7 @@
         DO ig=1,GridsInLayer(nl)
           ng=GridNumber(ig,nl)
           tileLen = 1 + last_tile(ng) - first_tile(ng)
+          Print *, 'nl=', nl, ' ig=', ig, ' ng=', ng, ' tileLen=', tileLen
           allocate(NO_BOXES_Z_arr(ng) % ArrInt(tileLen), stat=istat)
           allocate(NO_BOXES_XY_arr(ng) % ArrInt(tileLen), stat=istat)
           allocate(NO_BOXES_arr(ng) % ArrInt(tileLen), stat=istat)
@@ -424,6 +425,7 @@
             tileS = tile - first_tile(ng) + 1
             CALL COMPUTE_LOCAL_NB_WET(ng, tile, Nwetpoint)
             eProd = Nwetpoint * N(ng)
+            Print *, '  tile=', tile, ' Nwetpoint=', Nwetpoint
             !
             NO_BOXES_XY_arr(ng) % ArrInt(tileS) = Nwetpoint
             NO_BOXES_Z_arr(ng) % ArrInt(tileS) = N(ng)
@@ -736,9 +738,10 @@
 !      Print *, ' size(t,4)=', size(t,4)
 !      Print *, ' size(t,5)=', size(t,5)
 
-       Print *, 'Printing T average in biology_tile'
-       CALL Print_t_average(ng, tile, nstp)
-       CALL Print_t_average(ng, tile, nnew)
+      Print *, 'Printing T average in biology_tile'
+      CALL Print_t_average(ng, tile, nstp)
+      CALL Print_t_average(ng, tile, nnew)
+      CALL SET_BOT_SURFINDICES(ng, tile)
 
 !      Print *, 'Printing D3STATE before Source term integration'
 !      CALL PRINT_AVERAGE_D3STATE(ng, tile)
