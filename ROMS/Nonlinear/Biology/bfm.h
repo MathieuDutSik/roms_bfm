@@ -470,6 +470,7 @@
 !
       SUBROUTINE FULL_INIT_OF_BFM_MODEL
       implicit none
+      CALL COMPUTE_NO_BOXES_XY_Z_ALL
       CALL Allocate_GRID_ARRAY
       CALL INIT_BFM_MODEL
       CALL INIT_BFM_SYSTEM_VARIABLE
@@ -510,6 +511,9 @@
       integer idx, j, i, Nwetpoint, istat
 #include "set_bounds.h"
       tileS = tile - first_tile(ng) + 1
+      Print *, 'ng=', ng, ' tile=', tile, ' tileS=', tileS
+      Print *, 'allocated(ListArrayWet)=', allocated(ListArrayWet)
+      Print *, 'allocated(ListArrayWet(ng) % TheArr)=', allocated(ListArrayWet(ng) % TheArr)
       Nwetpoint = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
       allocate(ListArrayWet(ng) % TheArr(tileS) % ListI(Nwetpoint), stat=istat)
       allocate(ListArrayWet(ng) % TheArr(tileS) % ListJ(Nwetpoint), stat=istat)

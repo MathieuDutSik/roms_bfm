@@ -110,7 +110,10 @@
 
       PRIVATE
       PUBLIC  :: biology
-
+#ifdef BFM_COUPLING
+      PUBLIC  :: FULL_INIT_OF_BFM_MODEL
+#endif
+      
       CONTAINS
 
 # if defined BIO_FENNEL

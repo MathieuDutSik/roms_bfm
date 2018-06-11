@@ -64,6 +64,9 @@
     (defined MASKING    && (defined READ_WATER || defined WRITE_WATER))
       USE wpoints_mod,       ONLY : wpoints
 #endif
+#ifdef BFM_COUPLING
+      USE biology_mod, only : FULL_INIT_OF_BFM_MODEL
+#endif
 !
       implicit none
 !
@@ -950,12 +953,12 @@
         iic(ng)=ntstart(ng)-1
         time(ng)=time(ng)-dt(ng)
       END DO
+#ifdef BFM_COUPLING
 !
 !-----------------------------------------------------------------------
 !     Initialization of the grids of the BFM model
 !-----------------------------------------------------------------------
 !
-#ifdef BFM_COUPLING
       CALL FULL_INIT_OF_BFM_MODEL
 #endif
 
