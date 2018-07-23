@@ -518,8 +518,12 @@
 !  Apply tracers point sources to the horizontal advection terms,
 !  if any.
 !
+          Print *, 'step3d_t, before FX/FE assignation itrc=', itrc
+          Print *, 'LtracerSrc=', LtracerSrc(itrc,ng)
           IF (LuvSrc(ng).and.ANY(LtracerSrc(:,ng))) THEN
+            Print *, '  step3d_t, After uv check'
             DO is=1,Nsrc(ng)
+!              Print *, '    step3d_t, is=', is
               Isrc=SOURCES(ng)%Isrc(is)
               Jsrc=SOURCES(ng)%Jsrc(is)
               IF (INT(SOURCES(ng)%Dsrc(is)).eq.0) THEN
