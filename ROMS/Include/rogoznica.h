@@ -31,7 +31,7 @@
 #undef ANA_INITIAL
 #undef RST_SINGLE
 
-#define BFM_COUPLING
+#undef BFM_COUPLING
 
 #undef ANA_TAIR
 #undef ANA_PAIR
@@ -247,23 +247,40 @@
 
 /* define the boundary conditions */
 
-#define NORTHERN_WALL
-#define EASTERN_WALL
-#define WESTERN_WALL
-
-#define SSH_TIDES
-#define UV_TIDES
+#undef SSH_TIDES
+#undef UV_TIDES
 
 #define ADD_FSOBC
 #define ADD_M2OBC
 
 #define RADIATION_2D
-#undef SOUTH_TRADIATION
-#undef SOUTH_M3RADIATION
-#undef SOUTH_FSCHAPMAN
-#undef SOUTH_M2FLATHER
 
+#define SOUTH_TRADIATION
+#define SOUTH_M3RADIATION
+#define SOUTH_FSCHAPMAN
+#define SOUTH_M2FLATHER
 #define SOUTH_M3NUDGING
 #define SOUTH_TNUDGING
+
+#define NORTH_TRADIATION
+#define NORTH_M3RADIATION
+#define NORTH_FSCHAPMAN
+#define NORTH_M2FLATHER
+#define NORTH_M3NUDGING
+#define NORTH_TNUDGING
+
+#define EAST_TRADIATION
+#define EAST_M3RADIATION
+#define EAST_FSCHAPMAN
+#define EAST_M2FLATHER
+#define EAST_M3NUDGING
+#define EAST_TNUDGING
+
+#define WEST_TRADIATION
+#define WEST_M3RADIATION
+#define WEST_FSCHAPMAN
+#define WEST_M2FLATHER
+#define WEST_M3NUDGING
+#define WEST_TNUDGING
 
 

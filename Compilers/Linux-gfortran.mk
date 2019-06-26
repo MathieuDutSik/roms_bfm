@@ -22,7 +22,7 @@
 #
 # First the defaults
 #
-               FC := gfortran
+               FC := gfortran -fsignaling-nans -fsanitize=float-divide-by-zero
            FFLAGS := -frepack-arrays
               CPP := /usr/bin/cpp
          CPPFLAGS := -P -traditional
