@@ -376,6 +376,7 @@
 !
       IF (LuvSponge(ng)) THEN
 # ifdef UV_VIS2
+         Print *, ' Initializing the visc2_r'
         DO i=IstrT,IendT
           DO j=JstrT,JendT
             visc2_r(i,j)=ABS(MIXING(ng)%visc_factor(i,j))*              &

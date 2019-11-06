@@ -159,6 +159,8 @@
 /* define atmo model WRF, ALADIN COAMPS or LAMI */
 
 
+/* #define ANA_SPONGE */
+
 #define SPONGE
 #define MIX_S_UV
 #define TS_DIF2
