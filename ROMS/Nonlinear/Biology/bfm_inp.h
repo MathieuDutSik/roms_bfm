@@ -48,6 +48,7 @@
 !  Initialize.
 !-----------------------------------------------------------------------
 !
+      Print *, "Beginning of read_BioPar for ROMS_BFM"
       igrid=1                            ! nested grid counter
       itracer=0                          ! LBC tracer counter
       iTrcStr=1                          ! first LBC tracer to process
@@ -65,6 +66,7 @@
       DO WHILE (.TRUE.)
         READ (inp,'(a)',ERR=10,END=20) line
         status=decode_line(line, KeyWord, Nval, Cval, Rval)
+        Print *, 'decode_line in read_BioPar'
         IF (status.gt.0) THEN
           SELECT CASE (TRIM(KeyWord))
             CASE ('TNU2')

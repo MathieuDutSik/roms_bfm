@@ -22,7 +22,8 @@
 #
 # First the defaults
 #
-               FC := gfortran -fsignaling-nans -fsanitize=float-divide-by-zero
+#               FC := gfortran -fsignaling-nans -fsanitize=float-divide-by-zero
+               FC := gfortran
            FFLAGS := -frepack-arrays
               CPP := /usr/bin/cpp
          CPPFLAGS := -P -traditional
@@ -75,11 +76,12 @@ ifdef USE_OpenMP
 endif
 
 ifdef USE_DEBUG
+#           FFLAGS += -g -fbounds-check
            FFLAGS += -g -fbounds-check
 else
 #           FFLAGS += -O3 -ffast-math -g
-#           FFLAGS += -O3 -ffast-math -g -fcheck=all -fbacktrace
-           FFLAGS += -O3 -ffast-math -g -fcheck=bounds
+           FFLAGS += -O3 -ffast-math -g -fcheck=all -fbacktrace
+#           FFLAGS += -O3 -ffast-math
 endif
 
 ifdef USE_MCT

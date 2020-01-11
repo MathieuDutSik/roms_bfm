@@ -105,7 +105,9 @@
 !  Tracer Sources/Sinks.
 !
       DO i=1,NT(ng)
+        Print *, 'LtracerSrc, before get_ngfld i=', i
         IF (LtracerSrc(i,ng)) THEN
+          Print *, 'SSF(ng)%name = ', SSF(ng)%name
           CALL get_ngfld (ng, iNLM, idRtrc(i), SSF(ng)%ncid,            &
      &                    1, SSF(ng), update(1),                        &
      &                    1, Nsrc(ng), N(ng), 2, 1, Nsrc(ng), N(ng),    &

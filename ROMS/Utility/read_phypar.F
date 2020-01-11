@@ -921,6 +921,7 @@
 #ifdef SOLVE3D
             CASE ('LtracerSrc')
               Npts=load_l(Nval, Cval, (NAT+NPT)*Ngrids, Ltracer)
+              Print *, 'CASE LtracerSrc NAT=', NAT, ' NPT=', NPT
               DO ng=1,Ngrids
                 DO itrc=1,NAT
                   LtracerSrc(itrc,ng)=Ltracer(itrc,ng)

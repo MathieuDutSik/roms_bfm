@@ -743,7 +743,7 @@
 !-----------------------------------------------------------------------
 !
       OPEN (15, FILE=TRIM(bparnam), FORM='formatted', STATUS='old')
-
+      Print *, 'bparnam = ', bparnam
       CALL read_BioPar (model, 15, out, Lwrite)
 #endif
 #ifdef SEDIMENT
