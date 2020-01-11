@@ -686,3 +686,4 @@
 */
 
 #include "globaldefs.h"
+#undef PROFILE

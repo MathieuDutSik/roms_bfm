@@ -164,6 +164,7 @@
       iOxyg = ic+1
       Print *, 'iOxyg=', iOxyg
       iPO4_ = ic+2
+      Print *, 'iPO4_=', iPO4_
       iNO3_ = ic+3
       iNH4_ = ic+4
       iO4n_ = ic+5

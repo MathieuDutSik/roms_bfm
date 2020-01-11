@@ -3742,6 +3742,548 @@
   'r3dvar'
   1.0d0
 
+
+!
+!  BFM river
+!
+
+
+'river_PO4'                                              ! Input/Output
+  'phosphate concentration'
+  'millimole_PO4 meter-3'                          ! [millimole/m3]
+  'river_PO4, scalar, series'
+  'river_time'
+  'idRtrc(iPO4_)'
+  'r3dvar'
+  1.0d0
+
+'river_NitrogenSink'                                     ! Input/Output
+  'River aerobic and anaerobic bacteria'
+  'millimole meter-3'                              ! [millimole/m3]
+  'river_NitrogenSink, scalar, series'
+  'river_time'
+  'idRtrc(iO4n_)'
+  'r3dvar'
+  1.0d0
+
+'river_ReductionEquivalent'                              ! Input/Output
+  'River reduction equivalent'
+  'millimole meter-3'                              ! [millimole/m3]
+  'river_ReductionEquivalent, scalar, series'
+  'river_time'
+  'idRtrc(iN6r_)'
+  'r3dvar'
+  1.0d0
+
+'river_bacteria_c'                                         ! Input/Output
+  'River aerobic and anaerobic bacteria(C)'
+  'milligram meter-3'                              ! [mg/m3]
+  'river_Bacteria, scalar, series'
+  'river_time'
+  'idRtrc(iB1c_)'
+  'r3dvar'
+  1.0d0
+
+'river_bacteria_n'                                       ! Input/Output
+  'River aerobic and anaerobic bacteria(N)'
+  'milligram meter-3'                              ! [mg/m3]
+  'river_Bacteria, scalar, series'
+  'river_time'
+  'idRtrc(iB1n_)'
+  'r3dvar'
+  1.0d0
+
+'river_bacteria_p'                                       ! Input/Output
+  'River aerobic and anaerobic bacteria(P)'
+  'milligram meter-3'                              ! [mg/m3]
+  'river_Bacteria, scalar, series'
+  'river_time'
+  'idRtrc(iB1p_)'
+  'r3dvar'
+  1.0d0
+
+'river_diatoms_c'                                        ! Input/Output
+  'River diatoms carbon'
+  'milligram meter-3'                              ! [mg/m3]
+  'river_Diatoms, scalar, series'
+  'river_time'
+  'idRtrc(iP1c_)'
+  'r3dvar'
+  1.0d0
+
+'river_diatoms_n'                                        ! Input/Output
+  'River diatoms nitrogen'
+  'millimole meter-3'                              ! [millimole/m3]
+  'river_Diatoms, scalar, series'
+  'river_time'
+  'idRtrc(iP1n_)'
+  'r3dvar'
+  1.0d0
+
+'river_diatoms_p'                                        ! Input/Output
+  'River diatoms phosphate'
+  'millimole meter-3'                              ! [millimole/m3]
+  'river_Diatoms, scalar, series'
+  'river_time'
+  'idRtrc(iP1p_)'
+  'r3dvar'
+  1.0d0
+
+'river_diatoms_l'                                        ! Input/Output
+  'River diatoms chlorophyl'
+  'milligram meter-3'                              ! [mg/m3]
+  'river_Diatoms, scalar, series'
+  'river_time'
+  'idRtrc(iP1l_)'
+  'r3dvar'
+  1.0d0
+
+'river_diatoms_s'                                        ! Input/Output
+  'River diatoms silicate'
+  'millimole meter-3'                              ! [millimole/m3]
+  'river_Diatoms, scalar, series'
+  'river_time'
+  'idRtrc(iP1s_)'
+  'r3dvar'
+  1.0d0
+
+'river_flagellates_c'                                    ! Input/Output
+  'River flagellates carbon'
+  'milligram meter-3'                              ! [mg/m3]
+  'river_Flagellates, scalar, series'
+  'river_time'
+  'idRtrc(iP2c_)'
+  'r3dvar'
+  1.0d0
+
+'river_flagellates_n'                                    ! Input/Output
+  'River flagellates nitrogen'
+  'millimole meter-3'                              ! [millimole/m3]
+  'river_Flagellates, scalar, series'
+  'river_time'
+  'idRtrc(iP2n_)'
+  'r3dvar'
+  1.0d0
+
+'river_flagellates_p'                                    ! Input/Output
+  'River flagellates phosphate'
+  'millimole meter-3'                              ! [millimole/m3]
+  'river_Flagellates, scalar, series'
+  'river_time'
+  'idRtrc(iP2p_)'
+  'r3dvar'
+  1.0d0
+
+'river_flagellates_l'                                    ! Input/Output
+  'River flagellates chlorophyl'
+  'milligram meter-3'                              ! [mg/m3]
+  'river_Flagellates, scalar, series'
+  'river_time'
+  'idRtrc(iP2l_)'
+  'r3dvar'
+  1.0d0
+
+'river_picophytoplankton_c'                              ! Input/Output
+  'River picophytoplankton carbon'
+  'milligram meter-3'                              ! [mg/m3]
+  'river_PicoPhytoplankton, scalar, series'
+  'river_time'
+  'idRtrc(iP3c_)'
+  'r3dvar'
+  1.0d0
+
+'river_picophytoplankton_n'                              ! Input/Output
+  'River picophytoplankton nitrogen'
+  'millimole meter-3'                              ! [millimole/m3]
+  'river_PicoPhytoplankton, scalar, series'
+  'river_time'
+  'idRtrc(iP3n_)'
+  'r3dvar'
+  1.0d0
+
+'river_picophytoplankton_p'                              ! Input/Output
+  'River picophytoplankton phosphate'
+  'millimole meter-3'                              ! [millimole/m3]
+  'river_PicoPhytoplankton, scalar, series'
+  'river_time'
+  'idRtrc(iP3p_)'
+  'r3dvar'
+  1.0d0
+
+'river_picophytoplankton_l'                              ! Input/Output
+  'River picophytoplankton chlorophyl'
+  'milligram meter-3'                              ! [mg/m3]
+  'river_PicoPhytoplankton, scalar, series'
+  'river_time'
+  'idRtrc(iP3l_)'
+  'r3dvar'
+  1.0d0
+
+'river_largephytoplankton_c'                             ! Input/Output
+  'River largephytoplankton carbon'
+  'milligram meter-3'                              ! [mg/m3]
+  'river_LargePhytoplankton, scalar, series'
+  'river_time'
+  'idRtrc(iP4c_)'
+  'r3dvar'
+  1.0d0
+
+'river_largephytoplankton_n'                             ! Input/Output
+  'River largephytoplankton nitrogen'
+  'millimole meter-3'                              ! [millimole/m3]
+  'river_LargePhytoplankton, scalar, series'
+  'river_time'
+  'idRtrc(iP4n_)'
+  'r3dvar'
+  1.0d0
+
+'river_largephytoplankton_p'                             ! Input/Output
+  'River largephytoplankton chlorophyl'
+  'millimole meter-3'                              ! [millimole/m3]
+  'river_LargePhytoplankton, scalar, series'
+  'river_time'
+  'idRtrc(iP4p_)'
+  'r3dvar'
+  1.0d0
+
+'river_largephytoplankton_l'                             ! Input/Output
+  'River largephytoplankton chlorophyl'
+  'milligram meter-3'                              ! [mg/m3]
+  'river_LargePhytoplankton, scalar, series'
+  'river_time'
+  'idRtrc(iP4l_)'
+  'r3dvar'
+  1.0d0
+
+'river_CarnPlankton_c'                                   ! Input/Output
+  'River Carnivorous Mesozooplankton(C)'
+  'milligram meter-3'                              ! [mg/m3]
+  'river_CarnPlankton, scalar, series'
+  'river_time'
+  'idRtrc(iZ3c_)'
+  'r3dvar'
+  1.0d0
+
+'river_CarnPlankton_n'                                   ! Input/Output
+  'River Carnivorous Mesozooplankton(N)'
+  'milligram meter-3'                              ! [mg/m3]
+  'river_CarnPlankton, scalar, series'
+  'river_time'
+  'idRtrc(iZ3n_)'
+  'r3dvar'
+  1.0d0
+
+'river_CarnPlankton_p'                                   ! Input/Output
+  'River Carnivorous Mesozooplankton(P)'
+  'milligram meter-3'                              ! [mg/m3]
+  'river_CarnPlankton, scalar, series'
+  'river_time'
+  'idRtrc(iZ3p_)'
+  'r3dvar'
+  1.0d0
+
+'river_OmniPlankton_c'                                   ! Input/Output
+  'River Omnivorous Mesozooplankton(C)'
+  'milligram meter-3'                              ! [mg/m3]
+  'river_OmniPlankton, scalar, series'
+  'river_time'
+  'idRtrc(iZ4c_)'
+  'r3dvar'
+  1.0d0
+
+'river_OmniPlankton_n'                                   ! Input/Output
+  'River Omnivorous Mesozooplankton(N)'
+  'milligram meter-3'                              ! [mg/m3]
+  'river_OmniPlankton, scalar, series'
+  'river_time'
+  'idRtrc(iZ4n_)'
+  'r3dvar'
+  1.0d0
+
+'river_OmniPlankton_p'                                   ! Input/Output
+  'River Omnivorous Mesozooplankton(P)'
+  'milligram meter-3'                              ! [mg/m3]
+  'river_OmniPlankton, scalar, series'
+  'river_time'
+  'idRtrc(iZ4p_)'
+  'r3dvar'
+  1.0d0
+
+'river_MicroPlankton_c'                                  ! Input/Output
+  'River Microzooplankton(C)'
+  'milligram meter-3'                              ! [mg/m3]
+  'river_MicroPlankton, scalar, series'
+  'river_time'
+  'idRtrc(iZ5c_)'
+  'r3dvar'
+  1.0d0
+
+'river_MicroPlankton_n'                                  ! Input/Output
+  'River Microzooplankton(N)'
+  'milligram meter-3'                              ! [mg/m3]
+  'river_MicroPlankton, scalar, series'
+  'river_time'
+  'idRtrc(iZ5n_)'
+  'r3dvar'
+  1.0d0
+
+'river_MicroPlankton_p'                                  ! Input/Output
+  'River Microzooplankton(P)'
+  'milligram meter-3'                              ! [mg/m3]
+  'river_MicroPlankton, scalar, series'
+  'river_time'
+  'idRtrc(iZ5p_)'
+  'r3dvar'
+  1.0d0
+
+'river_HeteroNanoflagelattes_c'                          ! Input/Output
+  'River Heterotrophic Nanoflagellates (HNAN) C'
+  'milligram meter-3'                              ! [mg/m3]
+  'river_HeteroFlagellate, scalar, series'
+  'river_time'
+  'idRtrc(iZ6c_)'
+  'r3dvar'
+  1.0d0
+
+'river_HeteroNanoflagelattes_n'                          ! Input/Output
+  'River Heterotrophic Nanoflagellates (HNAN) N'
+  'milligram meter-3'                              ! [mg/m3]
+  'river_HeteroFlagellate, scalar, series'
+  'river_time'
+  'idRtrc(iZ6n_)'
+  'r3dvar'
+  1.0d0
+
+'river_HeteroNanoflagelattes_p'                          ! Input/Output
+  'River Heterotrophic Nanoflagellates (HNAN) P'
+  'milligram meter-3'                              ! [mg/m3]
+  'river_HeteroFlagellate, scalar, series'
+  'river_time'
+  'idRtrc(iZ6p_)'
+  'r3dvar'
+  1.0d0
+
+'river_LabileDOM1_c'                                     ! Input/Output
+  'River Labile Dissolved Organic Matter (Carbon)'
+  'milligram meter-3'                              ! [mg/m3]
+  'river_LabileDOM, scalar, series'
+  'river_time'
+  'idRtrc(iR1c_)'
+  'r3dvar'
+  1.0d0
+
+'river_LabileDOM1_n'                                     ! Input/Output
+  'River Labile Dissolved Organic Matter (Nitrogen)'
+  'millimole meter-3'                              ! [millimole/m3]
+  'river_LabileDOM, scalar, series'
+  'river_time'
+  'idRtrc(iR1n_)'
+  'r3dvar'
+  1.0d0
+
+'river_LabileDOM1_p'                                     ! Input/Output
+  'River Labile Dissolved Organic Matter (Phosphate)'
+  'millimole meter-3'                              ! [millimole/m3]
+  'river_LabileDOM, scalar, series'
+  'river_time'
+  'idRtrc(iR1p_)'
+  'r3dvar'
+  1.0d0
+
+'river_LabileDOM2_c'                                     ! Input/Output
+  'River Semi-labile Dissolved Organic Carbon'
+  'milligram meter-3'                              ! [mg/m3]
+  'river_SemiLabile, scalar, series'
+  'river_time'
+  'idRtrc(iR2c_)'
+  'r3dvar'
+  1.0d0
+
+'river_RefractoryDOM_c'                                  ! Input/Output
+  'River Semi-refractory Dissolved Organic Carbon'
+  'milligram meter-3'                              ! [mg/m3]
+  'river_SemiLabile, scalar, series'
+  'river_time'
+  'idRtrc(iR3c_)'
+  'r3dvar'
+  1.0d0
+
+'river_ParticleOM_c'                                     ! Input/Output
+  'River Particle Organic Matter (Carbon)'
+  'milligram meter-3'                              ! [mg/m3]
+  'river_ParticleOM, scalar, series'
+  'river_time'
+  'idRtrc(iR6c_)'
+  'r3dvar'
+  1.0d0
+
+'river_ParticleOM_n'                                     ! Input/Output
+  'River Particle Organic Matter (Nitrogen)'
+  'millimole meter-3'                              ! [millimole/m3]
+  'river_ParticleOM, scalar, series'
+  'river_time'
+  'idRtrc(iR6n_)'
+  'r3dvar'
+  1.0d0
+
+'river_ParticleOM_p'                                     ! Input/Output
+  'River Particle Organic Matter (Phosphate)'
+  'millimole meter-3'                              ! [millimole/m3]
+  'river_ParticleOM, scalar, series'
+  'river_time'
+  'idRtrc(iR6p_)'
+  'r3dvar'
+  1.0d0
+
+'river_ParticleOM_s'                                     ! Input/Output
+  'River Particle Organic Matter (Silicate)'
+  'millimole meter-3'                              ! [millimole/m3]
+  'river_ParticleOM, scalar, series'
+  'river_time'
+  'idRtrc(iR6s_)'
+  'r3dvar'
+  1.0d0
+
+'river_DissolvedIC_c'                                    ! Input/Output
+  'River Dissolved Inorganic Carbon C'
+  'milligram meter-3'                              ! [mg/m3]
+  'river_DissolvedIC, scalar, series'
+  'river_time'
+  'idRtrc(iO3c_)'
+  'r3dvar'
+  1.0d0
+
+'river_DissolvedIC_h'                                    ! Input/Output
+  'River Dissolved Inorganic Carbon H'
+  'millimole meter-3'                              ! [millimole/m3]
+  'river_DissolvedIC, scalar, series'
+  'river_time'
+  'idRtrc(iO3h_)'
+  'r3dvar'
+  1.0d0
+
+'rivere_Irradiance'                                       ! Input/Output
+  'River Irradiance'
+  'uE meter-2 second-1'                            ! [uE/m2/s]
+  'river_irrad, scalar, series'
+  'river_time'
+  'idRtrc(iEIR_)'
+  'r3dvar'
+  1.0d0
+
+'river_DissolvedIC'                                      ! Input/Output
+  'River Dissolved Inorganic Carbon'
+  'umol kilogram-1'                                ! [umol/kg]
+  'river_dic, scalar, series'
+  'river_time'
+  'idRtrc(iDIC_)'
+  'r3dvar'
+  1.0d0
+
+'river_ExtinctionCoeff'                                  ! Input/Output
+  'River Total Extinction Coefficient'
+  'meter-1'                                        ! [1/m]
+  'river_tec, scalar, series'
+  'river_time'
+  'idRtrc(ixEPS)'
+  'r3dvar'
+  1.0d0
+
+'river_NetProductionP1'                                  ! Input/Output
+  'River Specific Net Production of P1(Phytoplankton)'
+  'd-1'                                            ! [1/d]
+  'river_netproduction, scalar, series'
+  'river_time'
+  'idRtrc(siP1_)'
+  'r3dvar'
+  1.0d0
+
+'river_NetProductionP2'                                  ! Input/Output
+  'River Specific Net Production of P2(Phytoplankton)'
+  'd-1'                                            ! [1/d]
+  'river_netproduction, scalar, series'
+  'river_time'
+  'idRtrc(siP2_)'
+  'r3dvar'
+  1.0d0
+
+'river_NetProductionP3'                                  ! Input/Output
+  'River Specific Net Production of P3(Phytoplankton)'
+  'd-1'                                            ! [1/d]
+  'river_netproduction, scalar, series'
+  'river_time'
+  'idRtrc(siP3_)'
+  'r3dvar'
+  1.0d0
+
+'river_NetProductionP4'                                  ! Input/Output
+  'River Specific Net Production of P4(Phytoplankton)'
+  'd-1'                                            ! [1/d]
+  'river_netproduction, scalar, series'
+  'river_time'
+  'idRtrc(siP4_)'
+  'r3dvar'
+  1.0d0
+
+'river_RegFactorP1'                                      ! Input/Output
+  'River Regular Factor for Light in P1(Phytoplankton)'
+  'nondim'                                         ! [1]
+  'river_regfactor, scalar, series'
+  'river_time'
+  'idRtrc(eiP1_)'
+  'r3dvar'
+  1.0d0
+
+'river_RegFactorP2'                                      ! Input/Output
+  'River Regular Factor for Light in P2(Phytoplankton)'
+  'nondim'                                         ! [1]
+  'river_regfactor, scalar, series'
+  'river_time'
+  'idRtrc(eiP2_)'
+  'r3dvar'
+  1.0d0
+
+'river_RegFactorP3'                                      ! Input/Output
+  'River Regular Factor for Light in P3(Phytoplankton)'
+  'nondim'                                         ! [1]
+  'river_regfactor, scalar, series'
+  'river_time'
+  'idRtrc(eiP3_)'
+  'r3dvar'
+  1.0d0
+
+'river_RegFactorP4'                                      ! Input/Output
+  'River Regular Factor for Light in P4(Phytoplankton)'
+  'nondim'                                         ! [1]
+  'river_regfactor, scalar, series'
+  'river_time'
+  'idRtrc(eiP4_)'
+  'r3dvar'
+  1.0d0
+
+'river_GrossPP'                                          ! Input/Output
+  'River Gross Primary Production'
+  'milligram meter-3 d-1'                          ! [mg/m3/d]
+  'river_production, scalar, series'
+  'river_time'
+  'idRtrc(ruPTc)'
+  'r3dvar'
+  1.0d0
+
+'river_SecondPP'                                         ! Input/Output
+  'River Second Primary Production'
+  'milligram meter-3 d-1'                          ! [mg/m3/d]
+  'river_production, scalar, series'
+  'river_time'
+  'idRtrc(ruZTc)'
+  'r3dvar'
+  1.0d0
+
+
+
+
+
+
 !
 !  Diagnostic variables.
 !

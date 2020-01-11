@@ -153,7 +153,7 @@
               idTvar(siP3_)=varid
             CASE ('idTvar(siP4_)')
               idTvar(siP4_)=varid
-	      
+
             CASE ('idTvar(eiP1_)')
               idTvar(eiP1_)=varid
             CASE ('idTvar(eiP2_)')
@@ -169,7 +169,7 @@
               idTvar(ruZTc)=varid
             CASE ('idTvar(ixEPS)')
               idTvar(ixEPS)=varid
-	      
+
 /*
 **  Biological tracers open boundary conditions.
 */
@@ -189,3 +189,149 @@
 
             CASE ('idRtrc(iOxyg)')
               idRtrc(iOxyg)=varid
+              Print *, 'Matching iOxyg, iOxyg=', iOxyg, ' varid=', varid
+            CASE ('idRtrc(iPO4_)')
+              idRtrc(iPO4_)=varid
+              Print *, 'Matching iPO4 , iPO4_=', iPO4_, ' varid=', varid
+            CASE ('idRtrc(iNO3_)')
+              idRtrc(iNO3_)=varid
+            CASE ('idRtrc(iNH4_)')
+              idRtrc(iNH4_)=varid
+            CASE ('idRtrc(iO4n_)')
+              idRtrc(iO4n_)=varid
+            CASE ('idRtrc(iSiOH)')
+              idRtrc(iSiOH)=varid
+            CASE ('idRtrc(iN6r_)')
+              idRtrc(iN6r_)=varid
+
+            CASE ('idRtrc(iB1c_)')
+              idRtrc(iB1c_)=varid
+            CASE ('idRtrc(iB1n_)')
+              idRtrc(iB1n_)=varid
+            CASE ('idRtrc(iB1p_)')
+              idRtrc(iB1p_)=varid
+
+            CASE ('idRtrc(iP1c_)')
+              idRtrc(iP1c_)=varid
+            CASE ('idRtrc(iP1n_)')
+              idRtrc(iP1n_)=varid
+            CASE ('idRtrc(iP1p_)')
+              idRtrc(iP1p_)=varid
+            CASE ('idRtrc(iP1l_)')
+              idRtrc(iP1l_)=varid
+            CASE ('idRtrc(iP1s_)')
+              idRtrc(iP1s_)=varid
+
+            CASE ('idRtrc(iP2c_)')
+              idRtrc(iP2c_)=varid
+            CASE ('idRtrc(iP2n_)')
+              idRtrc(iP2n_)=varid
+            CASE ('idRtrc(iP2p_)')
+              idRtrc(iP2p_)=varid
+            CASE ('idRtrc(iP2l_)')
+              idRtrc(iP2l_)=varid
+
+            CASE ('idRtrc(iP3c_)')
+              idRtrc(iP3c_)=varid
+            CASE ('idRtrc(iP3n_)')
+              idRtrc(iP3n_)=varid
+            CASE ('idRtrc(iP3p_)')
+              idRtrc(iP3p_)=varid
+            CASE ('idRtrc(iP3l_)')
+              idRtrc(iP3l_)=varid
+
+            CASE ('idRtrc(iP4c_)')
+              idRtrc(iP4c_)=varid
+            CASE ('idRtrc(iP4n_)')
+              idRtrc(iP4n_)=varid
+            CASE ('idRtrc(iP4p_)')
+              idRtrc(iP4p_)=varid
+            CASE ('idRtrc(iP4l_)')
+              idRtrc(iP4l_)=varid
+
+            CASE ('idRtrc(iZ3c_)')
+              idRtrc(iZ3c_)=varid
+            CASE ('idRtrc(iZ3n_)')
+              idRtrc(iZ3n_)=varid
+            CASE ('idRtrc(iZ3p_)')
+              idRtrc(iZ3p_)=varid
+
+            CASE ('idRtrc(iZ4c_)')
+              idRtrc(iZ4c_)=varid
+            CASE ('idRtrc(iZ4n_)')
+              idRtrc(iZ4n_)=varid
+            CASE ('idRtrc(iZ4p_)')
+              idRtrc(iZ4p_)=varid
+
+            CASE ('idRtrc(iZ5c_)')
+              idRtrc(iZ5c_)=varid
+            CASE ('idRtrc(iZ5n_)')
+              idRtrc(iZ5n_)=varid
+            CASE ('idRtrc(iZ5p_)')
+              idRtrc(iZ5p_)=varid
+
+            CASE ('idRtrc(iZ6c_)')
+              idRtrc(iZ6c_)=varid
+            CASE ('idRtrc(iZ6n_)')
+              idRtrc(iZ6n_)=varid
+            CASE ('idRtrc(iZ6p_)')
+              idRtrc(iZ6p_)=varid
+
+            CASE ('idRtrc(iR1c_)')
+              idRtrc(iR1c_)=varid
+            CASE ('idRtrc(iR1n_)')
+              idRtrc(iR1n_)=varid
+            CASE ('idRtrc(iR1p_)')
+              idRtrc(iR1p_)=varid
+
+            CASE ('idRtrc(iR2c_)')
+              idRtrc(iR2c_)=varid
+
+            CASE ('idRtrc(iR3c_)')
+              idRtrc(iR3c_)=varid
+
+            CASE ('idRtrc(iR6c_)')
+              idRtrc(iR6c_)=varid
+            CASE ('idRtrc(iR6n_)')
+              idRtrc(iR6n_)=varid
+            CASE ('idRtrc(iR6p_)')
+              idRtrc(iR6p_)=varid
+            CASE ('idRtrc(iR6s_)')
+              idRtrc(iR6s_)=varid
+
+            CASE ('idRtrc(iO3c_)')
+              idRtrc(iO3c_)=varid
+            CASE ('idRtrc(iO3h_)')
+              idRtrc(iO3h_)=varid
+
+            CASE ('idRtrc(iEIR_)')
+              idRtrc(iEIR_)=varid
+            CASE ('idRtrc(iDIC_)')
+              idRtrc(iDIC_)=varid
+            CASE ('idRtrc(iChlo)')
+              idRtrc(iChlo)=varid
+
+            CASE ('idRtrc(siP1_)')
+              idRtrc(siP1_)=varid
+            CASE ('idRtrc(siP2_)')
+              idRtrc(siP2_)=varid
+            CASE ('idRtrc(siP3_)')
+              idRtrc(siP3_)=varid
+            CASE ('idRtrc(siP4_)')
+              idRtrc(siP4_)=varid
+
+            CASE ('idRtrc(eiP1_)')
+              idRtrc(eiP1_)=varid
+            CASE ('idRtrc(eiP2_)')
+              idRtrc(eiP2_)=varid
+            CASE ('idRtrc(eiP3_)')
+              idRtrc(eiP3_)=varid
+            CASE ('idRtrc(eiP4_)')
+              idRtrc(eiP4_)=varid
+
+            CASE ('idRtrc(ruPTc)')
+              idRtrc(ruPTc)=varid
+            CASE ('idRtrc(ruZTc)')
+              idRtrc(ruZTc)=varid
+            CASE ('idRtrc(ixEPS)')
+              idRtrc(ixEPS)=varid

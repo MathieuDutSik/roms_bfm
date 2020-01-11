@@ -66,7 +66,6 @@
       DO WHILE (.TRUE.)
         READ (inp,'(a)',ERR=10,END=20) line
         status=decode_line(line, KeyWord, Nval, Cval, Rval)
-        Print *, 'decode_line in read_BioPar'
         IF (status.gt.0) THEN
           SELECT CASE (TRIM(KeyWord))
             CASE ('TNU2')

@@ -618,6 +618,7 @@
 
       allocate ( Linfo(4,NV,Ngrids) )
 
+      print *, 'allocation of iinfo, NV=', NV
       allocate ( Iinfo(10,NV,Ngrids) )
 
       allocate ( Finfo(10,NV,Ngrids) )
