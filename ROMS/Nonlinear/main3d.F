@@ -769,6 +769,9 @@
 # ifdef BIOLOGY
                 CALL biology (ng, tile)
 # endif
+# ifdef SIMPLE_GROWTH
+                CALL simple_growth (ng,tile)
+# endif 
 # ifdef SEDIMENT
                 CALL sediment (ng, tile)
 # endif

@@ -442,8 +442,10 @@
 !
         logical, allocatable :: LuvSrc(:)            ! momentum
         logical, allocatable :: LwSrc(:)             ! mass
-        logical, allocatable :: LtracerSrc(:,:)      ! tracers
-        REAL(rkind), allocatable :: LtracerGrowth(:,:)      ! tracers
+        logical, allocatable :: LtracerSrc(:,:) ! tracers
+#ifdef SIMPLE_GROWTH
+        REAL(rkind), allocatable :: LtracerGrowth(:,:) ! tracers
+#endif
 !
 !  Execution termination flag.
 !
@@ -1853,7 +1855,9 @@
       allocate ( LuvSrc(Ngrids) )
       allocate ( LwSrc(Ngrids) )
       allocate ( LtracerSrc(MT,Ngrids) )
+#ifdef SIMPLE_GROWTH
       allocate ( LtracerGrowth(MT,Ngrids) )
+#endif
 
       allocate ( maxspeed(Ngrids) )
       allocate ( maxrho(Ngrids) )
@@ -2390,7 +2394,9 @@
           LnudgeTCLM(itrc,ng)=.FALSE.
           LtracerCLM(itrc,ng)=.FALSE.
           LtracerSrc(itrc,ng)=.FALSE.
+#ifdef SIMPLE_GROWTH
           LtracerGrowth(itrc,ng)=0
+#endif
           LtracerSponge(itrc,ng)=.FALSE.
           ad_Akt_fac(itrc,ng)=1.0_r8
           tl_Akt_fac(itrc,ng)=1.0_r8
