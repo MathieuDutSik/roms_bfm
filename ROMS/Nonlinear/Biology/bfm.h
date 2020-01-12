@@ -153,7 +153,7 @@
          i = ListArrayWet(ng) % TheArr(tileS) % ListI(idx)
          j = ListArrayWet(ng) % TheArr(tileS) % ListJ(idx)
          lat = GRID(ng) % latp(i,j)
-         ! The 
+         ! The sun
          SUNQ(idx) = daylength(REAL(Rclock % yday, r8), lat)
          ! The temperature and salinity
          eTemp = OCEAN(ng) % t(i, j, N(ng), nrhs(ng), itemp)

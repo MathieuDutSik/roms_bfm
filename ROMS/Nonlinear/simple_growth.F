@@ -1,15 +1,15 @@
 #include "cppdefs.h"
-      MODULE simple_growth
+      MODULE simple_growth_mod
 #ifdef SIMPLE_GROWTH
       implicit none
 
       PRIVATE
-      PUBLIC  :: lmd_skpp
+      PUBLIC  :: simple_growth
 
       CONTAINS
 !
 !***********************************************************************
-      SUBROUTINE lmd_skpp (ng, tile)
+      SUBROUTINE simple_growth (ng, tile)
 !***********************************************************************
 !
       USE mod_param
@@ -36,7 +36,7 @@
 # endif
      &                    OCEAN(ng) % t)
       RETURN
-      END SUBROUTINE lmd_skpp
+      END SUBROUTINE simple_growth
 !
 !***********************************************************************
       SUBROUTINE simple_growth_tile (ng, tile,                          &
@@ -68,23 +68,27 @@
 #  ifdef MASKING
       real(r8), intent(in) :: rmask(LBi:,LBj:)
 #  endif
-      real(r8), intent(in) :: t(LBi:,LBj:,:,:,:)
+      real(r8), intent(inout) :: t(LBi:,LBj:,:,:,:)
 # else
 #  ifdef MASKING
       real(r8), intent(in) :: rmask(LBi:UBi,LBj:UBj)
 #  endif
-      real(r8), intent(in) :: t(LBi:UBi,LBj:UBj,N(ng),3,NT(ng))
+      real(r8), intent(inout) :: t(LBi:UBi,LBj:UBj,N(ng),3,NT(ng))
 # endif
 !
 !  Local variable declarations.
 !
-      integer :: i, itrc, j, k
+      integer :: i, j, k, itrc
+      real(r8) :: increment
 # include "set_bounds.h"
       DO itrc=1,NT(ng)
         IF (LtracerGrowth(itrc,ng) .gt.0) THEN
+          increment = 1.0_r8 + LtracerGrowth(itrc,ng) * dt(ng)
           DO j=Jstr,Jend
             DO i=Istr,Iend
-              t(i,j
+              DO k=1,N(ng)
+                t(i,j,k,nstp,itrc) = t(i,j,k,nstp,itrc) * increment
+              END DO
             END DO
           END DO
         END IF

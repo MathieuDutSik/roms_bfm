@@ -59,7 +59,7 @@ endif
 #  the .h extension. For example, the upwelling application includes the
 #  "upwelling.h" header file.
 
-ROMS_APPLICATION ?= ADRIATIC_BFM
+ROMS_APPLICATION ?= ADRIATIC_SIMPLE_GROWTH
 
 #  If application header files is not located in "ROMS/Include",
 #  provide an alternate directory FULL PATH.

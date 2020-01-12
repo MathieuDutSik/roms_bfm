@@ -444,7 +444,7 @@
         logical, allocatable :: LwSrc(:)             ! mass
         logical, allocatable :: LtracerSrc(:,:) ! tracers
 #ifdef SIMPLE_GROWTH
-        REAL(rkind), allocatable :: LtracerGrowth(:,:) ! tracers
+        real(r8), allocatable :: LtracerGrowth(:,:) ! tracers
 #endif
 !
 !  Execution termination flag.
