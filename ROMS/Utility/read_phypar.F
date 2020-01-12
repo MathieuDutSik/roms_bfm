@@ -933,6 +933,22 @@
                 END DO
 # endif
               END DO
+# ifdef SIMPLE_GROWTH
+            CASE ('LtracerGrowth')
+              Npts=load_r(Nval, Rval, (NAT+NPT)*Ngrids, Rtracer)
+              Print *, 'CASE LtracerSrc NAT=', NAT, ' NPT=', NPT
+              DO ng=1,Ngrids
+                DO itrc=1,NAT
+                  LtracerGrowth(itrc,ng)=Rtracer(itrc,ng)
+                END DO
+#  ifdef T_PASSIVE
+                DO i=1,NPT
+                  itrc=inert(i)
+                  LtracerGrowth(itrc,ng)=Rtracer(NAT+i,ng)
+                END DO
+#  endif
+              END DO
+# endif
 #endif
             CASE ('LsshCLM')
               Npts=load_l(Nval, Cval, Ngrids, LsshCLM)
