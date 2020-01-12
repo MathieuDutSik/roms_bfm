@@ -443,6 +443,7 @@
         logical, allocatable :: LuvSrc(:)            ! momentum
         logical, allocatable :: LwSrc(:)             ! mass
         logical, allocatable :: LtracerSrc(:,:)      ! tracers
+        REAL(rkind), allocatable :: LtracerGrowth(:,:)      ! tracers
 !
 !  Execution termination flag.
 !
@@ -1852,6 +1853,7 @@
       allocate ( LuvSrc(Ngrids) )
       allocate ( LwSrc(Ngrids) )
       allocate ( LtracerSrc(MT,Ngrids) )
+      allocate ( LtracerGrowth(MT,Ngrids) )
 
       allocate ( maxspeed(Ngrids) )
       allocate ( maxrho(Ngrids) )
@@ -2388,6 +2390,7 @@
           LnudgeTCLM(itrc,ng)=.FALSE.
           LtracerCLM(itrc,ng)=.FALSE.
           LtracerSrc(itrc,ng)=.FALSE.
+          LtracerGrowth(itrc,ng)=0
           LtracerSponge(itrc,ng)=.FALSE.
           ad_Akt_fac(itrc,ng)=1.0_r8
           tl_Akt_fac(itrc,ng)=1.0_r8

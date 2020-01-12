@@ -153,6 +153,7 @@
       foundit=.FALSE.
       QUERY: DO ifile=1,nfiles
         Fname=S(ifile)%name
+        Print *, 'ifile=', ifile, '/', nfiles, ' Fname=', Fname
 !
 !  Open NetCDF file for reading.
 !
@@ -283,6 +284,9 @@
             END DO
           END IF
           IF (got_time.and.(Nrec.eq.0)) THEN
+            Print *, '   Tname(ifield) = ', TRIM(Tname(ifield))
+            Print *, ' Vname(1,ifield) = ', TRIM(Vname(1,ifield))
+            Print *, '           Fname = ', TRIM(Fname)
             IF (Master) WRITE (stdout,30) TRIM(Tname(ifield)),          &
      &                                    TRIM(Vname(1,ifield)),        &
      &                                    TRIM(Fname)
@@ -350,13 +354,13 @@
 !
       IF (.not.got_var) THEN
         IF ((nfiles.gt.1).and.(label(1:3).eq.'FRC')) THEN
-          WRITE (stdout,50) TRIM(Vname(1,ifield)), 'files:'
+          WRITE (stdout,50) TRIM(Vname(1,ifield)), '1: files:'
           DO i=1,nfiles
             WRITE (stdout,'(15x,a)') TRIM(S(i)%name)
           END DO
         ELSE
           lstr=LEN_TRIM(ncfile)
-          WRITE (stdout,50) TRIM(Vname(1,ifield)), 'file:'
+          WRITE (stdout,50) TRIM(Vname(1,ifield)), '2: file:'
           IF (lstr.gt.0) THEN
             WRITE (stdout,'(15x,a)') TRIM(ncfile)
           ELSE
@@ -369,12 +373,12 @@
       END IF
       IF (.not.got_time) THEN
         IF ((nfiles.gt.1).and.(label(1:3).eq.'FRC')) THEN
-          WRITE (stdout,50) TRIM(Tname(ifield)), 'files:'
+          WRITE (stdout,50) TRIM(Tname(ifield)), '3: files:'
           DO i=1,nfiles
             WRITE (stdout,'(15x,a)') TRIM(S(i)%name)
           END DO
         ELSE
-          WRITE (stdout,50) TRIM(Tname(ifield)), 'file:'
+          WRITE (stdout,50) TRIM(Tname(ifield)), '4: file:'
           WRITE (stdout,'(15x,a)') TRIM(ncfile)
         END IF
         exit_flag=2
