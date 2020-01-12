@@ -34,6 +34,9 @@
 # ifdef BIOLOGY
       USE biology_mod,          ONLY : biology
 # endif
+# ifdef SIMPLE_GROWTH
+      USE simple_growth_mod,    ONLY : simple_growth
+# endif
 # ifdef BBL_MODEL
       USE bbl_mod,              ONLY : bblm
 # endif
