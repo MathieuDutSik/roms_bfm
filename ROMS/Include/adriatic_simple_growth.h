@@ -10,7 +10,7 @@
 /* define one advection scheme here*/
 #undef  TS_U3HADVECTION/* define if 3rd-order upstream horiz. advection */
 #define TS_MPDATA	/* positive defi for TS */
-#undef T_PASSIVE	/*using pasive tracer dye_01*/
+#define T_PASSIVE	/*using pasive tracer dye_01*/
 #define SPLINES_VDIFF
 #define SPLINES_VVISC
 #define RI_SPLINES
