@@ -38,6 +38,7 @@
 !  grdscl     Grid scale used to adjust horizontal mixing according    !
 !               to grid area.                                          !
 !  h          Bottom depth (m) at RHO-points.                          !
+!  expfact    ExpansionFactor for the tracer                           !
 !  latp       Latitude (degrees_north) at PSI-points.                  !
 !  latr       Latitude (degrees_north) at RHO-points.                  !
 !  latu       Latitude (degrees_north) at U-points.                    !
@@ -350,6 +351,7 @@
       allocate ( GRID(ng) % fomn(LBi:UBi,LBj:UBj) )
       allocate ( GRID(ng) % grdscl(LBi:UBi,LBj:UBj) )
       allocate ( GRID(ng) % h(LBi:UBi,LBj:UBj) )
+      allocate ( GRID(ng) % expfact(LBi:UBi,LBj:UBj) )
       allocate ( GRID(ng) % latp(LBi:UBi,LBj:UBj) )
       allocate ( GRID(ng) % latr(LBi:UBi,LBj:UBj) )
       allocate ( GRID(ng) % latu(LBi:UBi,LBj:UBj) )
@@ -596,6 +598,7 @@
             GRID(ng) % grdscl(i,j) = IniVal
 
             GRID(ng) % h(i,j) = IniMetricVal
+            GRID(ng) % expfact(i,j) = IniMetricVal
 
             GRID(ng) % latp(i,j) = IniVal
             GRID(ng) % latr(i,j) = IniMetricVal

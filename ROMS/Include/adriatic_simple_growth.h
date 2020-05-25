@@ -31,7 +31,7 @@
 #undef ANA_INITIAL
 #undef RST_SINGLE
 
-#define SIMPLE_GROWTH
+#undef SIMPLE_GROWTH
 
 #undef ANA_TAIR
 #undef ANA_PAIR

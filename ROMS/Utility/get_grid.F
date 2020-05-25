@@ -355,6 +355,51 @@
 # endif
 # ifdef MASKING
 !
+!  Read in expansion factor.
+!
+# ifdef SIMPLE_GROWTH
+          CASE ('expfact')
+            gtype=r2dvar
+            status=nf_fread2d(ng, model, ncname, GRD(ng)%ncid,          &
+     &                        var_name(i), var_id(i),                   &
+     &                        0, gtype, Vsize,                          &
+     &                        LBi, UBi, LBj, UBj,                       &
+     &                        Fscl, hmin(ng), hmax(ng),                 &
+#  ifdef MASKING
+     &                        GRID(ng) % rmask,                         &
+#  endif
+     &                        GRID(ng) % expfact)
+            IF (FoundError(status, nf90_noerr, __LINE__,                &
+     &                     __FILE__)) THEN
+              exit_flag=2
+              ioerror=status
+              EXIT
+            END IF
+#  ifdef NESTING
+            CALL fill_contact(ng, model, tile,                          &
+     &                        cr, Rcontact(cr)%Npoints, Rcontact,       &
+     &                        r2dvar, var_name(i), spval_check,         &
+     &                        LBi, UBi, LBj, UBj,                       &
+     &                        CONTACT_METRIC(cr) % h,                   &
+     &                        GRID(ng) % expfact)
+            IF (FoundError(exit_flag, NoError, __LINE__,                &
+     &                     __FILE__)) RETURN
+#  endif
+            IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
+              CALL exchange_r2d_tile (ng, tile,                         &
+     &                                LBi, UBi, LBj, UBj,               &
+     &                                GRID(ng) % expfact)
+            END IF
+#  ifdef DISTRIBUTE
+            CALL mp_exchange2d (ng, tile, model, 1,                     &
+     &                          LBi, UBi, LBj, UBj,                     &
+     &                          NghostPoints,                           &
+     &                          EWperiodic(ng), NSperiodic(ng),         &
+     &                          GRID(ng) % expfact)
+#  endif
+# endif
+# ifdef MASKING
+!
 !  Read in Land/Sea masking at RHO-points.
 !
           CASE ('mask_rho')
