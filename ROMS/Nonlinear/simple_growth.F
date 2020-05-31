@@ -34,6 +34,7 @@
 # ifdef MASKING
      &                    GRID(ng) % rmask,                             &
 # endif
+     &                    GRID(ng) % expfact,                           &
      &                    OCEAN(ng) % t)
       RETURN
       END SUBROUTINE simple_growth
@@ -46,6 +47,7 @@
 # ifdef MASKING
      &                          rmask,                                  &
 # endif
+     &                          expfact,                                &
      &                          t)
 !***********************************************************************
 !
@@ -68,11 +70,13 @@
 #  ifdef MASKING
       real(r8), intent(in) :: rmask(LBi:,LBj:)
 #  endif
+      real(r8), intent(in) :: expfact(LBi:,LBj:)
       real(r8), intent(inout) :: t(LBi:,LBj:,:,:,:)
 # else
 #  ifdef MASKING
       real(r8), intent(in) :: rmask(LBi:UBi,LBj:UBj)
 #  endif
+      real(r8), intent(in) :: expfact(LBi:UBi,LBj:UBj)
       real(r8), intent(inout) :: t(LBi:UBi,LBj:UBj,N(ng),3,NT(ng))
 # endif
 !
@@ -83,10 +87,11 @@
 # include "set_bounds.h"
       DO itrc=1,NT(ng)
         IF (LtracerGrowth(itrc,ng) .gt.0) THEN
-          increment = 1.0_r8 + LtracerGrowth(itrc,ng) * dt(ng)
           DO j=Jstr,Jend
             DO i=Istr,Iend
               DO k=1,N(ng)
+                increment = 1.0_r8 + LtracerGrowth(itrc,ng)             &
+     &                    * expfact(i,j) * * dt(ng)
                 t(i,j,k,nstp,itrc) = t(i,j,k,nstp,itrc) * increment
               END DO
             END DO

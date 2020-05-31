@@ -159,6 +159,7 @@
           real(r8), pointer :: fomn(:,:)
           real(r8), pointer :: grdscl(:,:)
           real(r8), pointer :: h(:,:)
+          real(r8), pointer :: expfact(:,:)
           real(r8), pointer :: latp(:,:)
           real(r8), pointer :: latr(:,:)
           real(r8), pointer :: latu(:,:)

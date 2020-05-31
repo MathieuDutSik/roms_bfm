@@ -353,11 +353,10 @@
      &                          EWperiodic(ng), NSperiodic(ng),         &
      &                          GRID(ng) % h)
 # endif
-# ifdef MASKING
+# ifdef SIMPLE_GROWTH
 !
 !  Read in expansion factor.
 !
-# ifdef SIMPLE_GROWTH
           CASE ('expfact')
             gtype=r2dvar
             status=nf_fread2d(ng, model, ncname, GRD(ng)%ncid,          &
