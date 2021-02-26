@@ -247,10 +247,6 @@
 
 /* define the boundary conditions */
 
-#define NORTHERN_WALL
-#define EASTERN_WALL
-#define WESTERN_WALL
-
 #define SSH_TIDES
 #define UV_TIDES
 
@@ -258,12 +254,3 @@
 #define ADD_M2OBC
 
 #define RADIATION_2D
-#undef SOUTH_TRADIATION
-#undef SOUTH_M3RADIATION
-#undef SOUTH_FSCHAPMAN
-#undef SOUTH_M2FLATHER
-
-#define SOUTH_M3NUDGING
-#define SOUTH_TNUDGING
-
-
