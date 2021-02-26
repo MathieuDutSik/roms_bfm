@@ -16,11 +16,11 @@
       UBi=UBOUND(GRID(ng)%h,DIM=1)
       LBj=LBOUND(GRID(ng)%h,DIM=2)
       UBj=UBOUND(GRID(ng)%h,DIM=2)
-      Print *, 'NOUT=', NOUT, ' NT(ng)=', NT(ng), ' TheIdx=', TheIdx
+!      Print *, 'NOUT=', NOUT, ' NT(ng)=', NT(ng), ' TheIdx=', TheIdx
       siz1 = size(OCEAN(ng) % t, 1)
       siz2 = size(OCEAN(ng) % t, 2)
       siz3 = size(OCEAN(ng) % t, 3)
-      Print *, 'siz1=', siz1, ' siz2=', siz2, ' siz3=', siz3
+!      Print *, 'siz1=', siz1, ' siz2=', siz2, ' siz3=', siz3
       DO itrc=1,NT(ng)
         IF (Hout(idTvar(itrc),ng)) THEN
           eSum =  0
@@ -37,7 +37,7 @@
             END DO
           END DO
           eAvg = eSum / (siz1*siz2*siz3)
-          Print *, ' itrc=', itrc, ' avg/min/max=', eAvg, eMin, eMax
+!          Print *, ' itrc=', itrc, ' avg/min/max=', eAvg, eMin, eMax
         END IF
       END DO
       END SUBROUTINE

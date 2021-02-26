@@ -80,7 +80,6 @@
       real(r8), dimension((UBi-LBi+1)*UBj) :: A
 
       character (len=22) :: t_code
-      print *, 'ifield=', ifield
 !
       SourceFile=__FILE__
 !

@@ -837,7 +837,6 @@
         END IF
 #  ifdef SOLVE3D
         DO itrc=1,NT(ng)
-          Print *, 'itrc=', itrc, ' LtracerSrc=', LtracerSrc(itrc,ng)
           IF (LtracerSrc(itrc,ng)) THEN
             CALL set_ngfld (ng, iNLM, idRtrc(itrc), 1, Nsrc(ng), N(ng), &
      &                      1, Nsrc(ng), N(ng),                         &

@@ -153,7 +153,7 @@
       foundit=.FALSE.
       QUERY: DO ifile=1,nfiles
         Fname=S(ifile)%name
-        Print *, 'ifile=', ifile, '/', nfiles, ' Fname=', Fname
+!        Print *, 'ifile=', ifile, '/', nfiles, ' Fname=', Fname
 !
 !  Open NetCDF file for reading.
 !
@@ -284,9 +284,9 @@
             END DO
           END IF
           IF (got_time.and.(Nrec.eq.0)) THEN
-            Print *, '   Tname(ifield) = ', TRIM(Tname(ifield))
-            Print *, ' Vname(1,ifield) = ', TRIM(Vname(1,ifield))
-            Print *, '           Fname = ', TRIM(Fname)
+!            Print *, '   Tname(ifield) = ', TRIM(Tname(ifield))
+!            Print *, ' Vname(1,ifield) = ', TRIM(Vname(1,ifield))
+!            Print *, '           Fname = ', TRIM(Fname)
             IF (Master) WRITE (stdout,30) TRIM(Tname(ifield)),          &
      &                                    TRIM(Vname(1,ifield)),        &
      &                                    TRIM(Fname)

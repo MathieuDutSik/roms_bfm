@@ -921,7 +921,7 @@
 #ifdef SOLVE3D
             CASE ('LtracerSrc')
               Npts=load_l(Nval, Cval, (NAT+NPT)*Ngrids, Ltracer)
-              Print *, 'CASE LtracerSrc NAT=', NAT, ' NPT=', NPT
+!              Print *, 'CASE LtracerSrc NAT=', NAT, ' NPT=', NPT
               DO ng=1,Ngrids
                 DO itrc=1,NAT
                   LtracerSrc(itrc,ng)=Ltracer(itrc,ng)
@@ -936,7 +936,7 @@
 # ifdef SIMPLE_GROWTH
             CASE ('LtracerGrowth')
               Npts=load_r(Nval, Rval, (NAT+NPT)*Ngrids, Rtracer)
-              Print *, 'CASE LtracerSrc NAT=', NAT, ' NPT=', NPT
+!              Print *, 'CASE LtracerSrc NAT=', NAT, ' NPT=', NPT
               DO ng=1,Ngrids
                 DO itrc=1,NAT
                   LtracerGrowth(itrc,ng)=Rtracer(itrc,ng)
@@ -1312,7 +1312,7 @@
                 RETURN
               END IF
               Npts=load_l(Nval, Cval, NAT*Ngrids, Ltracer)
-              Print *, 'NAT=', NAT
+!              Print *, 'NAT=', NAT
               DO ng=1,Ngrids
                 DO itrc=1,NAT
                   i=idTvar(itrc)
