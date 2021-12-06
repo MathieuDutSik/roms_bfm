@@ -754,6 +754,7 @@
 !      Print *, 'Printing T average in biology_tile'
 !      CALL Print_t_average(ng, tile, nstp)
 !      CALL Print_t_average(ng, tile, nnew)
+     Print *, "PosMultiplier=", PosMultiplier, " MULTIPLIER(ng)=", MULTIPLIER(ng)
       PosMultiplier = PosMultiplier + 1
       IF (PosMultiplier == MULTIPLIER(ng)) THEN
         PosMultiplier = 0
@@ -761,6 +762,7 @@
 
 !        Print *, 'Printing D3STATE before Source term integration'
 !        CALL PRINT_AVERAGE_D3STATE(ng, tile)
+        Print *, "SourceTermD3STATE=", SourceTermD3STATE
         IF (SourceTermD3STATE) THEN
           CALL COPY_T_to_D3STATE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, nstp, t)
 !

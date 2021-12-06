@@ -63,13 +63,14 @@
 #endif
 
 #ifdef INCLUDE_SEAICE
+  Print *, "CalcSeaiceFlag=", CalcSeaiceFlag
   if ( CalcSeaiceFlag) then
 
     call SeaiceSystemDynamics
 
   end if
 #endif
-
+  Print *, "CalcPelagicFlag=", CalcPelagicFlag
   if ( CalcPelagicFlag) then
 
     call PelagicSystemDynamics
@@ -77,10 +78,10 @@
   end if
 
 #ifdef INCLUDE_BEN
+  Print *, "CalcBenthicFlag=", CalcBenthicFlag
   if ( CalcBenthicFlag > 0 ) then
 
          call SettlingDynamics
-  
        select case ( CalcBenthicFlag)
 
          case ( BENTHIC_RETURN )  ! Simple benthic return
@@ -104,7 +105,7 @@
 
        call SedimentationDynamics
 
-  else 
+  else
        ! This case considers an inactive benthic system 
        ! (the benthic arrays are defined but not used)
        ! only the net sink at the bottom is computed
@@ -117,7 +118,7 @@
   call BentoPelCoupDynamics
 
 #endif
-
+  Print *, "CalcConservationFlag=", CalcConservationFlag
   if (CalcConservationFlag) &
      call CheckMassConservationDynamics
 
