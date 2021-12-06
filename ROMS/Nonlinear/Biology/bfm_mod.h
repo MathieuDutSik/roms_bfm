@@ -22,7 +22,7 @@
       integer :: iPO4_                  !  2: Phosphate
       integer :: iNO3_                  !  3: Nitrate
       integer :: iNH4_                  !  4: Ammonium
-      integer :: iO4n_                  !  5: 
+      integer :: iO4n_                  !  5:
       integer :: iSiOH                  !  6: Silicate
       integer :: iN6r_                  !  7:
       integer :: iB1c_                  !  8: Aerobic or anaerobic bacteria
@@ -30,9 +30,9 @@
       integer :: iB1p_                  ! 10:
       integer :: iP1c_                  ! 11:
       integer :: iP1n_                  ! 12:
-      integer :: iP1p_                  ! 13: 
+      integer :: iP1p_                  ! 13:
       integer :: iP1l_                  ! 14:
-      integer :: iP1s_                  ! 15: 
+      integer :: iP1s_                  ! 15:
       integer :: iP2c_                  ! 16:
       integer :: iP2n_                  ! 17:
       integer :: iP2p_                  ! 18:
@@ -41,10 +41,10 @@
       integer :: iP3n_                  ! 21:
       integer :: iP3p_                  ! 22:
       integer :: iP3l_                  ! 23:
-      integer :: iP4c_                  ! 24: 
+      integer :: iP4c_                  ! 24:
       integer :: iP4n_                  ! 25:
       integer :: iP4p_                  ! 26:
-      integer :: iP4l_                  ! 27: 
+      integer :: iP4l_                  ! 27:
       integer :: iZ3c_                  ! 28:
       integer :: iZ3n_                  ! 29:
       integer :: iZ3p_                  ! 30:
@@ -98,8 +98,10 @@
       type(ARRAY_WET_TILE), allocatable :: TheArr(:)
       END TYPE ARRAY_WET
 
+      integer, allocatable :: MULTIPLIER(:)
+
       type(ARRAY_WET), allocatable :: ListArrayWet(:)
-      
+
       CONTAINS
 
       SUBROUTINE initialize_biology
@@ -139,6 +141,7 @@
 !
 !  Allocate biological tracer vector.
 !
+      allocate(MULTIPLIER(Ngrids))
       IF (.not.allocated(idbio)) THEN
         allocate ( idbio(NBT) )
       END IF

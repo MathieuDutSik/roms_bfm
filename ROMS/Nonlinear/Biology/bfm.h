@@ -198,7 +198,7 @@
          gamma = log(RH) + b_dew * eTemp / (c_dew - eTemp)
          eTempDewPoint = c_dew * gamma / (b_dew - gamma)
          AtmTDP % fnow(idx) = eTempDewPoint
-#endif         
+#endif
          ! deposition
          if (botdep_c>ZERO) jbotR6c(idx) = 0.0
          if (botdep_n>ZERO) jbotR6n(idx) = 0.0
@@ -647,8 +647,7 @@
       END SUBROUTINE
 
 
-      
-!     
+!
 !-----------------------------------------------------------------------
       SUBROUTINE biology_tile (ng, tile,                                &
      &                         LBi, UBi, LBj, UBj, UBk, UBt,            &
@@ -757,8 +756,8 @@
 !       It is probably needed to subdivide further the time interval
 !       or to use a better integration method
 !
-        step = -1 ! not used      
-        call envforcing_bfm(ng, tile, step) 
+        step = -1 ! not used
+        call envforcing_bfm(ng, tile, step)
         call CalcVerticalExtinction( ) !     Compute extinction coefficient
         call EcologyDynamics           !     Compute reaction terms
 
@@ -783,5 +782,4 @@
         CALL COPY_D3STATE_to_T(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, nnew, t)
 !       Need to put code for the diagnostics. We do not put yet the dlux. Maybe never.
       END IF
-      
       END SUBROUTINE biology_tile
