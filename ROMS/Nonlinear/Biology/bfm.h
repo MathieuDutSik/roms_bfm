@@ -739,6 +739,7 @@
       integer iNode, i, j, k, idx, itrc, ibio
       integer iVar, iZ
       integer step
+      real(r8) eminval, emaxval
 !
 !  Assigning the STATE variables from the t array
 !  ! We need to determine if the diagnostics need to be recomputed.
@@ -790,6 +791,9 @@
               END DO
 #endif
             END IF
+            eminval = minval(D3STATE(j,:))
+            emaxval = maxval(D3STATE(j,:))
+            Print *, 'j=', j, ' min=', eminval, ' max=', emaxval
           END DO
 !
 !         Now copying back the field values
