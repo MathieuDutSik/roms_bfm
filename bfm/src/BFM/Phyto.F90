@@ -563,7 +563,7 @@
       rups  =   run* p_qscPPY(phyto)* phytos  ! Si uptake based on net C uptake
       runs  =   min(  rums,  rups+ miss)  ! actual uptake
     end select
-              
+
     !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     ! Uptake and Losses of Si (only lysis)
     !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -590,7 +590,7 @@
      call flux_vector( iiPel, ppN7f,ppphytof, runf* r )
      ! release to dissolved organic to keep the balance if excess
      call flux_vector(iiPel, ppphytof,ppR1f,- runf*( ONE- r))
-   
+
      !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
      ! Losses of Fe
      !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-

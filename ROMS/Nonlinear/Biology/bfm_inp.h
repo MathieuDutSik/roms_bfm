@@ -84,8 +84,6 @@
                   nl_tnu4(i,ng)=Rbio(itrc,ng)
                 END DO
               END DO
-            CASE ('MULTIPLIER')
-              Npts=load_i(Nval, Rval, Ngrids, MULTIPLIER)
             CASE ('LtracerSponge')
               Npts=load_l(Nval, Cval, NBT*Ngrids, Ltrc)
               DO ng=1,Ngrids

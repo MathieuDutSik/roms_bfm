@@ -388,8 +388,10 @@
       USE mod_biology
       use api_bfm
       USE mod_parallel
+      USE mod_scalars
       USE mem
       implicit none
+      REAL(8) delta
       integer tile, tileS
       integer nl, ig, ng, eProd
       integer, parameter :: file_id = 1453
@@ -401,6 +403,14 @@
       OPEN(file_id, FILE="bfm_input.nml")
       READ(file_id, NML = SETTING_BFM_COUPL)
       CLOSE(file_id)
+      DO ng=1,Ngrids
+        MULTIPLIER(ng) = INT(delt_bfm / dt(ng))
+        delta = ABS(MULTIPLIER(ng) * dt(ng) - delt_bfm)
+        IF (delta .gt. 1.0) THEN
+          Print *, "delta=", delta, " which should be 0"
+          STOP
+          END IF
+      END DO
       DoNestLayer = .TRUE.
       !
       nl=0

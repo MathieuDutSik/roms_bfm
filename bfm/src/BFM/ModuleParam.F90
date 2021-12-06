@@ -237,10 +237,10 @@
 #ifdef INCLUDE_SEAICE
     write(LOGUNIT,nml=Param_parameters_ice)
 #endif
-   endif 
+   endif
    ! These initializations are done here because some compilers do not
    ! allow the initialization of constants with intrinsic functions
-   MIN_VAL_EXPFUN=log(DBL_MIN)  
+   MIN_VAL_EXPFUN=log(DBL_MIN)
    DAY_PER_SEC=ONE/SEC_PER_DAY
 
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -260,5 +260,5 @@
   end module
 !BOP
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-! MODEL  BFM - Biogeochemical Flux Model 
+! MODEL  BFM - Biogeochemical Flux Model
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
