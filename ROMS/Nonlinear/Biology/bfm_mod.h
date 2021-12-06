@@ -99,6 +99,7 @@
       END TYPE ARRAY_WET
 
       integer, allocatable :: MULTIPLIER(:)
+      integer PosMultiplier
 
       type(ARRAY_WET), allocatable :: ListArrayWet(:)
 
@@ -142,6 +143,7 @@
 !  Allocate biological tracer vector.
 !
       allocate(MULTIPLIER(Ngrids))
+      PosMultiplier = 0
       IF (.not.allocated(idbio)) THEN
         allocate ( idbio(NBT) )
       END IF

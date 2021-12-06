@@ -744,42 +744,46 @@
 !      Print *, 'Printing T average in biology_tile'
 !      CALL Print_t_average(ng, tile, nstp)
 !      CALL Print_t_average(ng, tile, nnew)
-      CALL SET_BOT_SURFINDICES(ng, tile)
+      PosMultiplier = PosMultiplier + 1
+      IF (PosMultiplier == MULTIPLIER(ng)) THEN
+        PosMultiplier = 0
+        CALL SET_BOT_SURFINDICES(ng, tile)
 
-!      Print *, 'Printing D3STATE before Source term integration'
-!      CALL PRINT_AVERAGE_D3STATE(ng, tile)
-      IF (SourceTermD3STATE) THEN
-        CALL COPY_T_to_D3STATE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, nstp, t)
+!        Print *, 'Printing D3STATE before Source term integration'
+!        CALL PRINT_AVERAGE_D3STATE(ng, tile)
+        IF (SourceTermD3STATE) THEN
+          CALL COPY_T_to_D3STATE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, nstp, t)
 !
-!       Now the time stepping operations 
-!       Right now we do Euler forward algorithm
-!       It is probably needed to subdivide further the time interval
-!       or to use a better integration method
+!         Now the time stepping operations 
+!         Right now we do Euler forward algorithm
+!         It is probably needed to subdivide further the time interval
+!         or to use a better integration method
 !
-        step = -1 ! not used
-        call envforcing_bfm(ng, tile, step)
-        call CalcVerticalExtinction( ) !     Compute extinction coefficient
-        call EcologyDynamics           !     Compute reaction terms
+          step = -1 ! not used
+          call envforcing_bfm(ng, tile, step)
+          call CalcVerticalExtinction( ) !     Compute extinction coefficient
+          call EcologyDynamics           !     Compute reaction terms
 
-        DO j=1,NO_D3_BOX_STATES
-          IF (D3STATETYPE(j).ge.0) THEN
+          DO j=1,NO_D3_BOX_STATES
+            IF (D3STATETYPE(j).ge.0) THEN
 #ifndef EXPLICIT_SINK
-            D3STATE(j,1:NO_BOXES) = D3STATE(j,1:NO_BOXES) +             &
+              D3STATE(j,1:NO_BOXES) = D3STATE(j,1:NO_BOXES) +             &
      &          delt_bfm * D3SOURCE(j,1:NO_BOXES)
 #else
-            DO i=1,NO_BOXES
-               DO k=1,NO_D3_BOX_STATES
-                  D3STATE(j,i) = D3STATE(j,i) +                         &
-     &                 delt_bfm * (D3SOURCE(j,k,i) - D3SINK(j,k,i))
-               END DO
-            END DO
+              DO i=1,NO_BOXES
+                 DO k=1,NO_D3_BOX_STATES
+                    D3STATE(j,i) = D3STATE(j,i) +                         &
+     &                   delt_bfm * (D3SOURCE(j,k,i) - D3SINK(j,k,i))
+                 END DO
+              END DO
 #endif
-          END IF
-        END DO
+            END IF
+          END DO
 !
-!       Now copying back the field values
+!         Now copying back the field values
 !
-        CALL COPY_D3STATE_to_T(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, nnew, t)
-!       Need to put code for the diagnostics. We do not put yet the dlux. Maybe never.
+          CALL COPY_D3STATE_to_T(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, nnew, t)
+!         Need to put code for the diagnostics. We do not put yet the dlux. Maybe never.
+        END IF
       END IF
       END SUBROUTINE biology_tile
