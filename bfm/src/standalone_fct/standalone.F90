@@ -279,7 +279,7 @@
    !---------------------------------------------
    ! Initialize internal constitutents of functional groups
    !---------------------------------------------
-   call init_organic_constituents()
+   call init_organic_constituents(AnalyticalInitD3STATE)
    !---------------------------------------------
    ! Set output stepping
    !---------------------------------------------

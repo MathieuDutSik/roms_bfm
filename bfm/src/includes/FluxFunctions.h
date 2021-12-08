@@ -25,7 +25,6 @@
           subroutine flux_vector(iiSub,iiorigin,iidestination,flux)
           !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             use constants, only: RLEN, ZERO,  SEC_PER_DAY, DAY_PER_SEC
-            use global_mem, only: LOGUNIT
 
             !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             ! Implicit typing is never allowed
@@ -36,7 +35,6 @@
 
             integer          :: origin, destination
             logical          :: fluxsign
-            character(len=8) :: D23
             integer          :: j
             REAL(RLEN) :: emin, emax
             !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -342,7 +340,6 @@
         subroutine unicflux(grid_nr,iiSub,origin,destination)
         !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
           use constants, only: RLEN, ZERO
-          use global_mem, only: LOGUNIT
           !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
           ! Implicit typing is never allowed
           !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
