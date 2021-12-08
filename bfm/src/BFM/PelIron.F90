@@ -91,6 +91,7 @@
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
   fR1N7f(:)  =  p_sR1N7* eTq_vector(  ETW(:),  p_q10R6N7)* R1f(:)
+  Print *, "PelIron, flux_vector 1"
   call flux_vector( iiPel, ppR1f, ppN7f, fR1N7f(:) )
 
   fR6N7f(:)  =  p_sR6N7* eTq_vector(  ETW(:),  p_q10R6N7)* R6f(:)

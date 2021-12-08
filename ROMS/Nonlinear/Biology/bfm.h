@@ -220,10 +220,12 @@
 !-----------------------------------------------------------------------
       SUBROUTINE COPY_T_to_D3STATE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, eTimeIdx, t)
       USE mod_param
+      USE mod_grid
       USE mod_biology
       USE mod_ncparam
       USE mod_scalars
       USE mod_parallel
+      USE mod_ocean
       USE mem
       USE api_bfm
       IMPLICIT NONE
@@ -256,6 +258,7 @@
 !               Print *, ' eVal=', eVal
                D3STATE(itrc, idx) = eVal
             END DO
+            Depth(idx) = OCEAN(ng) % zeta(i,j,eTimeIdx) - GRID(ng) % z_r(i,j,k)
          END DO
       END DO
       END SUBROUTINE
@@ -395,7 +398,7 @@
       integer tile, tileS
       integer nl, ig, ng, eProd
       integer, parameter :: file_id = 1453
-      integer istat
+      integer istat, i
       LOGICAL DoNestLayer
       integer Nwetpoint, tileLen
       integer NO_BOXES_Z_max, NO_BOXES_XY_max
@@ -776,12 +779,19 @@
           call envforcing_bfm(ng, tile, step)
           call CalcVerticalExtinction( ) !     Compute extinction coefficient
           call EcologyDynamics           !     Compute reaction terms
+#ifndef EXPLICIT_SINK
+          Print *, "        Case ifndef EXPLICIT_SINK"
+#else
+          Print *, "        Case ifdef EXPLICIT_SINK"
+#endif
 
           DO j=1,NO_D3_BOX_STATES
+            Print *, 'Before : j=', j, ' min=', eminval, ' max=', emaxval
             IF (D3STATETYPE(j).ge.0) THEN
 #ifndef EXPLICIT_SINK
-              D3STATE(j,1:NO_BOXES) = D3STATE(j,1:NO_BOXES) +             &
-     &          delt_bfm * D3SOURCE(j,1:NO_BOXES)
+              DO i=1,NO_BOXES
+                D3STATE(j,i) = D3STATE(j,i) + delt_bfm * D3SOURCE(j,i)
+              END DO
 #else
               DO i=1,NO_BOXES
                  DO k=1,NO_D3_BOX_STATES
@@ -793,7 +803,7 @@
             END IF
             eminval = minval(D3STATE(j,:))
             emaxval = maxval(D3STATE(j,:))
-            Print *, 'j=', j, ' min=', eminval, ' max=', emaxval
+            Print *, 'After : j=', j, ' min=', eminval, ' max=', emaxval
           END DO
 !
 !         Now copying back the field values

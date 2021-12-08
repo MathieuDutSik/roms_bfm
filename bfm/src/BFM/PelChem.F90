@@ -124,6 +124,7 @@
   ! Nitrification in the water
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   flN4N3n(:) =  max(ZERO,p_sN4N3* N4n(:)* eTq_vector(  ETW(:),  p_q10N4N3)* eo)
+  Print *, "PelChem, flux_vector 1"
   call flux_vector( iiPel, ppN4n,ppN3n, flN4N3n(:) )
   call flux_vector( iiPel, ppO2o,ppO2o,-( flN4N3n(:)* p_qon_nitri) )
 
@@ -133,6 +134,7 @@
   rPAo  =   flPTN6r(:)/ p_qro
   flN3O4n(:) = max(ZERO,p_sN3O4n* eTq_vector( ETW(:), p_q10N4N3)*       &
      &           er* rPAo/ p_rPAo* N3n(:))
+  Print *, "PelChem, flux_vector 2"
   call flux_vector( iiPel, ppN3n,ppO4n, flN3O4n(:) )
       call flux_vector( iiPel, ppN6r,ppN6r,                             &
      &     -( p_qro* flN3O4n(:)* p_qon_dentri*                          &
@@ -142,6 +144,7 @@
   ! Reoxidation of reduction equivalents
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   fN6O2r  =   p_rOS* N6r(:)* eo
+  Print *, "PelChem, flux_vector 3"
   call flux_vector( iiPel, ppN6r,ppN6r,-( fN6O2r) )
   call flux_vector( iiPel, ppO2o,ppO2o,-( fN6O2r/ p_qro) )
 

@@ -80,6 +80,7 @@
   ! NOTE: ALL DETRITUS FLUXES FROM THE PELAGIC TO THE SEDIMENT ARE 
   !       DIRECTED TO Q6 VIA R6 IN SETTLING.F90
   ! -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+  Print *, "Sedimentation, flux_vector 1"
   call flux_vector( iiBen, ppQ6c,ppQ6c, -jbotR6c(:) )
   call flux_vector( iiBen, ppQ6n,ppQ6n, -jbotR6n(:) )
   call flux_vector( iiBen, ppQ6p,ppQ6p, -jbotR6p(:) )
@@ -95,6 +96,7 @@
    Delta=GetDelta( )
    call RecalcPenetrationDepth( D1m(:), D6m(:), &
         -jbotR6c(:)*Delta, Q6c(:),newDm(:) )
+   Print *, "Sedimentation, flux_vector 2"
    call flux_vector(iiBen, ppD6m,ppD6m,(newDM(:)- D6m(:))/Delta)
    call RecalcPenetrationDepth( D1m(:), D7m(:), &
         -jbotR6n(:)*Delta, Q6n(:),newDm(:) )

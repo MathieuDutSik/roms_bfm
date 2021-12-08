@@ -156,10 +156,15 @@
 !    Print *, 'allocated(O2AIRFlux)=', allocated(O2AIRFlux)
     O2AIRFlux(:) = (ONE-ice(:)) * kun * ( cxoO2(SRFindices)- O2o(SRFindices)) 
     ! Update flux
+    Print *, " jsurO2o min=", minval(jsurO2o), " max=", maxval(jsurO2o)
     jsurO2o(:)  = jsurO2o(:) + O2AIRFlux(:)
+    Print *, "O2AIRFlux min=", minval(O2AIRFlux), " max=", maxval(O2AIRFlux)
     ! Convert to mmol/m2/day
     tmpflux(SRFindices) = jsurO2o(:) / Depth(SRFindices)
+    Print *, "Depth min=", minval(Depth(SRFindices)), " max=", maxval(Depth(SRFindices))
+    Print *, "tmpflux min=", minval(tmpflux), " max=", maxval(tmpflux)
     if ( AssignAirPelFluxesInBFMFlag) then
+        Print *, "WindOxRegeration, flux_vector 1"
         call flux_vector( iiPel, ppO2o, ppO2o, tmpflux ) 
     end if
 #ifdef DEBUG

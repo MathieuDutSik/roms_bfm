@@ -38,6 +38,7 @@
             logical          :: fluxsign
             character(len=8) :: D23
             integer          :: j
+            REAL(RLEN) :: emin, emax
             !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             !BEGIN compute
             !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -59,6 +60,9 @@
             TESTNANVECTOR(flux,iiSub,origin,destination)
             CHECKFLUX(-1,iiSub,origin,destination)
 #endif
+            emin = minval(flux)
+            emax = maxval(flux)
+                                      Print *, "FluxFonctions origin=", origin, " destination=", destination, "min/max=", emin, emax
             if ( origin /= destination ) then
               select case ( iiSub )
                 case (iiPel)

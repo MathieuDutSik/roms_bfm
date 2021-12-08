@@ -65,11 +65,17 @@
   LEVEL1 "#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-"
   LEVEL1 "# Allocating State Variables and Rates array ..."
 
+  Print *, "AllocateMem section"
 #ifndef NOT_STANDALONE
-    
+   Print *, "CASE ifndef NOT_STANDALONE"
+   Print *, "NO_D3_BOX_STATES=", NO_D3_BOX_STATES
+   Print *, "NO_BOXES=", NO_BOXES
+   Print *, "NO_BOXES=", NO_BOXES
+
    allocate(D3STATE(1:NO_D3_BOX_STATES,1:NO_BOXES),stat=status)
    if (status /= 0) call error_msg_prn(ALLOC,"AllocateMem", "D3STATE")
    D3STATE = ZERO
+  
 #ifndef EXPLICIT_SINK
      allocate(D3SOURCE(1:NO_D3_BOX_STATES,1:NO_BOXES),stat=status)
      if (status /= 0) call error_msg_prn(ALLOC,"AllocateMem", "D3SOURCE")
@@ -91,7 +97,7 @@
      D3STATEOBC = ZERO
 #endif
 
-    
+   Print *, 'Allocation of D3DIAGNOS'
    allocate(D3DIAGNOS(1:NO_D3_BOX_DIAGNOSS,1:NO_BOXES),stat=status)
    if (status /= 0) call error_msg_prn(ALLOC,"AllocateMem", "D3DIAGNOS")
    D3DIAGNOS = ZERO
@@ -266,6 +272,7 @@ ERHO => D3DIAGNOS(ppERHO,:); ERHO=ZERO
 EIR => D3DIAGNOS(ppEIR,:); EIR=ZERO
 ESS => D3DIAGNOS(ppESS,:); ESS=ZERO
 EPR => D3DIAGNOS(ppEPR,:); EPR=ZERO
+Print *, 'Assign pointer for Depth'
 Depth => D3DIAGNOS(ppDepth,:); Depth=ZERO
 Volume => D3DIAGNOS(ppVolume,:); Volume=ZERO
 DIC => D3DIAGNOS(ppDIC,:); DIC=ZERO

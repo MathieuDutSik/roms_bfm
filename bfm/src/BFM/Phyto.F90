@@ -441,13 +441,14 @@
        ! Activity and Nutrient-stress excretions are assigned to R2
        flPIR2c  =  seo*phytoc + sea*phytoc
   end select
-  call flux_vector( iiPel, ppO3c,ppphytoc, rugc )  
+  Print *, "Phyto, flux_vector 1"
+  call flux_vector( iiPel, ppO3c,ppphytoc, rugc )
   call flux_vector( iiPel, ppphytoc,ppR1c, rr1c )
   call flux_vector( iiPel, ppphytoc,ppR6c, rr6c )
 
   call flux_vector( iiPel, ppphytoc,ppO3c, rrc )
   call flux_vector( iiPel, ppO2o,ppO2o,-( rrc/ MW_C) )
-  call flux_vector( iiPel, ppO2o,ppO2o, rugc/ MW_C ) 
+  call flux_vector( iiPel, ppO2o,ppO2o, rugc/ MW_C )
 
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
   ! Potential-Net prim prod. (mgC /m3/d)
@@ -489,6 +490,7 @@
       run  =   netgrowth
   end if
 
+  Print *, "Phyto, flux_vector 2"
   call flux_vector( iiPel, ppphytoc,ppR2c, flPIR2c )
 
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -506,6 +508,7 @@
   r  =   insw_vector(  runn)
   runn3  =   r* runn* rumn3/( p_small+ rumn)  ! actual uptake of Nn
   runn4  =   r* runn* rumn4/( p_small+ rumn)  ! actual uptake of Nn
+  Print *, "Phyto, flux_vector 3"
   call flux_vector( iiPel, ppN3n,ppphyton, runn3 )  ! source/sink.n
   call flux_vector( iiPel, ppN4n,ppphyton, runn4 )  ! source/sink.n
   tmp = - runn*( ONE- r)
@@ -523,6 +526,7 @@
 
   r  =   insw_vector(  runp)
   tmp = runp*r
+  Print *, "Phyto, flux_vector 4"
   call flux_vector( iiPel, ppN1p,ppphytop, tmp )  ! source/sink.p
   tmp = - runp*( ONE- r)
   call flux_vector(iiPel, ppphytop,ppR1p, tmp)  ! source/sink.p
@@ -536,6 +540,7 @@
      rr6p  =  pe_R6* sdo* phytop
      rr1p  =  sdo* phytop- rr6p
 
+  Print *, "Phyto, flux_vector 5"
   call flux_vector( iiPel, ppphyton,ppR6n, rr6n )  ! source/sink.n
   call flux_vector( iiPel, ppphyton,ppR1n, rr1n )  ! source/sink.n
 
@@ -567,6 +572,7 @@
     !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     ! Uptake and Losses of Si (only lysis)
     !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+    Print *, "Phyto, flux_vector 6"
     call flux_vector( iiPel, ppN5s,ppphytos, runs)
     call flux_vector( iiPel, ppphytos, ppR6s, sdo*phytos )
   endif
@@ -587,6 +593,7 @@
      runf  =   min(  rumf,  rupf+ misf)  ! actual uptake
      r  =   insw_vector(runf)
      ! uptake from inorganic if shortage
+     Print *, "Phyto, flux_vector 7"
      call flux_vector( iiPel, ppN7f,ppphytof, runf* r )
      ! release to dissolved organic to keep the balance if excess
      call flux_vector(iiPel, ppphytof,ppR1f,- runf*( ONE- r))
@@ -596,6 +603,7 @@
      !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
      rr6f  =   rr6c* p_qflc(phyto)
      rr1f  =   sdo* phytof- rr6f
+     Print *, "Phyto, flux_vector 8"
      call flux_vector( iiPel, ppphytof,ppR1f, rr1f )
      call flux_vector( iiPel, ppphytof,ppR6f, rr6f )
   end if
@@ -640,6 +648,7 @@
          rate_Chl = rho_Chl*run - p_sdchl(phyto)*phytol*max( ZERO,      &
      &    ( p_thdo(phyto)-tN)) -srs * phytol * ONE/(Irr+ONE)
     end select
+    Print *, "Phyto, flux_vector 9"
     call flux_vector( iiPel, ppphytol,ppphytol, rate_Chl )
   end if
 

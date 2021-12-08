@@ -143,14 +143,14 @@
         ! Definition of arrays which will hold all state variables and other
         ! global variables  used for exchange between submodels and/or output
         !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        
+
         real(RLEN),public,pointer,dimension(:,:) :: D3STATE
 
 #ifndef EXPLICIT_SINK
         real(RLEN),public,pointer,dimension(:,:)   :: D3SOURCE
 #else
         real(RLEN),public,pointer,dimension(:,:,:) :: D3SOURCE
-        real(RLEN),public,pointer,dimension(:,:,:) :: D3SINK
+       real(RLEN),public,pointer,dimension(:,:,:) :: D3SINK
 #endif
 
         integer,public,pointer,dimension(:) :: D3STATETYPE
@@ -291,7 +291,7 @@
         !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
         integer,parameter,public  :: ppO2o=1, ppN1p=2,                  &
-     & ppN4n=4, ppO4n=5, ppN5s=6, ppN6r=7, ppB1c=8, ppB1n=9, ppB1p=10,  & 
+     & ppN4n=4, ppO4n=5, ppN5s=6, ppN6r=7, ppB1c=8, ppB1n=9, ppB1p=10,  &
      & ppP1n=12, ppP1p=13, ppP1l=14, ppP1s=15, ppP2c=16, ppP2n=17,      &
      & ppP2l=19, ppP2s=0, ppP3c=20, ppP3n=21, ppP3p=22, ppP3l=23,       &
      & ppP4c=24, ppP4n=25, ppP4p=26, ppP4l=27, ppP4s=0, ppZ3c=28,       &
@@ -301,7 +301,7 @@
      & ppR6c=45, ppR6n=46, ppR6p=47, ppR6s=48, ppO3c=49, ppO3h=50,      &
      & ppR3s=0, ppR1s=0, ppZ5p=36, ppZ3n=29, ppP3s=0, ppP2p=18,         &
      & ppP1c=11, ppN3n=3
-        
+
        real(RLEN),public,dimension(:),pointer  :: O2o, N1p, N3n,        &
      & N6r, B1c, B1n, B1p, P1c, P1n, P1p, P1l, P1s, P2c, P2n, P2p,      &
      & P3p, P3l, P4c, P4n, P4p, P4l, Z3c, Z3n, Z3p, Z4c, Z4n, Z4p,      &

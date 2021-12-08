@@ -275,6 +275,7 @@
   ! Phytoplankton
   do i = 1, iiPhytoPlankton
     ruPPYc = sut*PPYc(:,i)
+    Print *, "MesoZoo, fixed_quota_flux_vector 1"
     call fixed_quota_flux_vector(check_fixed_quota, iiPel, ppzooc,      &
      &    ppPhytoPlankton(i,iiC), ppzooc, ruPPYc          , tfluxc)
     call fixed_quota_flux_vector(check_fixed_quota, iiPel, ppzoon,      &
@@ -301,6 +302,7 @@
   ! Microzooplankton
   do i = 1, iiMicroZooPlankton
     ruMIZc = sut*MIZc(:,i)
+    Print *, "MesoZoo, fixed_quota_flux_vector 2"
     call fixed_quota_flux_vector(check_fixed_quota, iiPel, ppzooc,      &
      &   ppMicroZooPlankton(i,iiC), ppzooc, ruMIZc           , tfluxc )
     call fixed_quota_flux_vector(check_fixed_quota, iiPel, ppzoon, &
@@ -316,6 +318,7 @@
     ruMEZc = sut*MEZc(:, i)
     ! Note that intra-group predation (cannibalism) is not added as a flux
     if ( i/= zoo ) then
+      Print *, "MesoZoo, fixed_quota_flux_vector 3"
       call fixed_quota_flux_vector(check_fixed_quota, iiPel, ppzooc,    &
      &   ppMesoZooPlankton(i,iiC), ppzooc, ruMEZc          , tfluxc )
       call fixed_quota_flux_vector( check_fixed_quota, iiPel, ppzoon,   &
@@ -411,6 +414,7 @@
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
   ren = p_srs(zoo)*et*eo*zoon + pe_N4n
   rep = p_srs(zoo)*et*eo*zoop + pe_N1p
+  Print *, "MesoZoo, fixed_quota_flux_vector 4"
   call fixed_quota_flux_vector(check_fixed_quota, iiPel, ppzoop, &
                                ppzoop, ppN1p, rep, tfluxp)
   call fixed_quota_flux_vector(check_fixed_quota, iiPel, ppzoon, &
@@ -437,6 +441,7 @@
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
   if ( check_fixed_quota == 1 ) then
      ren = tfluxC*p_qncMEZ(zoo)
+      Print *, "MesoZoo, fixed_quota_flux_vector 5"
      call fixed_quota_flux_vector( check_fixed_quota,-iiN,0,0,0,ren,tfluxN)
      rep = tfluxC*p_qpcMEZ(zoo)
      call fixed_quota_flux_vector( check_fixed_quota,-iiP,0,0,0,rep,tfluxP)
