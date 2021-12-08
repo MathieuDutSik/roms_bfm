@@ -240,6 +240,7 @@
       integer iVar, itrc, ibio, NO_BOXES_XY_loc, tileS
       REAL(r8) eVal
       Print *, 'CP_T_D3 : stPelStateS=', stPelStateS, ' stPelStateE=', stPelStateE
+      Print *, 'first_tile=', first_tile(ng)
       tileS = tile - first_tile(ng) + 1
       NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
       DO iNode=1,NO_BOXES_XY_loc
@@ -685,9 +686,12 @@
 !-----------------------------------------------------------------------
 !
       USE mod_param
+      USE mod_ocean
+      USE mod_grid
       USE mod_biology
       USE mod_ncparam
       USE mod_scalars
+      USE mod_parallel
       USE mem
       USE api_bfm
 !
@@ -739,10 +743,15 @@
       real(r8), intent(inout) :: t(LBi:UBi,LBj:UBj,UBk,3,UBt)
 #endif
       real(r8) eVal
-      integer iNode, i, j, k, idx, itrc, ibio
+      integer iNode, i, j, k, idx, ibio
       integer iVar, iZ
       integer step
+      integer ic, jc, kc
+      integer icFound, jcFound, kcFound
       real(r8) eminval, emaxval
+      real(r8) themax
+      integer tileS
+      integer NO_BOXES_XY_loc
 !
 !  Assigning the STATE variables from the t array
 !  ! We need to determine if the diagnostics need to be recomputed.
@@ -785,7 +794,13 @@
           Print *, "        Case ifdef EXPLICIT_SINK"
 #endif
 
+
+          tileS = tile - first_tile(ng) + 1
+          NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
           DO j=1,NO_D3_BOX_STATES
+            eminval = minval(D3STATE(j,:))
+            emaxval = maxval(D3STATE(j,:))
+
             Print *, 'Before : j=', j, ' min=', eminval, ' max=', emaxval
             IF (D3STATETYPE(j).ge.0) THEN
 #ifndef EXPLICIT_SINK
@@ -803,7 +818,31 @@
             END IF
             eminval = minval(D3STATE(j,:))
             emaxval = maxval(D3STATE(j,:))
+            themax = -1000000000
+            icFound = -1
+            jcFound = -1
+            kcFound = -1
+            DO iNode=1,NO_BOXES_XY_loc
+               ic = ListArrayWet(ng) % TheArr(tileS) % ListI(iNode)
+               jc = ListArrayWet(ng) % TheArr(tileS) % ListJ(iNode)
+               DO kc=1,NO_BOXES_Z
+                  iZ = kc
+                  idx = iZ + NO_BOXES_Z * (iNode-1)
+                  eVal = D3STATE(j, idx)
+                  if (eVal .gt. themax) THEN
+                     themax = eVal
+                     icFound = ic
+                     jcFound = jc
+                     kcFound = kc
+                  END IF
+               END DO
+            END DO
+
+
             Print *, 'After : j=', j, ' min=', eminval, ' max=', emaxval
+            PRint *, 'max at ic/jc/zeta/z_r=', ic, jc,                  &
+             OCEAN(ng) % zeta(icFound,jcFound,nstp),                    &
+             GRID(ng) % z_r(icFound,jcFound,kcFound)
           END DO
 !
 !         Now copying back the field values
