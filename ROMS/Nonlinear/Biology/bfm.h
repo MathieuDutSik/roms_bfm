@@ -259,7 +259,8 @@
 !               Print *, ' eVal=', eVal
                D3STATE(itrc, idx) = eVal
             END DO
-            Depth(idx) = OCEAN(ng) % zeta(i,j,eTimeIdx) - GRID(ng) % z_r(i,j,k)
+!            Depth(idx) = OCEAN(ng) % zeta(i,j,eTimeIdx) - GRID(ng) % z_r(i,j,k)
+            Depth(idx) = 5.0
          END DO
       END DO
       END SUBROUTINE
@@ -752,6 +753,9 @@
       real(r8) themax
       integer tileS
       integer NO_BOXES_XY_loc
+      logical AdvectionD3STATE
+      AdvectionD3STATE = .FALSE.
+
 !
 !  Assigning the STATE variables from the t array
 !  ! We need to determine if the diagnostics need to be recomputed.
@@ -776,8 +780,10 @@
 !        Print *, 'Printing D3STATE before Source term integration'
 !        CALL PRINT_AVERAGE_D3STATE(ng, tile)
         Print *, "SourceTermD3STATE=", SourceTermD3STATE
-        IF (SourceTermD3STATE) THEN
+        IF (AdvectionD3STATE) THEN
           CALL COPY_T_to_D3STATE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, nstp, t)
+        ENd IF
+        IF (SourceTermD3STATE) THEN
 !
 !         Now the time stepping operations 
 !         Right now we do Euler forward algorithm
@@ -838,12 +844,14 @@
                END DO
             END DO
 
-
             Print *, 'After : j=', j, ' min=', eminval, ' max=', emaxval
             PRint *, 'max at ic/jc/zeta/z_r=', ic, jc,                  &
              OCEAN(ng) % zeta(icFound,jcFound,nstp),                    &
              GRID(ng) % z_r(icFound,jcFound,kcFound)
           END DO
+          call ResetFluxes
+        END IF
+        IF (AdvectionD3STATE) THEN
 !
 !         Now copying back the field values
 !

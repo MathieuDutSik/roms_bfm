@@ -11,15 +11,15 @@
 !			2. Runge-Kutta 2nd order
 !			3. Leap-frog
 !-------------------------------------------------------------------------
-&standalone_nml  
-    nboxes       =  1       
-    indepth      =  5.0     
-    latitude     =  45.0    
-    longitude    =  13.5    
-    maxdelt      =  8640.0  
-    mindelt      =  1.0     
-    method       =  2       
-/                
+&standalone_nml
+    nboxes       =  1
+    indepth      =  5.0
+    latitude     =  45.0
+    longitude    =  13.5
+    maxdelt      =  8640.0
+    mindelt      =  1.0
+    method       =  1
+/
 
 
 

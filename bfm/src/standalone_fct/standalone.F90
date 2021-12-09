@@ -20,7 +20,7 @@
    use init_var_bfm_local
 #ifdef INCLUDE_PELCO2
    use mem_CO2, ONLY: CloseCO2
-#endif   
+#endif
    private
 !
 ! !PUBLIC MEMBER FUNCTIONS:
@@ -209,6 +209,7 @@
 #endif
 
    LEVEL2 'Number of Boxes:',nboxes
+   Print *, 'nboxes=', nboxes
    LEVEL2 'Box Depth:',indepth
    ! set where surface and bottom boxes are 
    ! (actually all boxes in standalone mode)
@@ -263,6 +264,7 @@
         LEVEL1 'Integration method : Leap-frog'
    end select
 
+   Print *, 'delt=', delt, ' method=', method
    !---------------------------------------------
    ! Initialise the BFM with standalone settings
    !---------------------------------------------

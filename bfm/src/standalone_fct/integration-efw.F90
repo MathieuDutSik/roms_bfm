@@ -123,7 +123,7 @@
       END DO
 #endif
 
-      nmin=nmin+nstep 
+      nmin=nmin+nstep
    !  Check for negative concentrations
       min3D=minval(D3STATE)
       cut_pel = ( min3D.lt.eps )
@@ -173,7 +173,7 @@
 #ifndef EXPLICIT_SINK
                bbccc2D_ben = D2SOURCE_BEN(:,:)
 #else
-               bbccc2D_ben = sum(D2SOURCE_BEN(:,:,:)-D2SINK_BEN(:,:,:),2)
+                bbccc2D_ben = sum(D2SOURCE_BEN(:,:,:)-D2SINK_BEN(:,:,:),2)
 #endif
                LEVEL1 'Benthic Variable:',trim(var_names(stBenStateS+blccc_ben(1,2)-1))
                LEVEL1 'Value: ',D2STATE_BEN(blccc_ben(1,2),blccc_ben(2,2)),' Rate: ', &
