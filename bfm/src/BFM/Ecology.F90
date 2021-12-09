@@ -63,14 +63,18 @@
 #endif
 
 #ifdef INCLUDE_SEAICE
+# ifdef BFM_DEBUG
   Print *, "CalcSeaiceFlag=", CalcSeaiceFlag
+# endif
   if ( CalcSeaiceFlag) then
 
     call SeaiceSystemDynamics
 
   end if
 #endif
+# ifdef BFM_DEBUG
   Print *, "CalcPelagicFlag=", CalcPelagicFlag
+# endif
   if ( CalcPelagicFlag) then
 
     call PelagicSystemDynamics
@@ -78,7 +82,9 @@
   end if
 
 #ifdef INCLUDE_BEN
+# ifdef BFM_DEBUG
   Print *, "CalcBenthicFlag=", CalcBenthicFlag
+# endif
   if ( CalcBenthicFlag > 0 ) then
 
          call SettlingDynamics
@@ -118,7 +124,9 @@
   call BentoPelCoupDynamics
 
 #endif
+# ifdef BFM_DEBUG
   Print *, "CalcConservationFlag=", CalcConservationFlag
+# endif
   if (CalcConservationFlag) &
      call CheckMassConservationDynamics
 

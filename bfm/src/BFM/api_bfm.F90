@@ -55,6 +55,7 @@
    LOGICAL                            :: CopyInitialToD3STATE = .TRUE.
    LOGICAL                            :: CopyD3STATEtoInitial = .TRUE.
    LOGICAL                            :: SourceTermD3STATE = .TRUE.
+   LOGICAL                            :: AdvectionD3STATE = .TRUE.
 
    !---------------------------------------------
    ! Dimension lengths for output

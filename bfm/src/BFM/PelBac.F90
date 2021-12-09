@@ -239,7 +239,9 @@
   !   using the p_pe_R1x parameters defined in Param
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
   rd  =  ( p_sd(bac)*et + p_sd2(bac)*bacc ) * bacc
+#ifdef BFM_DEBUG
   Print *, "PelBac, flux_vector 1"
+#endif
   call flux_vector( iiPel, ppbacc,ppR6c, rd*(ONE-p_pe_R1c) )
   call flux_vector( iiPel, ppbacn,ppR6n, rd*qncPBA(bac,:)*(ONE-p_pe_R1n) )
   call flux_vector( iiPel, ppbacp,ppR6p, rd*qpcPBA(bac,:)*(ONE-p_pe_R1p) )
@@ -316,7 +318,9 @@
   ruR2c = rug*ruR2c/rut
   ruR3c = rug*ruR3c/rut
   ruR6c = rug*ruR6c/rut
+#ifdef BFM_DEBUG
   Print *, "PelBac, flux_vector 2"
+#endif
   call flux_vector( iiPel, ppR1c, ppbacc, ruR1c )
   call flux_vector( iiPel, ppR2c, ppbacc, ruR2c )
   call flux_vector( iiPel, ppR3c, ppbacc, ruR3c )
@@ -327,7 +331,9 @@
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
   ruR1n = qncOMT(iiR1,:)*ruR1c
   ruR6n = qncOMT(iiR6,:)*ruR6c
+#ifdef BFM_DEBUG
   Print *, "PelBac, flux_vector 3"
+#endif
   call flux_vector( iiPel, ppR1n, ppbacn, ruR1n )
   call flux_vector( iiPel, ppR6n, ppbacn, ruR6n )
 
@@ -346,7 +352,9 @@
   ! consumption (eq 19 Vichi et al., 2004 and PelChem.F90)
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
   rrc = (p_pu_ra(bac)+ p_pu_ra_o(bac)*(ONE-eO2) )*rug + p_srs(bac)* bacc* et
+#ifdef BFM_DEBUG
   Print *, "PelBac, flux_vector 4"
+#endif
   call flux_vector( iiPel, ppbacc, ppO3c, rrc )
   call flux_vector( iiPel, ppO2o, ppO2o, -eO2*rrc/MW_C )
   flN6rPBA = (ONE- eO2)*rrc/ MW_C* p_qro
@@ -386,7 +394,9 @@
       ! and controlled with a Michaelis-Menten function
       !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
       ren = (qncPBA(bac,:) - p_qncPBA(bac))*bacc*p_ruen(bac)
+#ifdef BFM_DEBUG
       Print *, "PelBac, flux_vector 5"
+#endif
       call flux_vector(iiPel, ppbacn, ppN4n,       ren*insw_vector( ren))
       call flux_vector(iiPel, ppN4n, ppbacn, -eN4n*ren*insw_vector(-ren))
 
@@ -415,7 +425,9 @@
       ! and controlled with a Michaelis-Menten function
       !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
       ren  =  (qncPBA(bac,:) - p_qncPBA(bac))*bacc*p_ruen(bac)
+#ifdef BFM_DEBUG
       Print *, "PelBac, flux_vector 6"
+#endif
       call flux_vector(iiPel, ppbacn, ppN4n,       ren*insw_vector( ren))
       call flux_vector(iiPel, ppN4n, ppbacn, -eN4n*ren*insw_vector(-ren))
 
@@ -437,7 +449,9 @@
       !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
       huln = (ruR6n + ruR1n) - p_qncPBA(bac)*run
       ren  = huln*insw_vector(huln)
+#ifdef BFM_DEBUG
       Print *, "PelBac, flux_vector 7"
+#endif
       call flux_vector(iiPel, ppbacn, ppN4n, ren)
 
       !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -486,7 +500,9 @@
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
   ! Excretion fluxes (only losses to R2 and R3)
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+#ifdef BFM_DEBUG
   Print *, "PelBac, flux_vector 8"
+#endif
   call flux_vector( iiPel, ppbacc,ppR2c, reR2c )
   call flux_vector( iiPel, ppbacc,ppR3c, reR3c )
 

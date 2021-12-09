@@ -257,7 +257,9 @@
 
   do i = 1, iiPelBacteria
     ruPBAc = sut*PBAc(:,i)
+#ifdef BFM_DEBUG
     Print *, "MicroZoo, fixed_quota_flux_vector 1"
+#endif
     call fixed_quota_flux_vector(check_fixed_quota, iiPel, ppzooc, &
                ppPelBacteria(i,iiC), ppzooc, ruPBAc, tfluxc )
     call fixed_quota_flux_vector(check_fixed_quota, iiPel, ppzoon, &
@@ -270,7 +272,9 @@
   ! Phytoplankton
   do i = 1, iiPhytoPlankton
     ruPPYc = sut*PPYc(:,i)
+#ifdef BFM_DEBUG
     Print *, "MicroZoo, fixed_quota_flux_vector 2"
+#endif
     call fixed_quota_flux_vector(check_fixed_quota, iiPel, ppzooc,      &
      &    ppPhytoPlankton(i,iiC), ppzooc, ruPPYc, tfluxc)
     call fixed_quota_flux_vector(check_fixed_quota, iiPel, ppzoon,      &
@@ -298,7 +302,9 @@
     ruMIZc = sut*MIZc(:,i)
     ! Note that intra-group predation (cannibalism) is not added as a flux
     if ( i/= zoo) then
+#ifdef BFM_DEBUG
        Print *, "MicroZoo, fixed_quota_flux_vector 3"
+#endif
        call fixed_quota_flux_vector(check_fixed_quota, iiPel, ppzooc,   &
      &  ppMicroZooPlankton(i,iiC), ppzooc, ruMIZc, tfluxc )
        call fixed_quota_flux_vector(check_fixed_quota, iiPel, ppzoon,   &
@@ -326,7 +332,9 @@
   ! the activity respiration is derived from the other constant parameters
   rrac = rugc*(ONE - p_pu(zoo) - p_pu_ea(zoo))
   rrtc = rrsc + rrac
+#ifdef BFM_DEBUG
   Print *, "MicroZoo, fixed_quota_flux_vector 4"
+#endif
   call fixed_quota_flux_vector(check_fixed_quota, iiPel, ppzooc,        &
      &                           ppzooc, ppO3c, rrtc, tfluxC)
   call flux_vector(iiPel, ppO2o, ppO2o, -rrtc/MW_C)
@@ -355,7 +363,9 @@
   rrin = rugn*p_pu_ea(zoo) + rdc*qncMIZ(zoo,:)
   rr1n = rrin*p_pe_R1n
   rr6n = rrin - rr1n
+#ifdef BFM_DEBUG
   Print *, "MicroZoo, fixed_quota_flux_vector 5"
+#endif
   call fixed_quota_flux_vector(check_fixed_quota, iiPel, ppzoon,        &
      &                          ppzoon, ppR1n, rr1n ,tfluxN)
   call fixed_quota_flux_vector(check_fixed_quota, iiPel, ppzoon,        &
@@ -381,7 +391,9 @@
   runp = max(ZERO, rugp*(ONE - p_pu_ea(zoo)) + rrsc*qpcMIZ(zoo,:))
   ren  = max(ZERO, runn/(p_small + runc) - p_qncMIZ(zoo))* runc
   rep  = max(ZERO, runp/(p_small + runc) - p_qpcMIZ(zoo))* runc
+#ifdef BFM_DEBUG
   Print *, "MicroZoo, fixed_quota_flux_vector 6"
+#endif
   call fixed_quota_flux_vector(check_fixed_quota,iiPel, ppzoon,         &
      &                          ppzoon, ppN4n, ren, tfluxN)
   call fixed_quota_flux_vector(check_fixed_quota,iiPel, ppzoop,         &

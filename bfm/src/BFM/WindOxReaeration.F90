@@ -144,31 +144,38 @@
     ! computed using ETW
     !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     !
-!    Print *, 'kun=', kun
-!    Print *, 'size(ice)=', size(ice)
-!    Print *, 'size(cxoO2)=', size(cxoO2)
-!    Print *, 'size(O2o)=', size(O2o)
-!    Print *, 'size(kun)=', size(kun)
-!    Print *, 'size(O2AIRFlux)=', size(O2AIRFlux)
-!    Print *, 'allocated(ice)=', allocated(ice)
-!    Print *, 'allocated(cxoO2)=', allocated(cxoO2)
-!    Print *, 'allocated(O2o)=', allocated(O2o)
-!    Print *, 'allocated(O2AIRFlux)=', allocated(O2AIRFlux)
+#ifdef BFM_DEBUG
+    Print *, 'kun=', kun
+    Print *, 'size(ice)=', size(ice)
+    Print *, 'size(cxoO2)=', size(cxoO2)
+    Print *, 'size(O2o)=', size(O2o)
+    Print *, 'size(kun)=', size(kun)
+    Print *, 'size(O2AIRFlux)=', size(O2AIRFlux)
+    Print *, 'allocated(ice)=', allocated(ice)
+    Print *, 'allocated(cxoO2)=', allocated(cxoO2)
+    Print *, 'allocated(O2o)=', allocated(O2o)
+    Print *, 'allocated(O2AIRFlux)=', allocated(O2AIRFlux)
     Print *, 'kun min/max=', minval(kun), maxval(kun)
     Print *, 'ice min/max=', minval(ice), maxval(ice)
     Print *, 'O2o min/max=', minval(O2o), maxval(O2o)
     Print *, 'cxoO2 min/max=', minval(cxoO2), maxval(cxoO2)
+#endif
     O2AIRFlux(:) = (ONE-ice(:)) * kun * ( cxoO2(SRFindices)- O2o(SRFindices))
     ! Update flux
+#ifdef BFM_DEBUG
     Print *, " jsurO2o min=", minval(jsurO2o), " max=", maxval(jsurO2o)
+#endif
     jsurO2o(:)  = jsurO2o(:) + O2AIRFlux(:)
+#ifdef BFM_DEBUG
     Print *, "O2AIRFlux min=", minval(O2AIRFlux), " max=", maxval(O2AIRFlux)
+#endif
     ! Convert to mmol/m2/day
     tmpflux(SRFindices) = jsurO2o(:) / Depth(SRFindices)
+#ifdef BFM_DEBUG
     Print *, "Depth min=", minval(Depth(SRFindices)), " max=", maxval(Depth(SRFindices))
     Print *, "tmpflux min=", minval(tmpflux), " max=", maxval(tmpflux)
+#endif
     if ( AssignAirPelFluxesInBFMFlag) then
-        Print *, "WindOxRegeration, flux_vector 1"
         call flux_vector( iiPel, ppO2o, ppO2o, tmpflux )
     end if
 #ifdef DEBUG

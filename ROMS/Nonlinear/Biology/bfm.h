@@ -267,8 +267,8 @@
       integer iNode, i, j, k, iZ, idx
       integer iVar, itrc, ibio, NO_BOXES_XY_loc, tileS
       REAL(r8) eVal
-      Print *, 'CP_T_D3 : stPelStateS=', stPelStateS, ' stPelStateE=', stPelStateE
-      Print *, 'first_tile=', first_tile(ng)
+!      Print *, 'CP_T_D3 : stPelStateS=', stPelStateS, ' stPelStateE=', stPelStateE
+!      Print *, 'first_tile=', first_tile(ng)
       tileS = tile - first_tile(ng) + 1
       NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
       DO iNode=1,NO_BOXES_XY_loc
@@ -310,7 +310,7 @@
       integer iNode, i, j, k, iZ, idx
       integer iVar, itrc, ibio, NO_BOXES_XY_loc, tileS
       REAL(r8) eVal
-      Print *, 'CP_D3_T : stPelStateS=', stPelStateS, ' stPelStateE=', stPelStateE
+!      Print *, 'CP_D3_T : stPelStateS=', stPelStateS, ' stPelStateE=', stPelStateE
       tileS = tile - first_tile(ng) + 1
       NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
       DO iNode=1,NO_BOXES_XY_loc
@@ -430,7 +430,9 @@
       LOGICAL DoNestLayer
       integer Nwetpoint, tileLen
       integer NO_BOXES_Z_max, NO_BOXES_XY_max
-      NAMELIST /SETTING_BFM_COUPL/ delt_bfm, AnalyticalInitD3STATE, CopyInitialToD3STATE, CopyD3STATEtoInitial, SourceTermD3STATE
+      NAMELIST /SETTING_BFM_COUPL/ delt_bfm, AnalyticalInitD3STATE,     &
+     &   CopyInitialToD3STATE, CopyD3STATEtoInitial,                    &
+     &   SourceTermD3STATE, AdvectionD3STATE
       OPEN(file_id, FILE="bfm_input.nml")
       READ(file_id, NML = SETTING_BFM_COUPL)
       CLOSE(file_id)
@@ -779,8 +781,6 @@
       real(r8) themax
       integer tileS
       integer NO_BOXES_XY_loc
-      logical AdvectionD3STATE
-      AdvectionD3STATE = .FALSE.
 
 !
 !  Assigning the STATE variables from the t array
@@ -797,7 +797,11 @@
 !      Print *, 'Printing T average in biology_tile'
 !      CALL Print_t_average(ng, tile, nstp)
 !      CALL Print_t_average(ng, tile, nnew)
-     Print *, "PosMultiplier=", PosMultiplier, " MULTIPLIER(ng)=", MULTIPLIER(ng)
+#ifdef BFM_DEBUG
+      Print *, "PosMultiplier=", PosMultiplier, " MULTIPLIER(ng)=", MULTIPLIER(ng)
+      Print *, "SourceTermD3STATE=", SourceTermD3STATE
+      Print *, "AdvectionD3STATE=", AdvectionD3STATE
+#endif
       PosMultiplier = PosMultiplier + 1
       IF (PosMultiplier == MULTIPLIER(ng)) THEN
         PosMultiplier = 0
@@ -805,7 +809,6 @@
 
 !        Print *, 'Printing D3STATE before Source term integration'
 !        CALL PRINT_AVERAGE_D3STATE(ng, tile)
-        Print *, "SourceTermD3STATE=", SourceTermD3STATE
         CALL SET_BFM_DEPTH(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, nstp)
         IF (AdvectionD3STATE) THEN
           CALL COPY_T_to_D3STATE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, nstp, t)
@@ -821,10 +824,12 @@
           call envforcing_bfm(ng, tile, step)
           call CalcVerticalExtinction( ) !     Compute extinction coefficient
           call EcologyDynamics           !     Compute reaction terms
-#ifndef EXPLICIT_SINK
+#ifdef BFM_DEBUG
+# ifndef EXPLICIT_SINK
           Print *, "        Case ifndef EXPLICIT_SINK"
-#else
+# else
           Print *, "        Case ifdef EXPLICIT_SINK"
+# endif
 #endif
 
 
@@ -834,7 +839,9 @@
             eminval = minval(D3STATE(j,:))
             emaxval = maxval(D3STATE(j,:))
 
+#ifdef BFM_DEBUG
             Print *, 'Before : j=', j, ' min=', eminval, ' max=', emaxval
+#endif
             IF (D3STATETYPE(j).ge.0) THEN
 #ifndef EXPLICIT_SINK
               DO i=1,NO_BOXES
@@ -871,19 +878,21 @@
                END DO
             END DO
 
+#ifdef BFM_DEBUG
             Print *, 'After : j=', j, ' min=', eminval, ' max=', emaxval
             PRint *, 'max at ic/jc/zeta/z_r=', ic, jc,                  &
              OCEAN(ng) % zeta(icFound,jcFound,nstp),                    &
              GRID(ng) % z_r(icFound,jcFound,kcFound)
+#endif
           END DO
           call ResetFluxes
         END IF
-        IF (AdvectionD3STATE) THEN
 !
-!         Now copying back the field values
+!       Now copying back the field values
+!       This is needed even if in absence of advection because we use this for
+!       for outputting results.
 !
-          CALL COPY_D3STATE_to_T(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, nnew, t)
-!         Need to put code for the diagnostics. We do not put yet the dlux. Maybe never.
-        END IF
+        CALL COPY_D3STATE_to_T(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, nnew, t)
+!       Need to put code for the diagnostics. We do not put yet the dlux. Maybe never.
       END IF
       END SUBROUTINE biology_tile

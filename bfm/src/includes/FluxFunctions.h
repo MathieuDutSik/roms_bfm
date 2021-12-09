@@ -60,7 +60,9 @@
 #endif
             emin = minval(flux)
             emax = maxval(flux)
+#ifdef BFM_DEBUG
             Print *, "FluxFonctions origin=", origin, " destination=", destination, "min/max=", emin, emax
+#endif
             if ( origin /= destination ) then
               select case ( iiSub )
                 case (iiPel)
@@ -111,10 +113,12 @@
                   endif
 #endif
               end select
+#ifdef BFM_DEBUG
               Print *, 'D3SOURCE(orig,:) min/max=',                     &
      & minval(D3SOURCE(origin,:)), maxval(D3SOURCE(origin,:))
               Print *, 'D3SOURCE(dest,:) min/max=',                     &
      & minval(D3SOURCE(destination,:)), maxval(D3SOURCE(destination,:))
+#endif
             else ! origin==destination
               ! In this case the flux carries the proper sign
               select case ( iiSub )
@@ -190,8 +194,10 @@
                   endif
 #endif
               end select
+#ifdef BFM_DEBUG
               Print *, 'D3SOURCE(dest,:) min/max=',                     &
      & minval(D3SOURCE(destination,:)), maxval(D3SOURCE(destination,:))
+#endif
             end if !origin <> destination
 
             ! if destination == 0 => need to restore original input sign 
