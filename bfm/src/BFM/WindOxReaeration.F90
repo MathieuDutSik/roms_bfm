@@ -1,7 +1,7 @@
 #include "DEBUG.h"
 #include "INCLUDE.h"
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-! MODEL  BFM - Biogeochemical Flux Model 
+! MODEL  BFM - Biogeochemical Flux Model
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 !BOP
 !
@@ -12,7 +12,7 @@
 !       as forced by temperature and wind.
 !
 !       The equation and correlation used in this routine
-!       are found in the 
+!       are found in the
 !		R. Wanninkhof (1992), Relationship between windspeed and gas
 !		exchange over the oecean
 !               J. GeoPhys. Res. 97, 7373-7382
@@ -32,7 +32,7 @@
 #else
   use mem, ONLY: O2o, cxoO2, EICE, EWIND, ETW
   use mem, ONLY: ppO2o, jsurO2o, NO_BOXES_XY, NO_BOXES,  &
-     Depth, iiBen, iiPel, flux_vector 
+     Depth, iiBen, iiPel, flux_vector
 #endif
   use mem_Param,  ONLY: AssignAirPelFluxesInBFMFlag
 !  use mem_WindOxReaeration_3
@@ -46,13 +46,13 @@
 !
 ! !AUTHORS
 !   11 March 1998 Original version by P. Ruardij
-!	              JWB 1999/03/25 Corrected k 
+!	              JWB 1999/03/25 Corrected k
 !
 ! !REVISION_HISTORY
 !   2012 T. Lovato : Rearraged code and added Chemical enhancement
-!   
+!
 ! COPYING
-!   
+!
 !   Copyright (C) 2015 BFM System Team (bfm_st@lists.cmcc.it)
 !   Copyright (C) 2006 P. Ruardij and M. Vichi
 !   (rua@nioz.nl, vichi@bo.ingv.it)
@@ -120,7 +120,7 @@
 
     !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     ! Calculate Schmidt number,
-    ! ratio between the kinematic viscosity and the molecular 
+    ! ratio between the kinematic viscosity and the molecular
     ! diffusivity of carbon dioxide.
     !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     temp2 = temp*temp
@@ -128,7 +128,7 @@
 
     ScRatio = O2SCHMIDT / pschmidt
     !
-    ! ScRatio is limited to 0 when T > 40 °C 
+    ! ScRatio is limited to 0 when T > 40 °C
     WHERE(ScRatio .le. 0.0_RLEN); ScRatio=0.0_RLEN ; END WHERE
     !
     !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -139,8 +139,8 @@
     ! This is the old formulation used before 2012 modifications
     !kun_old = (0.074E00_RLEN*wind*wind)*sqrt(O2SCHMIDT/pschmidt)
     !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    ! flux o2 in mmol/m3/day   
-    ! cxoO2 [mMol/m3] is the O2 concentration at saturation 
+    ! flux o2 in mmol/m3/day
+    ! cxoO2 [mMol/m3] is the O2 concentration at saturation
     ! computed using ETW
     !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     !
@@ -154,7 +154,11 @@
 !    Print *, 'allocated(cxoO2)=', allocated(cxoO2)
 !    Print *, 'allocated(O2o)=', allocated(O2o)
 !    Print *, 'allocated(O2AIRFlux)=', allocated(O2AIRFlux)
-    O2AIRFlux(:) = (ONE-ice(:)) * kun * ( cxoO2(SRFindices)- O2o(SRFindices)) 
+    Print *, 'kun min/max=', minval(kun), maxval(kun)
+    Print *, 'ice min/max=', minval(ice), maxval(ice)
+    Print *, 'O2o min/max=', minval(O2o), maxval(O2o)
+    Print *, 'cxoO2 min/max=', minval(cxoO2), maxval(cxoO2)
+    O2AIRFlux(:) = (ONE-ice(:)) * kun * ( cxoO2(SRFindices)- O2o(SRFindices))
     ! Update flux
     Print *, " jsurO2o min=", minval(jsurO2o), " max=", maxval(jsurO2o)
     jsurO2o(:)  = jsurO2o(:) + O2AIRFlux(:)
@@ -165,7 +169,7 @@
     Print *, "tmpflux min=", minval(tmpflux), " max=", maxval(tmpflux)
     if ( AssignAirPelFluxesInBFMFlag) then
         Print *, "WindOxRegeration, flux_vector 1"
-        call flux_vector( iiPel, ppO2o, ppO2o, tmpflux ) 
+        call flux_vector( iiPel, ppO2o, ppO2o, tmpflux )
     end if
 #ifdef DEBUG
     write(LOGUNIT,*) ' Oxygen Reareation'
@@ -181,5 +185,5 @@
   end subroutine OxygenReaerationDynamics
 !EOC
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-! MODEL  BFM - Biogeochemical Flux Model 
+! MODEL  BFM - Biogeochemical Flux Model
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-

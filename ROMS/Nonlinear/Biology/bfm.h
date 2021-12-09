@@ -218,6 +218,34 @@
       END SUBROUTINE
 !
 !-----------------------------------------------------------------------
+      SUBROUTINE SET_BFM_DEPTH(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, eTimeIdx)
+      USE mod_param
+      USE mod_grid
+      USE mod_biology
+      USE mod_ncparam
+      USE mod_scalars
+      USE mod_parallel
+      USE mod_ocean
+      USE mem
+      USE api_bfm
+      IMPLICIT NONE
+      integer, intent(in) :: LBi, UBi, LBj, UBj, UBk, UBt
+      integer, intent(in) :: ng, tile, eTimeIdx
+      integer tileS, i, j, k, iZ, idx, iNode, NO_BOXES_XY_loc
+      tileS = tile - first_tile(ng) + 1
+      NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
+      DO iNode=1,NO_BOXES_XY_loc
+         i = ListArrayWet(ng) % TheArr(tileS) % ListI(iNode)
+         j = ListArrayWet(ng) % TheArr(tileS) % ListJ(iNode)
+         DO k=1,NO_BOXES_Z
+            iZ = k
+            idx = iZ + NO_BOXES_Z * (iNode-1)
+!            Depth(idx) = OCEAN(ng) % zeta(i,j,eTimeIdx) - GRID(ng) % z_r(i,j,k)
+            Depth(idx) = 5.0
+         END DO
+      END DO
+      END SUBROUTINE
+!-----------------------------------------------------------------------
       SUBROUTINE COPY_T_to_D3STATE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, eTimeIdx, t)
       USE mod_param
       USE mod_grid
@@ -259,8 +287,6 @@
 !               Print *, ' eVal=', eVal
                D3STATE(itrc, idx) = eVal
             END DO
-!            Depth(idx) = OCEAN(ng) % zeta(i,j,eTimeIdx) - GRID(ng) % z_r(i,j,k)
-            Depth(idx) = 5.0
          END DO
       END DO
       END SUBROUTINE
@@ -780,6 +806,7 @@
 !        Print *, 'Printing D3STATE before Source term integration'
 !        CALL PRINT_AVERAGE_D3STATE(ng, tile)
         Print *, "SourceTermD3STATE=", SourceTermD3STATE
+        CALL SET_BFM_DEPTH(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, nstp)
         IF (AdvectionD3STATE) THEN
           CALL COPY_T_to_D3STATE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, nstp, t)
         ENd IF
