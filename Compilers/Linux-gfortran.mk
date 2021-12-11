@@ -62,7 +62,7 @@ ifdef USE_ARPACK
 endif
 
 ifdef USE_MPI
-         CPPFLAGS += -DMPI
+         CPPFLAGS += -DMPI -DBFM_DEBUG
  ifdef USE_MPIF90
                FC := mpif90
  else

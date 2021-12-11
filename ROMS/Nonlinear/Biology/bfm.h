@@ -344,13 +344,16 @@
       integer iVar, itrc, ibio, siz, TotalNb
       REAL(r8), allocatable :: ArrSum(:), ArrMin(:), ArrMax(:)
       REAL(r8) eVal, eAvg, eMin, eMax
+      REAL(r8) eminval, emaxval, eavgval
+      REAL(r8), allocatable :: F(:)
 !      Print *, 'PRINT_AVERAGE: stPelStateS=', stPelStateS, ' stPelStateE=', stPelStateE
 !      Print *, 'stPelFluxS=', stPelFluxS, ' stPelFluxE=', stPelFluxE
       DO iVar=stPelStateS, stPelStateE
         itrc = iVar - stPelStateS + 1
         ibio = idbio(itrc)
-        Print *, 'iVar=', iVar, ' itrc=', itrc, ' ibio=', ibio
+!        Print *, 'iVar=', iVar, ' itrc=', itrc, ' ibio=', ibio
       END DO
+      Print *, 'size(D3STATE,1:2)=', size(D3STATE,1), size(D3STATE,2)
       Print *, 'Computing the average NO_BOXES_XY/Z=', NO_BOXES_XY, NO_BOXES_Z
       siz = stPelStateE + 1 - stPelStateS
       Allocate(ArrSum(siz), ArrMin(siz), ArrMax(siz))
@@ -382,9 +385,21 @@
         eAvg = ArrSum(i) / TotalNb
         eMin = ArrMin(i)
         eMax = ArrMax(i)
-        Print *, 'i=', i, ' avg/min/max=', eAvg, eMin, eMax
+        Print *, 'i=', i, ' min/max/avg=', eMin, eMax, eAvg
       END DO
       deallocate(ArrSum, ArrMin, ArrMax)
+      Print *, "siz=", siz, " NO_D3_BOX_STATES=", NO_D3_BOX_STATES, " TotalNb=", TotalNb
+      allocate(F(TotalNb))
+      DO j=1,NO_D3_BOX_STATES
+         DO i=1,TotalNb
+            F(i) = D3STATE(j,i)
+         END DO
+         eminval = minval(F)
+         emaxval = maxval(F)
+         eavgval = sum(F) / TotalNb
+!         Print *, 'j=', j, ' min/max/avg=', eminval, emaxval, eavgval
+      END DO
+      deallocate(F)
       END SUBROUTINE
 
       SUBROUTINE COMPUTE_LOCAL_NB_WET(ng, tile, Nwetpoint)
@@ -633,7 +648,6 @@
       END SUBROUTINE
 
 
-
       SUBROUTINE INIT_BFM_SYSTEM_VARIABLE_LOCAL(ng, tile)
       use mod_param
       use mod_ocean
@@ -687,6 +701,8 @@
         Print *, 'copying T to D3STATE'
         CALL COPY_T_to_D3STATE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, 1, t)
       END IF
+      Print *, 'End of INIT_BFM_SYSTEM_VARIABLE_local'
+      CALL PRINT_AVERAGE_D3STATE(ng, tile)
       END SUBROUTINE
 
 
@@ -777,7 +793,7 @@
       integer step
       integer ic, jc, kc
       integer icFound, jcFound, kcFound
-      real(r8) eminval, emaxval
+      real(r8) eminval, emaxval, eavgval
       real(r8) themax
       integer tileS
       integer NO_BOXES_XY_loc
@@ -836,11 +852,11 @@
           tileS = tile - first_tile(ng) + 1
           NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
           DO j=1,NO_D3_BOX_STATES
+#ifdef BFM_DEBUG
             eminval = minval(D3STATE(j,:))
             emaxval = maxval(D3STATE(j,:))
-
-#ifdef BFM_DEBUG
-            Print *, 'Before : j=', j, ' min=', eminval, ' max=', emaxval
+            eavgval = sum(D3STATE(j,:)) / (NO_BOXES_XY * NO_BOXES_Z)
+            Print *, 'Before : j=', j, ' min/max/avg=', eminval, emaxval, eavgval
 #endif
             IF (D3STATETYPE(j).ge.0) THEN
 #ifndef EXPLICIT_SINK
@@ -856,8 +872,10 @@
               END DO
 #endif
             END IF
+#ifdef BFM_DEBUG
             eminval = minval(D3STATE(j,:))
             emaxval = maxval(D3STATE(j,:))
+            eavgval = sum(D3STATE(j,:)) / (NO_BOXES_XY * NO_BOXES_Z)
             themax = -1000000000
             icFound = -1
             jcFound = -1
@@ -878,8 +896,7 @@
                END DO
             END DO
 
-#ifdef BFM_DEBUG
-            Print *, 'After : j=', j, ' min=', eminval, ' max=', emaxval
+            Print *, 'After : j=', j, ' min/max/avg=', eminval, emaxval, eavgval
             PRint *, 'max at ic/jc/zeta/z_r=', ic, jc,                  &
              OCEAN(ng) % zeta(icFound,jcFound,nstp),                    &
              GRID(ng) % z_r(icFound,jcFound,kcFound)
