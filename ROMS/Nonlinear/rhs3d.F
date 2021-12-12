@@ -37,6 +37,7 @@
 # endif
       USE mod_ocean
       USE mod_stepping
+      USE biology_mod, only : PRINT_CRITICAL
 !
       USE pre_step3d_mod, ONLY : pre_step3d
       USE prsgrd_mod, ONLY : prsgrd
@@ -68,13 +69,16 @@
 !  variables.
 !-----------------------------------------------------------------------
 !
+      CALL PRINT_CRITICAL(4701)
       CALL pre_step3d (ng, tile)
+      CALL PRINT_CRITICAL(4702)
 !
 !-----------------------------------------------------------------------
 !  Compute baroclinic pressure gradient.
 !-----------------------------------------------------------------------
 !
       CALL prsgrd (ng, tile)
+      CALL PRINT_CRITICAL(4703)
 # ifndef TS_FIXED
 #  ifdef TS_DIF2
 !
@@ -83,6 +87,7 @@
 !-----------------------------------------------------------------------
 !
       CALL t3dmix2 (ng, tile)
+      CALL PRINT_CRITICAL(4704)
 #  endif
 #  ifdef TS_DIF4
 !
@@ -91,6 +96,7 @@
 !-----------------------------------------------------------------------
 !
       CALL t3dmix4 (ng, tile)
+      CALL PRINT_CRITICAL(4705)
 #  endif
 # endif
 !
@@ -147,6 +153,7 @@
 # ifdef PROFILE
       CALL wclock_off (ng, iNLM, 21, __LINE__, __FILE__)
 # endif
+      CALL PRINT_CRITICAL(4706)
 # ifdef UV_VIS2
 !
 !-----------------------------------------------------------------------
@@ -154,6 +161,7 @@
 !-----------------------------------------------------------------------
 !
       CALL uv3dmix2 (ng, tile)
+      CALL PRINT_CRITICAL(4707)
 # endif
 # ifdef UV_VIS4
 !
@@ -163,6 +171,7 @@
 !
       CALL uv3dmix4 (ng, tile)
 # endif
+      CALL PRINT_CRITICAL(4708)
 
       RETURN
       END SUBROUTINE rhs3d

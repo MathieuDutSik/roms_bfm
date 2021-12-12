@@ -109,7 +109,7 @@
       implicit none
 
       PRIVATE
-      PUBLIC  :: biology
+      PUBLIC  :: biology, PRINT_CRITICAL
 #ifdef BFM_COUPLING
       PUBLIC  :: FULL_INIT_OF_BFM_MODEL
 #endif

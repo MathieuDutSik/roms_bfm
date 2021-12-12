@@ -32,7 +32,7 @@
       USE analytical_mod,       ONLY : ana_vmix
 # endif
 # ifdef BIOLOGY
-      USE biology_mod,          ONLY : biology
+      USE biology_mod,          ONLY : biology, PRINT_CRITICAL
 # endif
 # ifdef SIMPLE_GROWTH
       USE simple_growth_mod,    ONLY : simple_growth
@@ -154,6 +154,7 @@
 !  combinations. Otherwise, the solution it is looped once for a single
 !  grid application (NestLayers = 1).
 !
+        CALL PRINT_CRITICAL(1)
         nl=0
 #ifdef NESTING
         TwoWayCounter(1:Ngrids)=0
@@ -179,6 +180,7 @@
 !
 !  Set time indices and time clock.
 !
+            CALL PRINT_CRITICAL(2)
             DO ig=1,GridsInLayer(nl)
               ng=GridNumber(ig,nl)
               iic(ng)=iic(ng)+1
@@ -194,6 +196,7 @@
               IF (step_counter(ng).eq.Rsteps) Time_Step=.FALSE.
 # endif
             END DO
+            CALL PRINT_CRITICAL(3)
 !
 !-----------------------------------------------------------------------
 !  Read in required data, if any, from input NetCDF files.
@@ -208,6 +211,7 @@
               IF (FoundError(exit_flag, NoError, __LINE__,              &
      &                       __FILE__)) RETURN
             END DO
+            CALL PRINT_CRITICAL(4)
 !
 !-----------------------------------------------------------------------
 !  If applicable, process input data: time interpolate between data
@@ -221,6 +225,7 @@
               END DO
 !$OMP BARRIER
             END DO
+            CALL PRINT_CRITICAL(5)
             IF (FoundError(exit_flag, NoError, __LINE__,                &
      &                     __FILE__)) RETURN
 
@@ -246,6 +251,7 @@
               END IF
             END DO
 # endif
+            CALL PRINT_CRITICAL(6)
 !
 !-----------------------------------------------------------------------
 !  Initialize all time levels and compute other initial fields.
@@ -259,15 +265,20 @@
 !  depths.
 !
                 DO tile=first_tile(ng),last_tile(ng),+1
+                  CALL PRINT_CRITICAL(301)
                   CALL ini_zeta (ng, tile, iNLM)
+                  CALL PRINT_CRITICAL(302)
                   CALL set_depth (ng, tile, iNLM)
+                  CALL PRINT_CRITICAL(303)
                 END DO
 !$OMP BARRIER
 !
 !  Initialize other state variables.
 !
                 DO tile=last_tile(ng),first_tile(ng),-1
+                  CALL PRINT_CRITICAL(304)
                   CALL ini_fields (ng, tile, iNLM)
+                  CALL PRINT_CRITICAL(305)
                 END DO
 !$OMP BARRIER
 
@@ -282,6 +293,7 @@
 # endif
               END IF
             END DO
+            CALL PRINT_CRITICAL(31)
 !
 !-----------------------------------------------------------------------
 !  Compute horizontal mass fluxes (Hz*u/n and Hz*v/m), density related
@@ -302,6 +314,7 @@
               END DO
 !$OMP BARRIER
             END DO
+            CALL PRINT_CRITICAL(32)
             IF (FoundError(exit_flag, NoError, __LINE__,                &
      &                     __FILE__)) RETURN
 
@@ -312,6 +325,7 @@
 !  timesteps: get air/sea fluxes.
 !-----------------------------------------------------------------------
 !
+            CALL PRINT_CRITICAL(7)
             DO ig=1,GridsInLayer(nl)
               ng=GridNumber(ig,nl)
               IF ((iic(ng).ne.ntstart(ng)).and.                         &
@@ -357,6 +371,7 @@
 !$OMP BARRIER
             END DO
 # endif
+            CALL PRINT_CRITICAL(8)
 !
 !-----------------------------------------------------------------------
 !  Set fields for vertical boundary conditions. Process tidal forcing,
@@ -396,6 +411,7 @@
               END IF
             END DO
 # endif
+            CALL PRINT_CRITICAL(9)
 
 # ifdef ADJUST_BOUNDARY
 !
@@ -435,6 +451,7 @@
               END IF
             END DO
 # endif
+            CALL PRINT_CRITICAL(10)
 !
 !-----------------------------------------------------------------------
 !  Compute time-dependent vertical/horizontal mixing coefficients for
@@ -480,6 +497,7 @@
               END DO
 !$OMP BARRIER
             END DO
+            CALL PRINT_CRITICAL(11)
 
 # ifdef NESTING
 !
@@ -538,19 +556,25 @@
 !  Compute right-hand-side terms for 3D equations.
 !-----------------------------------------------------------------------
 !
+            CALL PRINT_CRITICAL(1101)
             DO ig=1,GridsInLayer(nl)
               ng=GridNumber(ig,nl)
               DO tile=last_tile(ng),first_tile(ng),-1
+                CALL PRINT_CRITICAL(1102)
                 CALL rhs3d (ng, tile)
+                CALL PRINT_CRITICAL(1103)
 # ifdef MY25_MIXING
                 CALL my25_prestep (ng, tile)
+                CALL PRINT_CRITICAL(1104)
 # elif defined GLS_MIXING
                 CALL gls_prestep (ng, tile)
+                CALL PRINT_CRITICAL(1105)
 # endif
               END DO
 !$OMP BARRIER
             END DO
 
+            CALL PRINT_CRITICAL(12)
 # ifdef NESTING
 !
 !  If composite or mosaic grids, process additional points in the
@@ -788,6 +812,7 @@
 !  Time-step tracer equations.
 !-----------------------------------------------------------------------
 !
+            CALL PRINT_CRITICAL(13)
             DO ig=1,GridsInLayer(nl)
               ng=GridNumber(ig,nl)
               DO tile=last_tile(ng),first_tile(ng),-1
@@ -795,6 +820,7 @@
               END DO
 !$OMP BARRIER
             END DO
+            CALL PRINT_CRITICAL(14)
 
 #  ifdef NESTING
 !

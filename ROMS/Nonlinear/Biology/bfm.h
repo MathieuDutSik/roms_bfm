@@ -11,32 +11,6 @@
 !  Hypoxia Simple Respiration Model for dissolved oxygen. Then, it     !
 !  adds those terms to the global biological fields.                   !
 !                                                                      !
-!  This simple formulation is based on the work of Malcolm Scully. The !
-!  dissolved oxygen (DO) is respired at a constant rate.  A constant   !
-!  magnitude of DO is respired during each time step and the DO is not !
-!  allowed to go negative.                                             !
-!                                                                      !
-!  Dissolved Oxygen can either be added to the surface as a flux or    !
-!  the surface layer DO can be set to saturation based on the layer    !
-!  temperature and salinity.                                           !
-!                                                                      !
-!  The surface oxygen saturation formulation is the same as in the     !
-!  Fennel ecosystem model.  The surface oxygen flux is different from  !
-!  the method used by the below citations.  Setting the surface DO to  !
-!  saturation is very similar to the ChesROMS-CRM method in Irby et.   !
-!  al. (2016).                                                         !
-!                                                                      !
-!    Scully, M.E., 2010: Wind Modulation of Dissolved Oxygen in        !
-!      Chesapeake Bay, Estuaries and Coasts, 33, 1164-1175.            !
-!                                                                      !
-!    Scully, M.E., 2013: Physical control on hypoxia in Chesapeake     !
-!      Bay: A numerical modeling study, J. Geophys. Res., 118,         !
-!      1239-1256.                                                      !
-!                                                                      !
-!    Irby, I. et al., 2016: Challenges associated with modeling low-   !
-!      oxygen waters in Chesapeake Bay: a multiple model comparison,   !
-!      Biogeosciences, 13, 2011-2028                                   !
-!                                                                      !
 !***********************************************************************
 !
       USE mod_param
@@ -158,6 +132,9 @@
          ! The temperature and salinity
          eTemp = OCEAN(ng) % t(i, j, N(ng), nrhs(ng), itemp)
          eSalt = OCEAN(ng) % t(i, j, N(ng), nrhs(ng), isalt)
+         IF (eSalt .lt. 1.0_r8) THEN
+            Print *, 'salt at zero for i/j=', i, j
+         END IF
          ETW(idx) = eTemp
          ESW(idx) = eSalt
          ! The irradiance
@@ -270,6 +247,7 @@
 !      Print *, 'CP_T_D3 : stPelStateS=', stPelStateS, ' stPelStateE=', stPelStateE
 !      Print *, 'first_tile=', first_tile(ng)
       tileS = tile - first_tile(ng) + 1
+      Print *, "tileS=", tileS
       NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
       DO iNode=1,NO_BOXES_XY_loc
          i = ListArrayWet(ng) % TheArr(tileS) % ListI(iNode)
@@ -351,7 +329,7 @@
       DO iVar=stPelStateS, stPelStateE
         itrc = iVar - stPelStateS + 1
         ibio = idbio(itrc)
-!        Print *, 'iVar=', iVar, ' itrc=', itrc, ' ibio=', ibio
+        Print *, 'iVar=', iVar, ' itrc=', itrc, ' ibio=', ibio
       END DO
       Print *, 'size(D3STATE,1:2)=', size(D3STATE,1), size(D3STATE,2)
       Print *, 'Computing the average NO_BOXES_XY/Z=', NO_BOXES_XY, NO_BOXES_Z
@@ -368,7 +346,6 @@
             idx = iZ + NO_BOXES_Z * (iNode-1)
             DO iVar=stPelStateS, stPelStateE
                itrc = iVar - stPelStateS + 1
-               ibio = idbio(itrc)
                eVal = D3STATE(itrc, idx)
                ArrSum(itrc) = ArrSum(itrc) + eVal
                IF (eVal .lt. ArrMin(itrc)) THEN
@@ -381,6 +358,7 @@
          END DO
       END DO
       TotalNb = NO_BOXES_Z * NO_BOXES_XY
+      Print *, 'TotalNb=', TotalNb
       DO i=1,siz
         eAvg = ArrSum(i) / TotalNb
         eMin = ArrMin(i)
@@ -388,7 +366,7 @@
         Print *, 'i=', i, ' min/max/avg=', eMin, eMax, eAvg
       END DO
       deallocate(ArrSum, ArrMin, ArrMax)
-      Print *, "siz=", siz, " NO_D3_BOX_STATES=", NO_D3_BOX_STATES, " TotalNb=", TotalNb
+      Print *, "siz=", siz, " NO_D3_BOX_STATES=", NO_D3_BOX_STATES
       allocate(F(TotalNb))
       DO j=1,NO_D3_BOX_STATES
          DO i=1,TotalNb
@@ -705,6 +683,23 @@
       CALL PRINT_AVERAGE_D3STATE(ng, tile)
       END SUBROUTINE
 
+      SUBROUTINE PRINT_CRITICAL(pos)
+      USE mod_biology
+      use mod_ocean
+      use mod_mixing
+      implicit none
+      integer, intent(in) :: pos
+      integer ibio, ng
+      real(r8) val1, val2, val3, maxakt
+      ng = 1
+      ibio = idbio(1)
+      val1 = maxval(OCEAN(ng) % t(:,:,:, 1, ibio))
+      val2 = maxval(OCEAN(ng) % t(:,:,:, 2, ibio))
+      val3 = maxval(OCEAN(ng) % t(:,:,:, 3, ibio))
+      maxakt = maxval(MIXING(ng) % Akt)
+      Print *, 'Critical pos=', pos, ' val123=', val1, val2, val3
+!      Print *, 'Critical pos=', pos, ' val12=', val1, val2, ' m(akt)=', maxakt
+      END SUBROUTINE
 
 !
 !-----------------------------------------------------------------------
@@ -857,11 +852,25 @@
             emaxval = maxval(D3STATE(j,:))
             eavgval = sum(D3STATE(j,:)) / (NO_BOXES_XY * NO_BOXES_Z)
             Print *, 'Before : j=', j, ' min/max/avg=', eminval, emaxval, eavgval
+            IF (j .eq. 1) THEN
+               DO iNode=1,NO_BOXES_XY_loc
+                  ic = ListArrayWet(ng) % TheArr(tileS) % ListI(iNode)
+                  jc = ListArrayWet(ng) % TheArr(tileS) % ListJ(iNode)
+                  DO kc=1,NO_BOXES_Z
+                     iZ = kc
+                     idx = iZ + NO_BOXES_Z * (iNode-1)
+                     eVal = D3STATE(j, idx)
+                     IF (D3STATE(j, idx) .lt. 1.0_r8) THEN
+!                        Print *, 'ic/jc/kc=', ic, jc, kc
+                     END IF
+                  END DO
+               END DO
+            END IF
 #endif
             IF (D3STATETYPE(j).ge.0) THEN
 #ifndef EXPLICIT_SINK
               DO i=1,NO_BOXES
-                D3STATE(j,i) = D3STATE(j,i) + delt_bfm * D3SOURCE(j,i)
+!                D3STATE(j,i) = D3STATE(j,i) + delt_bfm * D3SOURCE(j,i)
               END DO
 #else
               DO i=1,NO_BOXES
@@ -909,7 +918,7 @@
 !       This is needed even if in absence of advection because we use this for
 !       for outputting results.
 !
-        CALL COPY_D3STATE_to_T(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, nnew, t)
+        CALL COPY_D3STATE_to_T(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, nstp, t)
 !       Need to put code for the diagnostics. We do not put yet the dlux. Maybe never.
       END IF
       END SUBROUTINE biology_tile

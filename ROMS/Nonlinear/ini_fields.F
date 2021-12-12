@@ -134,6 +134,8 @@
       USE mod_param
       USE mod_ncparam
       USE mod_scalars
+      USE biology_mod,          ONLY : biology, PRINT_CRITICAL
+      USE mod_biology,          ONLY : idbio
 # if defined SEDIMENT || defined BBL_MODEL
       USE mod_sediment
 # endif
@@ -259,6 +261,7 @@
 !  Local variable declarations.
 !
       integer :: i, ic, itrc, j, k
+      integer ibio
 # if defined SEDIMENT || defined BBL_MODEL
       integer :: ised
 # endif
@@ -597,8 +600,13 @@
 !
       ic=0
       Print *, 'ini_fields, nstp=', nstp, ' nnew=', nnew
+      CALL PRINT_CRITICAL(701)
       IF (.not.PerfectRST(ng)) THEN
+        ibio = idbio(1)
         DO itrc=1,NT(ng)
+          IF (itrc .eq. ibio) THEN
+            CALL PRINT_CRITICAL(702)
+          END IF
           IF (LtracerCLM(itrc,ng).and.LnudgeTCLM(itrc,ng)) THEN
             ic=ic+1
           END IF
@@ -614,6 +622,9 @@
               END DO
             END DO
           END DO
+          IF (itrc .eq. ibio) THEN
+            CALL PRINT_CRITICAL(703)
+          END IF
 !
 !  Apply boundary conditions.
 !
@@ -627,6 +638,9 @@
      &                     IminS, ImaxS, JminS, JmaxS,                  &
      &                     nstp, nnew,                                  &
      &                     t)
+          IF (itrc .eq. ibio) THEN
+            CALL PRINT_CRITICAL(704)
+          END IF
         END DO
       END IF
 !
@@ -640,6 +654,7 @@
      &                            t(:,:,:,nnew,itrc))
         END DO
       END IF
+      CALL PRINT_CRITICAL(705)
 
 #  ifdef DISTRIBUTE
 !
@@ -650,6 +665,7 @@
      &                    t(:,:,:,nstp,:),                              &
      &                    t(:,:,:,nnew,:))
 #  endif
+      CALL PRINT_CRITICAL(706)
 
 #  if defined BBL_MODEL || defined SEDIMENT
 !

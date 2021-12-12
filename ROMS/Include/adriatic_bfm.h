@@ -14,7 +14,6 @@
 #define SPLINES_VDIFF
 #define SPLINES_VVISC
 #define RI_SPLINES
-#define TS_DIF2 	/* turn ON or OFF Laplacian horizontal mixing */
 #define NONLIN_EOS 	/* define if using nonlinear equation of state */
 #define SALINITY 	/* define if using salinity */
 #define MASKING 	/* define if there is land in the domain */
@@ -52,48 +51,6 @@
 #undef WWM_MPI
 #define ROMS_WWM_PGMCL_COUPLING
 #undef DUMMY_COUPLING
-#ifdef WWM_COUPLING
-# define NEARSHORE_ARDHUIN
-# undef NEARSHORE_MELLOR05
-# undef NEARSHORE_LONGUETHIGGINS
-# ifdef NEARSHORE_ARDHUIN
-#  define WAVE_ADVECTION
-#  define WAVE_ADVECTION_TRACER
-#  define WAVE_ADVECTION_MOMENTUM
-#  define WAVE_ADVECTION_TURBULENCE
-#  define APPLY_VORTEX
-#  define APPLY_PRESSURE
-#  define WAVE_BOUNDARY
-#  define FIRST_ORDER_ARDHUIN
-#  define WAVE_COR
-#  define STOKES_CORR_FLOAT
-#  define STOKES_DRIFT_USING_INTEGRAL
-#  define USE_STRESS_FROM_WAVE
-#  define USE_WAVE_PRESSURE_INTEGRAL
-#  define GET_CD_UFRIC_ROUGHNESS
-#  define ZOS_HSIG       /* have to have Hsig */
-#  define CRAIG_BANNER
-# endif
-# ifdef NEARSHORE_MELLOR05
-#  define WAVE_ADVECTION
-#  define WAVE_ADVECTION_TRACER
-#  define WAVE_ADVECTION_MOMENTUM
-#  undef WAVE_BOUNDARY
-#  undef FIRST_ORDER_ARDHUIN
-#  define WAVE_COR
-#  define STOKES_CORR_FLOAT
-#  define STOKES_DRIFT_USING_INTEGRAL
-#  define USE_STRESS_FROM_WAVE
-#  define USE_WAVE_PRESSURE_INTEGRAL
-#  define GET_CD_UFRIC_ROUGHNESS
-#  define ZOS_HSIG       /* have to have Hsig */
-#  define CRAIG_BANNER
-# endif
-#endif
-
-#undef COARE_TAYLOR_YELLAND
-#undef COARE_OOST
-
 
 
 
@@ -144,8 +101,8 @@
 
 /* define one vertical mixing scheme here*/
 #undef  LMD_MIXING
-#undef  MY25_MIXING
-#define GLS_MIXING
+#define  MY25_MIXING
+#undef GLS_MIXING
 #if defined GLS_MIXING || defined MY25_MIXING
 # define KANTHA_CLAYSON
 # define N2S2_HORAVG
@@ -161,10 +118,9 @@
 
 #define SPONGE
 #define MIX_S_UV
-#define TS_DIF2
 #define UV_VIS2
-#define TS_DIF2         /* turn ON or OFF Laplacian horizontal mixing */
-#define MIX_GEO_TS 
+#undef TS_DIF2         /* turn ON or OFF Laplacian horizontal mixing */
+#undef MIX_GEO_TS
 
 #define ALADIN
 
@@ -182,18 +138,18 @@
 # undef ANA_SRFLUX      /* analytical surface shortwave radiation flux */
 # define ANA_RAIN /* analytical rain fall rate */
 #elif defined ALADIN
-#   define BULK_FLUXES
-#   define EMINUSP /* compute evaporation and effect on salinity */
-#   define COOL_SKIN
-#   define SOLAR_SOURCE /* define solar radiation source term */
-#   undef ANA_SSFLUX /* analytical surface salinity flux */
-#   define ANA_BSFLUX /* analytical bottom salinity flux */
-#   define ANA_BPFLUX /* analytical bottom passive tracers fluxes */
-#   define ANA_BTFLUX /* analytical bottom temperature flux */
-#   define ANA_SPFLUX /* analytical surface passive tracers fluxes */
-#   define LONGWAVE /* Compute net longwave radiation internally from Tair,Qair,Cloud,SST*/
-#   undef ANA_SRFLUX      /* analytical surface shortwave radiation flux */
-#   define ANA_RAIN /* analytical rain fall rate */
+# define BULK_FLUXES
+# define EMINUSP /* compute evaporation and effect on salinity */
+# define COOL_SKIN
+# define SOLAR_SOURCE /* define solar radiation source term */
+# undef ANA_SSFLUX /* analytical surface salinity flux */
+# define ANA_BSFLUX /* analytical bottom salinity flux */
+# define ANA_BPFLUX /* analytical bottom passive tracers fluxes */
+# define ANA_BTFLUX /* analytical bottom temperature flux */
+# define ANA_SPFLUX /* analytical surface passive tracers fluxes */
+# define LONGWAVE /* Compute net longwave radiation internally from Tair,Qair,Cloud,SST*/
+# undef ANA_SRFLUX      /* analytical surface shortwave radiation flux */
+# define ANA_RAIN /* analytical rain fall rate */
 #elif defined LAMI_MODIF
 # define BULK_FLUXES
 # undef ANA_SRFLUX      /* analytical surface shortwave radiation flux */
@@ -241,7 +197,7 @@
 # define ANA_BPFLUX /* analytical bottom passive tracers fluxes */
 # define ANA_BTFLUX /* analytical bottom temperature flux */
 # define ANA_SPFLUX /* analytical surface passive tracers fluxes */
-# define ANA_STFLUX 
+# define ANA_STFLUX
 #endif
 
 
