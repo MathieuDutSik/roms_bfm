@@ -869,7 +869,7 @@
             IF (D3STATETYPE(j).ge.0) THEN
 #ifndef EXPLICIT_SINK
               DO i=1,NO_BOXES
-!                D3STATE(j,i) = D3STATE(j,i) + delt_bfm * D3SOURCE(j,i)
+                D3STATE(j,i) = D3STATE(j,i) + delt_bfm * D3SOURCE(j,i)
               END DO
 #else
               DO i=1,NO_BOXES
