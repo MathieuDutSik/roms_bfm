@@ -247,7 +247,6 @@
 !      Print *, 'CP_T_D3 : stPelStateS=', stPelStateS, ' stPelStateE=', stPelStateE
 !      Print *, 'first_tile=', first_tile(ng)
       tileS = tile - first_tile(ng) + 1
-      Print *, "tileS=", tileS
       NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
       DO iNode=1,NO_BOXES_XY_loc
          i = ListArrayWet(ng) % TheArr(tileS) % ListI(iNode)
@@ -697,7 +696,7 @@
       val2 = maxval(OCEAN(ng) % t(:,:,:, 2, ibio))
       val3 = maxval(OCEAN(ng) % t(:,:,:, 3, ibio))
       maxakt = maxval(MIXING(ng) % Akt)
-      Print *, 'Critical pos=', pos, ' val123=', val1, val2, val3
+!      Print *, 'Critical pos=', pos, ' val123=', val1, val2, val3
 !      Print *, 'Critical pos=', pos, ' val12=', val1, val2, ' m(akt)=', maxakt
       END SUBROUTINE
 

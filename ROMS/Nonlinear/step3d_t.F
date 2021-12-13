@@ -1003,11 +1003,6 @@
         END DO
       END DO
       CALL PRINT_CRITICAL(1304)
-      Print *, 'NT=', NT(ng), ' NAT=', NAT
-      Print *, 'size(Akt,1)=', size(Akt,1)
-      Print *, 'size(Akt,2)=', size(Akt,2)
-      Print *, 'size(Akt,3)=', size(Akt,3)
-      Print *, 'size(Akt,4)=', size(Akt,4)
 !
 !  Start pipelined J-loop.
 !
