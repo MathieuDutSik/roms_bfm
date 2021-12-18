@@ -11,8 +11,8 @@
 !
 ! DESCRIPTION
 !   Allocation of memory for Global State variables and other Variables
-!  
-!   This file is generated directly from OpenSesame model code, using a code 
+!
+!   This file is generated directly from OpenSesame model code, using a code
 !   generator which transposes from the sesame meta language into F90.
 !   F90 code generator written by P. Ruardij.
 !   structure of the code based on ideas of M. Vichi.
@@ -24,7 +24,7 @@
 !   ---
 !
 ! COPYING
-!   
+!
 !   Copyright (C) 2015 BFM System Team (bfm_st@lists.cmcc.it)
 !   Copyright (C) 2004 P. Ruardij, M. Vichi
 !   (rua@nioz.nl, vichi@bo.ingv.it)
@@ -75,7 +75,7 @@
    allocate(D3STATE(1:NO_D3_BOX_STATES,1:NO_BOXES),stat=status)
    if (status /= 0) call error_msg_prn(ALLOC,"AllocateMem", "D3STATE")
    D3STATE = ZERO
-  
+
 #ifndef EXPLICIT_SINK
      allocate(D3SOURCE(1:NO_D3_BOX_STATES,1:NO_BOXES),stat=status)
      if (status /= 0) call error_msg_prn(ALLOC,"AllocateMem", "D3SOURCE")
@@ -102,7 +102,7 @@
    if (status /= 0) call error_msg_prn(ALLOC,"AllocateMem", "D3DIAGNOS")
    D3DIAGNOS = ZERO
 
-    
+
    allocate(D2DIAGNOS(1:NO_D2_BOX_DIAGNOSS,1:NO_BOXES_XY),stat=status)
    if (status /= 0) call error_msg_prn(ALLOC,"AllocateMem", "D2DIAGNOS")
    D2DIAGNOS = ZERO
@@ -518,7 +518,7 @@ EICE => D2DIAGNOS(ppEICE,:); EICE=ZERO
 
 #ifdef INCLUDE_SEAICE
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  ! Start the allocation of other seaIce vairables which can be outputted 
+  ! Start the allocation of other seaIce vairables which can be outputted
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 
@@ -531,7 +531,7 @@ EICE => D2DIAGNOS(ppEICE,:); EICE=ZERO
 
 #ifdef INCLUDE_BEN
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  ! Start the allocation of other benthic vairables which can be outputted 
+  ! Start the allocation of other benthic vairables which can be outputted
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 
@@ -660,7 +660,7 @@ EICE => D2DIAGNOS(ppEICE,:); EICE=ZERO
 
   ! reBn = (N4n<-B1n)
   D3FLUX_MATRIX(ppB1n, ppN4n)%p(2)=+12
-  
+
   ! rePTn = (N3n+N4n<-B1n+Z.n)
   D3FLUX_MATRIX(ppB1n, ppN3n)%p(1)=+10
   D3FLUX_MATRIX(ppZ5n, ppN3n)%p(1)=+10
@@ -672,7 +672,7 @@ EICE => D2DIAGNOS(ppEICE,:); EICE=ZERO
   D3FLUX_MATRIX(ppZ6n, ppN4n)%p(1)=+10
   D3FLUX_MATRIX(ppZ4n, ppN4n)%p(1)=+10
   D3FLUX_MATRIX(ppZ3n, ppN4n)%p(1)=+10
-  
+
   ! netZTc = (Z.c<-P.c+B1c+Z.c)-(Z.c->R1c+R6c)
   D3FLUX_MATRIX(ppP2c, ppZ5c)%p(2)=+8
   D3FLUX_MATRIX(ppP4c, ppZ5c)%p(2)=+8
@@ -722,36 +722,36 @@ EICE => D2DIAGNOS(ppEICE,:); EICE=ZERO
   D3FLUX_MATRIX(ppZ6c, ppZ6c)%dir(2)=0
   D3FLUX_MATRIX(ppZ3c, ppZ3c)%dir(2)=0
   D3FLUX_MATRIX(ppZ4c, ppZ4c)%dir(2)=0
-  
+
   ! fR2B1c = R2c->B1c
   D3FLUX_MATRIX(ppR2c, ppB1c)%p(1)=+14
-  
+
   ! fP1Z4c = P1c->Z4c
   D3FLUX_MATRIX(ppP1c, ppZ4c)%p(3)=+15
-  
+
   ! resPP = (P.c->O3c)
   D3FLUX_MATRIX(ppP2c, ppO3c)%p(1)=+2
   D3FLUX_MATRIX(ppP4c, ppO3c)%p(1)=+2
   D3FLUX_MATRIX(ppP1c, ppO3c)%p(1)=+2
   D3FLUX_MATRIX(ppP3c, ppO3c)%p(1)=+2
-  
+
   ! rrPTo = (O2o->*)
   D3FLUX_MATRIX(ppO2o, ppO2o)%p(1)=+9
   D3FLUX_MATRIX(ppO2o, ppO2o)%dir(1)=1
-  
+
   ! rePTp = (N1p<-B1p+Z.p)
   D3FLUX_MATRIX(ppB1p, ppN1p)%p(1)=+11
   D3FLUX_MATRIX(ppZ3p, ppN1p)%p(1)=+11
   D3FLUX_MATRIX(ppZ4p, ppN1p)%p(1)=+11
   D3FLUX_MATRIX(ppZ6p, ppN1p)%p(1)=+11
   D3FLUX_MATRIX(ppZ5p, ppN1p)%p(1)=+11
-  
+
   ! ruPTp = P.p <- N1p
   D3FLUX_MATRIX(ppN1p, ppP4p)%p(1)=+5
   D3FLUX_MATRIX(ppN1p, ppP2p)%p(1)=+5
   D3FLUX_MATRIX(ppN1p, ppP1p)%p(1)=+5
   D3FLUX_MATRIX(ppN1p, ppP3p)%p(1)=+5
-  
+
   ! ruPTn = P.n <- N3n+N4n
   D3FLUX_MATRIX(ppN3n, ppP4n)%p(1)=+4
   D3FLUX_MATRIX(ppN4n, ppP4n)%p(1)=+4
@@ -761,7 +761,7 @@ EICE => D2DIAGNOS(ppEICE,:); EICE=ZERO
   D3FLUX_MATRIX(ppN4n, ppP3n)%p(1)=+4
   D3FLUX_MATRIX(ppN3n, ppP1n)%p(1)=+4
   D3FLUX_MATRIX(ppN4n, ppP1n)%p(1)=+4
-  
+
   ! exPP = (P.c->R1c+R2c+R6c)
   D3FLUX_MATRIX(ppP2c, ppR1c)%p(1)=+6
   D3FLUX_MATRIX(ppP2c, ppR2c)%p(1)=+6
@@ -775,22 +775,22 @@ EICE => D2DIAGNOS(ppEICE,:); EICE=ZERO
   D3FLUX_MATRIX(ppP1c, ppR1c)%p(1)=+6
   D3FLUX_MATRIX(ppP1c, ppR2c)%p(1)=+6
   D3FLUX_MATRIX(ppP1c, ppR6c)%p(1)=+6
-  
+
   ! ruPTc = P.c <- O3c
   D3FLUX_MATRIX(ppO3c, ppP3c)%p(1)=+1
   D3FLUX_MATRIX(ppO3c, ppP1c)%p(1)=+1
   D3FLUX_MATRIX(ppO3c, ppP4c)%p(1)=+1
   D3FLUX_MATRIX(ppO3c, ppP2c)%p(1)=+1
-  
+
   ! resZT = (Z.c->O3c)
   D3FLUX_MATRIX(ppZ4c, ppO3c)%p(1)=+3
   D3FLUX_MATRIX(ppZ3c, ppO3c)%p(1)=+3
   D3FLUX_MATRIX(ppZ6c, ppO3c)%p(1)=+3
   D3FLUX_MATRIX(ppZ5c, ppO3c)%p(1)=+3
-  
+
   ! ruBn = (N4n->B1n)
   D3FLUX_MATRIX(ppN4n, ppB1n)%p(1)=+13
-  
+
   ! ruZTc = (Z.c<-P.c+B1c+Z.c)
   D3FLUX_MATRIX(ppP1c, ppZ4c)%p(1)=+7
   D3FLUX_MATRIX(ppP3c, ppZ4c)%p(1)=+7
@@ -832,7 +832,7 @@ EICE => D2DIAGNOS(ppEICE,:); EICE=ZERO
   D3FLUX_MATRIX(ppZ3c, ppZ3c)%dir(1)=0
   D3FLUX_MATRIX(ppZ6c, ppZ6c)%dir(1)=0
   D3FLUX_MATRIX(ppZ5c, ppZ5c)%dir(1)=0
-  
+
 
 
 #ifdef INCLUDE_SEAICE

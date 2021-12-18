@@ -12,7 +12,7 @@
 !  This subroutine provides information on the variables. To be used
 !  when storing data in NetCDF files.
 !  This file is produced by a procedure from a file which include all
-!  definitions of global variables and state variables  and a proto-file 
+!  definitions of global variables and state variables  and a proto-file
 !
 !
 ! AUTHORS
@@ -22,7 +22,7 @@
 !   ---
 !
 ! COPYING
-!   
+!
 !   Copyright (C) 2015 BFM System Team (bfm_st@lists.cmcc.it)
 !   Copyright (C) 2006 P. Ruardij  (rua@nioz.nl)
 !
@@ -49,12 +49,12 @@ subroutine set_var_info_bfm
 #else
   use api_bfm
 #endif
- 
+
 
 !
 ! 3d variables description:
 !
-   var_names(1)="O2o" ! ok 
+   var_names(1)="O2o" ! ok
    var_long(1)="Oxygen"
    var_units(1)="mmol O2/m3"
    var_names(2)="N1p" ! ok
@@ -63,7 +63,7 @@ subroutine set_var_info_bfm
    var_names(3)="N3n" ! ok
    var_long(3)="Nitrate"
    var_units(3)="mmol N/m3"
-   var_names(4)="N4n" ! ok 
+   var_names(4)="N4n" ! ok
    var_long(4)="Ammonium"
    var_units(4)="mmol N/m3"
    var_names(5)="O4n" ! ok

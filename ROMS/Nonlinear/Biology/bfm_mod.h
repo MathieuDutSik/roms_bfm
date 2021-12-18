@@ -100,6 +100,23 @@
 
       integer, allocatable :: MULTIPLIER(:)
       integer PosMultiplier
+      real(r8), allocatable :: ROMS_EIR(:,:,:)
+      real(r8), allocatable :: ROMS_DIC(:,:,:)
+      real(r8), allocatable :: ROMS_Chlo(:,:,:)
+      real(r8), allocatable :: ROMS_siP1(:,:,:)
+      real(r8), allocatable :: ROMS_siP2(:,:,:)
+      real(r8), allocatable :: ROMS_siP3(:,:,:)
+      real(r8), allocatable :: ROMS_siP4(:,:,:)
+      real(r8), allocatable :: ROMS_eiP1(:,:,:)
+      real(r8), allocatable :: ROMS_eiP2(:,:,:)
+      real(r8), allocatable :: ROMS_eiP3(:,:,:)
+      real(r8), allocatable :: ROMS_eiP4(:,:,:)
+      real(r8), allocatable :: ROMS_ruPTC(:,:,:)
+      real(r8), allocatable :: ROMS_ruZTC(:,:,:)
+      real(r8), allocatable :: ROMS_ixEPS(:,:,:)
+      integer dim1
+      integer dim2
+      integer dim3
 
       type(ARRAY_WET), allocatable :: ListArrayWet(:)
 
@@ -122,7 +139,7 @@
 !  Set number of biological tracers.
 !-----------------------------------------------------------------------
 !
-      NBT=64
+      NBT=50
 
 #if defined DIAGNOSTICS && defined DIAGNOSTICS_BIO
 !
@@ -162,18 +179,20 @@
 !-----------------------------------------------------------------------
 !
       ic=NAT+NPT+NCS+NNS
+      Print *, 'NAT=', NAT, ' NPT=', NPT
+      Print *, 'NCS=', NCS, ' NNS=', NNS
       Print *, 'ic=', ic
       DO i=1,NBT
         idbio(i)=ic+i
       END DO
-      iOxyg = ic+1
+      iOxyg = ic+1    ! Correspond to O2o
       Print *, 'iOxyg=', iOxyg
-      iPO4_ = ic+2
+      iPO4_ = ic+2    ! Correspond to N1p
       Print *, 'iPO4_=', iPO4_
-      iNO3_ = ic+3
-      iNH4_ = ic+4
+      iNO3_ = ic+3    ! Correspond to N3n
+      iNH4_ = ic+4    ! Correspond to N4n
       iO4n_ = ic+5
-      iSiOH = ic+6
+      iSiOH = ic+6    ! Correspond to N5s
       iN6r_ = ic+7
       iB1c_ = ic+8
       iB1n_ = ic+9
@@ -217,21 +236,39 @@
       iR6p_ = ic+47
       iR6s_ = ic+48
       iO3c_ = ic+49
-      iO3h_ = ic+50
-      iEIR_ = ic+51
-      iDIC_ = ic+52
-      iChlo = ic+53
-      siP1_ = ic+54
-      siP2_ = ic+55
-      siP3_ = ic+56
-      siP4_ = ic+57
-      eiP1_ = ic+58
-      eiP2_ = ic+59
-      eiP3_ = ic+60
-      eiP4_ = ic+61
-      ruPTc = ic+62
-      ruZTc = ic+63
-      ixEPS = ic+64
+      iO3h_ = ic+50 ! End of the first block from ModuleMem.F90
+
+!      iEIR_ = ic+51
+!      iDIC_ = ic+52
+!      iChlo = ic+53
+!      siP1_ = ic+54
+!      siP2_ = ic+55
+!      siP3_ = ic+56
+!      siP4_ = ic+57
+!      eiP1_ = ic+58
+!      eiP2_ = ic+59
+!      eiP3_ = ic+60
+!      eiP4_ = ic+61
+!      ruPTc = ic+62
+!      ruZTc = ic+63
+!      ixEPS = ic+64
+
+      allocate(ROMS_EIR(dim1, dim2, dim3))
+      allocate(ROMS_DIC(dim1, dim2, dim3))
+      allocate(ROMS_Chlo(dim1, dim2, dim3))
+      allocate(ROMS_siP1(dim1, dim2, dim3))
+      allocate(ROMS_siP2(dim1, dim2, dim3))
+      allocate(ROMS_siP3(dim1, dim2, dim3))
+      allocate(ROMS_siP4(dim1, dim2, dim3))
+      allocate(ROMS_eiP1(dim1, dim2, dim3))
+      allocate(ROMS_eiP2(dim1, dim2, dim3))
+      allocate(ROMS_eiP3(dim1, dim2, dim3))
+      allocate(ROMS_eiP4(dim1, dim2, dim3))
+      allocate(ROMS_ruPTC(dim1, dim2, dim3))
+      allocate(ROMS_ruZTC(dim1, dim2, dim3))
+      allocate(ROMS_ixEPS(dim1, dim2, dim3))
+
+
 
       RETURN
       END SUBROUTINE initialize_biology

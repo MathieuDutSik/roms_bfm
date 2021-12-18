@@ -198,7 +198,7 @@
    call check_err(NF90_DEF_DIM(ncid_bfm, 'oceanpoint', max(NO_BOXES,1), ocepoint_dim), fname)
    call check_err(NF90_DEF_DIM(ncid_bfm, 'surfacepoint', max(NO_BOXES_XY,1), surfpoint_dim), fname)
    call check_err(NF90_DEF_DIM(ncid_bfm, 'bottompoint', max(NO_BOXES_XY,1), botpoint_dim), fname)
-   call check_err(NF90_DEF_DIM(ncid_bfm, 'time', NF90_UNLIMITED, time_dim), fname)   
+   call check_err(NF90_DEF_DIM(ncid_bfm, 'time', NF90_UNLIMITED, time_dim), fname)
 
    !---------------------------------------------
    ! define coordinate variables
@@ -320,7 +320,7 @@
    if (present(lon)) &
       call check_err(store_data(ncid_bfm,lon_id,POINT,1,scalar=lon), fname)
    if (present(lat)) &
-      call check_err(store_data(ncid_bfm,lat_id,POINT,1,scalar=lat), fname) 
+      call check_err(store_data(ncid_bfm,lat_id,POINT,1,scalar=lat), fname)
    if (present(lat2d)) &
       call check_err(store_data(ncid_bfm,lat_id,XY_SHAPE,NO_BOXES_Z, &
                         array2d=lat2d), fname)
@@ -590,7 +590,7 @@
    if (present(lon)) &
       call check_err(store_data(ncid_rst,lon_rid,POINT,1,scalar=lon), fname)
    if (present(lat)) &
-      call check_err(store_data(ncid_rst,lat_rid,POINT,1,scalar=lat), fname) 
+      call check_err(store_data(ncid_rst,lat_rid,POINT,1,scalar=lat), fname)
    if (present(lat2d)) &
       call check_err(store_data(ncid_rst,lat_rid,XY_SHAPE,NO_BOXES_Z, &
                         array2d=lat2d), fname)
@@ -631,7 +631,7 @@ end subroutine init_netcdf_rst_bfm
   subroutine save_rst_bfm(time)
 !
 ! !DESCRIPTION:
-! output restart file of BFM variables 
+! output restart file of BFM variables
 !
 ! !USES:
    use mem, only: D3STATE, NO_D3_BOX_STATES, NO_BOXES
@@ -673,7 +673,7 @@ end subroutine init_netcdf_rst_bfm
 #endif
 !
 ! !REVISION HISTORY:
-!  Original author(s): Marcello Vichi (INGV) 
+!  Original author(s): Marcello Vichi (INGV)
 !
 !EOP
 !-----------------------------------------------------------------------
@@ -760,7 +760,7 @@ end subroutine init_netcdf_rst_bfm
      LEVEL2 'save_rst_bfm: Restart data has been written'
 ! the file is closed in the main (in case of more restart files)
 
-  end subroutine save_rst_bfm 
+  end subroutine save_rst_bfm
 !EOC
 
 !-----------------------------------------------------------------------
@@ -772,7 +772,7 @@ end subroutine init_netcdf_rst_bfm
   subroutine read_rst_bfm(title)
 !
 ! !DESCRIPTION:
-! Read restart file of BFM variables 
+! Read restart file of BFM variables
 !
 ! !USES:
    use mem, only: D3STATE, NO_D3_BOX_STATES, NO_BOXES
@@ -800,7 +800,7 @@ end subroutine init_netcdf_rst_bfm
 !
 ! !INPUT PARAMETERS:
    character(len=*), intent(in)                 :: title
-   character(len=NF90_MAX_NAME)                :: namedimt 
+   character(len=NF90_MAX_NAME)                :: namedimt
 ! !LOCAL VARIABLES:
    character(len=PATH_MAX)   :: ext,fname
    integer                   :: iret
@@ -808,7 +808,7 @@ end subroutine init_netcdf_rst_bfm
    integer                   :: ncomp_id,ncomp_len
 !
 ! !REVISION HISTORY:
-!  Original author(s): Marcello Vichi (INGV) 
+!  Original author(s): Marcello Vichi (INGV)
 !
 !EOP
 !-----------------------------------------------------------------------
@@ -824,7 +824,7 @@ end subroutine init_netcdf_rst_bfm
    LEVEL2 TRIM(fname)
    call check_err(NF90_OPEN(fname,NF90_NOWRITE,ncid_rst_in), fname)
    !---------------------------------------------
-   ! Check 3D dimensions 
+   ! Check 3D dimensions
    !---------------------------------------------
    call check_err(NF90_INQ_DIMID(ncid_rst_in,"d3vars",nstate_id), fname)
    call check_err(NF90_INQUIRE_DIMENSION(ncid_rst_in,nstate_id,namedimt,nstate_len), fname)
@@ -847,7 +847,7 @@ end subroutine init_netcdf_rst_bfm
 #ifdef INCLUDE_PELCO2
    call check_err(NF90_INQ_VARID(ncid_rst_in,"pH",nstate_id), fname)
    call check_err(NF90_GET_VAR(ncid_rst_in,nstate_id,D3DIAGNOS(pppH,:)), fname)
-#endif 
+#endif
 #ifdef BFM_POM
    call check_err(NF90_INQ_VARID(ncid_rst_in,"D3STATEB",nstate_id), fname)
    call check_err(NF90_GET_VAR(ncid_rst_in,nstate_id,D3STATEB(:,:)), fname)
@@ -855,7 +855,7 @@ end subroutine init_netcdf_rst_bfm
 
 #if defined INCLUDE_SEAICE
    !---------------------------------------------
-   ! Check Seaice 2D dimensions 
+   ! Check Seaice 2D dimensions
    !---------------------------------------------
    call check_err(NF90_INQ_DIMID(ncid_rst_in,"d2vars_ice",nstate_id), fname)
    call check_err(NF90_INQUIRE_DIMENSION(ncid_rst_in,nstate_id,namedimt,nstate_len), fname)
@@ -884,7 +884,7 @@ end subroutine init_netcdf_rst_bfm
 
 #if defined INCLUDE_BEN
    !---------------------------------------------
-   ! Check Benthic 2D dimensions 
+   ! Check Benthic 2D dimensions
    !---------------------------------------------
    call check_err(NF90_INQ_DIMID(ncid_rst_in,"d2vars_ben",nstate_id), fname)
    call check_err(NF90_INQUIRE_DIMENSION(ncid_rst_in,nstate_id,namedimt,nstate_len), fname)
@@ -932,7 +932,7 @@ end subroutine init_netcdf_rst_bfm
         SEAmask )
 !
 ! !DESCRIPTION:
-! Read restart file of BFM variables from one merged file in 3d 
+! Read restart file of BFM variables from one merged file in 3d
 !
 ! !USES:
    use mem, only: D3STATE
@@ -973,7 +973,7 @@ end subroutine init_netcdf_rst_bfm
    character(len=NF90_MAX_NAME) :: string
 !
 ! !REVISION HISTORY:
-!  Original author(s): Marcello Vichi (INGV) 
+!  Original author(s): Marcello Vichi (INGV)
 !
 !EOP
 !-----------------------------------------------------------------------
@@ -988,7 +988,7 @@ end subroutine init_netcdf_rst_bfm
    LEVEL2 TRIM(fname)
    call check_err(NF90_OPEN(fname,NF90_NOWRITE,ncid_rst_3d), fname)
    !---------------------------------------------
-   ! Check 3D dimensions 
+   ! Check 3D dimensions
    !---------------------------------------------
    call check_err(NF90_INQ_DIMID(ncid_rst_3d,"x",ncomp_id), fname)
    call check_err(NF90_INQUIRE_DIMENSION(ncid_rst_3d,ncomp_id, len=ncomp_len), fname)
@@ -1042,7 +1042,7 @@ end subroutine init_netcdf_rst_bfm
       string = var_names(idx_var)
       iret = NF90_INQ_VARID(ncid_rst_3d, string, vid)
       if( iret /= NF90_NOERR ) then
-         ! in new BFM version netcdf output remove '(' and ')' 
+         ! in new BFM version netcdf output remove '(' and ')'
          call replace_char(str=string, tar='()', rep='_')
          iret = NF90_INQ_VARID(ncid_rst_3d, string, vid)
       end if
@@ -1125,8 +1125,8 @@ end subroutine init_netcdf_rst_bfm
 !  Adapted to BFM: Marcello Vichi (INGV) & Piet Ruardij (NIOZ)
 !
 ! !LOCAL VARIABLES:
-   integer, save             :: nn       ! number pel.var to be saved 
-   integer, save             :: nnb      ! number ben.var to be saved 
+   integer, save             :: nn       ! number pel.var to be saved
+   integer, save             :: nnb      ! number ben.var to be saved
    integer                   :: iret,rc
    real(RLEN)                :: ltime
    integer                   :: out_unit=67
@@ -1151,19 +1151,19 @@ end subroutine init_netcdf_rst_bfm
             iret = set_attributes(ncid_bfm,var_ids(n),            &
                  units=var_units(n),         &
                  long_name=var_long(n))
-         end if 
+         end if
       end do
 
       do n=stPelDiag2dS,stPelRivE
-         dims(1) = botpoint_dim 
+         dims(1) = botpoint_dim
          if ( n >= stPelDiag2dS .AND. n <= stPelSurE ) dims(1) = surfpoint_dim
 
-         if ( var_ids(n) /= 0 )  then 
+         if ( var_ids(n) /= 0 )  then
             iret = new_nc_variable(ncid_bfm,var_names(n),NF90_REAL, &
                  dims,var_ids(n))
             iret = set_attributes(ncid_bfm,var_ids(n),            &
                  units=var_units(n),         &
-                 long_name=var_long(n)) 
+                 long_name=var_long(n))
          endif
       end do
 
@@ -1172,12 +1172,12 @@ end subroutine init_netcdf_rst_bfm
 
          dims(1) = surfpoint_dim
 
-         if ( var_ids(n) /= 0 )  then 
+         if ( var_ids(n) /= 0 )  then
             iret = new_nc_variable(ncid_bfm,var_names(n),NF90_REAL, &
                  dims,var_ids(n))
             iret = set_attributes(ncid_bfm,var_ids(n),            &
                  units=var_units(n),         &
-                 long_name=var_long(n)) 
+                 long_name=var_long(n))
          endif
       end do
 #endif
@@ -1194,12 +1194,12 @@ end subroutine init_netcdf_rst_bfm
             j=special_dims(2,ncid_bfm,NO_BOXES_Z,var_names(n),var_long(n),  &
                            var_units(n),time_dim,var_ids(n))
 #endif
-         if ( j.eq.0 .and. var_ids(n) /= 0 )  then 
+         if ( j.eq.0 .and. var_ids(n) /= 0 )  then
             iret = new_nc_variable(ncid_bfm,var_names(n),NF90_REAL, &
                  dims,var_ids(n))
             iret = set_attributes(ncid_bfm,var_ids(n),            &
                  units=var_units(n),         &
-                 long_name=var_long(n)) 
+                 long_name=var_long(n))
          endif
       end do
 #endif
@@ -1232,7 +1232,7 @@ end subroutine init_netcdf_rst_bfm
   subroutine save_bfm(time)
 !
 ! !DESCRIPTION:
-! output of BFM variables 
+! output of BFM variables
 !
 ! !USES:
    use mem, only: D3STATE,D3DIAGNOS,D3FLUX_FUNC
@@ -1289,7 +1289,7 @@ end subroutine init_netcdf_rst_bfm
          !-- Store snapshot of pelagic state variables
          if ( n >= stPelStateS .AND. n <= stPelStateE ) then
             idx_tmp=n-stPelStateS+1
-            iret = store_data(ncid_bfm,var_ids(n),OCET_SHAPE,NO_BOXES,garray=D3STATE(idx_tmp,:))     
+            iret = store_data(ncid_bfm,var_ids(n),OCET_SHAPE,NO_BOXES,garray=D3STATE(idx_tmp,:))
          end if
          !-- Store snapshot of pelagic diagnostics
          if ( n >= stPelDiagS .AND. n <= stPelDiagE ) then
@@ -1297,7 +1297,7 @@ end subroutine init_netcdf_rst_bfm
             iret = store_data(ncid_bfm,var_ids(n),OCET_SHAPE,NO_BOXES,garray=D3DIAGNOS(idx_tmp,:))
          end if
          !-- Store snapshot of pelagic fluxes
-         if ( n >= stPelFluxS .AND. n <= stPelFluxE ) then 
+         if ( n >= stPelFluxS .AND. n <= stPelFluxE ) then
             idx_tmp=n-stPelFluxS+1
             call correct_flux_output(1,idx_tmp,1,NO_BOXES,c1dim)
             iret = store_data(ncid_bfm,var_ids(n),OCET_SHAPE,NO_BOXES,garray=c1dim)
@@ -1310,7 +1310,7 @@ end subroutine init_netcdf_rst_bfm
               iret = store_data(ncid_bfm,var_ids(n),OCET_SHAPE,NO_BOXES,garray=D3ave(k,:))
            endif
         ENDIF
- 
+
       endif
    enddo
 
@@ -1319,7 +1319,7 @@ end subroutine init_netcdf_rst_bfm
    !---------------------------------------------
    k=0
    do n = stPelDiag2dS , stPelRivE
-      if ( var_ids(n) > 0 ) then   
+      if ( var_ids(n) > 0 ) then
          IF ( .not. var_ave(n) ) THEN
             ! Store snapshot of pelagic 2D diagnostics
             if ( n >= stPelDiag2dS .AND. n <= stPelDiag2dE ) then
@@ -1352,7 +1352,7 @@ end subroutine init_netcdf_rst_bfm
    !---------------------------------------------
    k=0
    do n = stIceStart , stIceEnd
-      if ( var_ids(n) > 0 ) then   
+      if ( var_ids(n) > 0 ) then
          IF ( .not. var_ave(n) ) THEN
 
             ! Store snapshot of seaice 2D state
@@ -1387,7 +1387,7 @@ end subroutine init_netcdf_rst_bfm
    !---------------------------------------------
    k=0
    do n = stBenStart , stBenEnd
-      if ( var_ids(n) > 0 ) then   
+      if ( var_ids(n) > 0 ) then
          IF ( .not. var_ave(n) ) THEN
 
             ! Store snapshot of benthic 2D state
@@ -1566,7 +1566,7 @@ end subroutine init_netcdf_rst_bfm
 ! !DESCRIPTION:
 !  This routine is used to set a number of attributes for
 !  variables. The routine makes heavy use of the {\tt optional} keyword.
-!  The list of recognized keywords is very easy to extend. 
+!  The list of recognized keywords is very easy to extend.
 !  The CF-1.0 convention is used.
 !
 ! !USES:
@@ -1815,11 +1815,11 @@ end subroutine init_netcdf_rst_bfm
                                  time_dim,vars_id)
 !
 ! !DESCRIPTION:
-! This is a spcialized routine for the storage of diagnostic variables 
+! This is a spcialized routine for the storage of diagnostic variables
 ! with  alternative dimensions.
 ! The typical example are the benthic profiles, which have a sigma
 ! layer grid with nlev levels.
-! 2 additional dimension variables, one with the sigma levels and 
+! 2 additional dimension variables, one with the sigma levels and
 ! one for the data points, which is a compressed coordinate
 !
 ! !USES:
@@ -1902,7 +1902,7 @@ end subroutine init_netcdf_rst_bfm
 !-----------------------------------------------------------------------
 !BOP
 !
-! !ROUTINE: check_err() - error reporting on netcdf operations 
+! !ROUTINE: check_err() - error reporting on netcdf operations
 
    subroutine check_err(iret,filename)
 !

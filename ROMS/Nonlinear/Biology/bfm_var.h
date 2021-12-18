@@ -138,36 +138,36 @@
 
 
 
-            CASE ('idTvar(iEIR_)')
+            CASE ('EIR_')
               idTvar(iEIR_)=varid
-            CASE ('idTvar(iDIC_)')
+            CASE ('iDIC_')
               idTvar(iDIC_)=varid
-            CASE ('idTvar(iChlo)')
+            CASE ('iChlo')
               idTvar(iChlo)=varid
 
-            CASE ('idTvar(siP1_)')
+            CASE ('siP1_')
               idTvar(siP1_)=varid
-            CASE ('idTvar(siP2_)')
+            CASE ('siP2_')
               idTvar(siP2_)=varid
-            CASE ('idTvar(siP3_)')
+            CASE ('siP3_')
               idTvar(siP3_)=varid
-            CASE ('idTvar(siP4_)')
+            CASE ('siP4_')
               idTvar(siP4_)=varid
 
-            CASE ('idTvar(eiP1_)')
+            CASE ('eiP1_')
               idTvar(eiP1_)=varid
-            CASE ('idTvar(eiP2_)')
+            CASE ('eiP2_')
               idTvar(eiP2_)=varid
-            CASE ('idTvar(eiP3_)')
+            CASE ('eiP3_')
               idTvar(eiP3_)=varid
-            CASE ('idTvar(eiP4_)')
+            CASE ('eiP4_')
               idTvar(eiP4_)=varid
 
-            CASE ('idTvar(ruPTc)')
+            CASE ('ruPTc')
               idTvar(ruPTc)=varid
-            CASE ('idTvar(ruZTc)')
+            CASE ('ruZTc')
               idTvar(ruZTc)=varid
-            CASE ('idTvar(ixEPS)')
+            CASE ('ixEPS')
               idTvar(ixEPS)=varid
 
 /*

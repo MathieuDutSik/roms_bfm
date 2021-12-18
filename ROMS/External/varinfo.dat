@@ -3630,7 +3630,7 @@
   'uE meter-2 second-1'                            ! [uE/m2/s]
   'irrad, scalar, series'
   'ocean_time'
-  'idTvar(iEIR_)'
+  'iEIR_'
   'r3dvar'
   1.0d0
 
@@ -3639,7 +3639,7 @@
   'umol kilogram-1'                                ! [umol/kg]
   'dic, scalar, series'
   'ocean_time'
-  'idTvar(iDIC_)'
+  'iDIC_'
   'r3dvar'
   1.0d0
 
@@ -3648,7 +3648,7 @@
   'meter-1'                                        ! [1/m]
   'tec, scalar, series'
   'ocean_time'
-  'idTvar(ixEPS)'
+  'ixEPS'
   'r3dvar'
   1.0d0
 
@@ -3657,7 +3657,7 @@
   'd-1'                                            ! [1/d]
   'netproduction, scalar, series'
   'ocean_time'
-  'idTvar(siP1_)'
+  'siP1_'
   'r3dvar'
   1.0d0
 
@@ -3666,7 +3666,7 @@
   'd-1'                                            ! [1/d]
   'netproduction, scalar, series'
   'ocean_time'
-  'idTvar(siP2_)'
+  'siP2_'
   'r3dvar'
   1.0d0
 
@@ -3675,7 +3675,7 @@
   'd-1'                                            ! [1/d]
   'netproduction, scalar, series'
   'ocean_time'
-  'idTvar(siP3_)'
+  'siP3_'
   'r3dvar'
   1.0d0
 
@@ -3684,7 +3684,7 @@
   'd-1'                                            ! [1/d]
   'netproduction, scalar, series'
   'ocean_time'
-  'idTvar(siP4_)'
+  'siP4_'
   'r3dvar'
   1.0d0
 
@@ -3693,7 +3693,7 @@
   'nondim'                                         ! [1]
   'regfactor, scalar, series'
   'ocean_time'
-  'idTvar(eiP1_)'
+  'eiP1_'
   'r3dvar'
   1.0d0
 
@@ -3702,7 +3702,7 @@
   'nondim'                                         ! [1]
   'regfactor, scalar, series'
   'ocean_time'
-  'idTvar(eiP2_)'
+  'eiP2_'
   'r3dvar'
   1.0d0
 
@@ -3711,7 +3711,7 @@
   'nondim'                                         ! [1]
   'regfactor, scalar, series'
   'ocean_time'
-  'idTvar(eiP3_)'
+  'eiP3_'
   'r3dvar'
   1.0d0
 
@@ -3720,7 +3720,7 @@
   'nondim'                                         ! [1]
   'regfactor, scalar, series'
   'ocean_time'
-  'idTvar(eiP4_)'
+  'eiP4_'
   'r3dvar'
   1.0d0
 
@@ -3729,7 +3729,7 @@
   'milligram meter-3 d-1'                          ! [mg/m3/d]
   'production, scalar, series'
   'ocean_time'
-  'idTvar(ruPTc)'
+  'ruPTo'
   'r3dvar'
   1.0d0
 
@@ -3738,7 +3738,7 @@
   'milligram meter-3 d-1'                          ! [mg/m3/d]
   'production, scalar, series'
   'ocean_time'
-  'idTvar(ruZTc)'
+  'ruZTo'
   'r3dvar'
   1.0d0
 
@@ -4161,124 +4161,6 @@
   'idRtrc(iO3h_)'
   'r3dvar'
   1.0d0
-
-'rivere_Irradiance'                                       ! Input/Output
-  'River Irradiance'
-  'uE meter-2 second-1'                            ! [uE/m2/s]
-  'river_irrad, scalar, series'
-  'river_time'
-  'idRtrc(iEIR_)'
-  'r3dvar'
-  1.0d0
-
-'river_DissolvedIC'                                      ! Input/Output
-  'River Dissolved Inorganic Carbon'
-  'umol kilogram-1'                                ! [umol/kg]
-  'river_dic, scalar, series'
-  'river_time'
-  'idRtrc(iDIC_)'
-  'r3dvar'
-  1.0d0
-
-'river_ExtinctionCoeff'                                  ! Input/Output
-  'River Total Extinction Coefficient'
-  'meter-1'                                        ! [1/m]
-  'river_tec, scalar, series'
-  'river_time'
-  'idRtrc(ixEPS)'
-  'r3dvar'
-  1.0d0
-
-'river_NetProductionP1'                                  ! Input/Output
-  'River Specific Net Production of P1(Phytoplankton)'
-  'd-1'                                            ! [1/d]
-  'river_netproduction, scalar, series'
-  'river_time'
-  'idRtrc(siP1_)'
-  'r3dvar'
-  1.0d0
-
-'river_NetProductionP2'                                  ! Input/Output
-  'River Specific Net Production of P2(Phytoplankton)'
-  'd-1'                                            ! [1/d]
-  'river_netproduction, scalar, series'
-  'river_time'
-  'idRtrc(siP2_)'
-  'r3dvar'
-  1.0d0
-
-'river_NetProductionP3'                                  ! Input/Output
-  'River Specific Net Production of P3(Phytoplankton)'
-  'd-1'                                            ! [1/d]
-  'river_netproduction, scalar, series'
-  'river_time'
-  'idRtrc(siP3_)'
-  'r3dvar'
-  1.0d0
-
-'river_NetProductionP4'                                  ! Input/Output
-  'River Specific Net Production of P4(Phytoplankton)'
-  'd-1'                                            ! [1/d]
-  'river_netproduction, scalar, series'
-  'river_time'
-  'idRtrc(siP4_)'
-  'r3dvar'
-  1.0d0
-
-'river_RegFactorP1'                                      ! Input/Output
-  'River Regular Factor for Light in P1(Phytoplankton)'
-  'nondim'                                         ! [1]
-  'river_regfactor, scalar, series'
-  'river_time'
-  'idRtrc(eiP1_)'
-  'r3dvar'
-  1.0d0
-
-'river_RegFactorP2'                                      ! Input/Output
-  'River Regular Factor for Light in P2(Phytoplankton)'
-  'nondim'                                         ! [1]
-  'river_regfactor, scalar, series'
-  'river_time'
-  'idRtrc(eiP2_)'
-  'r3dvar'
-  1.0d0
-
-'river_RegFactorP3'                                      ! Input/Output
-  'River Regular Factor for Light in P3(Phytoplankton)'
-  'nondim'                                         ! [1]
-  'river_regfactor, scalar, series'
-  'river_time'
-  'idRtrc(eiP3_)'
-  'r3dvar'
-  1.0d0
-
-'river_RegFactorP4'                                      ! Input/Output
-  'River Regular Factor for Light in P4(Phytoplankton)'
-  'nondim'                                         ! [1]
-  'river_regfactor, scalar, series'
-  'river_time'
-  'idRtrc(eiP4_)'
-  'r3dvar'
-  1.0d0
-
-'river_GrossPP'                                          ! Input/Output
-  'River Gross Primary Production'
-  'milligram meter-3 d-1'                          ! [mg/m3/d]
-  'river_production, scalar, series'
-  'river_time'
-  'idRtrc(ruPTc)'
-  'r3dvar'
-  1.0d0
-
-'river_SecondPP'                                         ! Input/Output
-  'River Second Primary Production'
-  'milligram meter-3 d-1'                          ! [mg/m3/d]
-  'river_production, scalar, series'
-  'river_time'
-  'idRtrc(ruZTc)'
-  'r3dvar'
-  1.0d0
-
 
 
 

@@ -88,7 +88,7 @@
 **       NetCDF files:                                                **
 **                                                                    **
 **         ecosim_wrt.h                                               **
-**         fennel_wrt.h                                               **
+x**         fennel_wrt.h                                               **
 **         hypoxia_srm_wrt.h                                          **
 **         nemuro_wrt.h                                               **
 **         npzd_Franks_wrt.h                                          **

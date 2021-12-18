@@ -10,11 +10,11 @@
 !
 ! DESCRIPTION
 !   Definition of Global Shared Memory
-!  
+!
 !   This module contains all the structural definitions of the BFM
 !   and sets up the memory layout.
-!   It is automatically generated from the prototype file 
-!   BFM/proto/ModuleMem.proto by including the information from 
+!   It is automatically generated from the prototype file
+!   BFM/proto/ModuleMem.proto by including the information from
 !   BFM/General/GlobalDefsBFM.model
 !   Do not directly edit this code because changes will be lost at
 !   any new compilation.
@@ -26,7 +26,7 @@
 !   ---
 !
 ! COPYING
-!   
+!
 !   Copyright (C) 2015 BFM System Team (bfm_st@lists.cmcc.it)
 !   Copyright (C) 2006 P. Ruardij, M. Vichi
 !   (rua@nioz.nl, vichi@bo.ingv.it)
@@ -44,7 +44,7 @@
 !
 !
 !! IMPORTANT NOTE:
-!! Do not change the lines starting with two comment characters "!" 
+!! Do not change the lines starting with two comment characters "!"
 !! These lines are used by the parser to generate the final module file
 
 !
@@ -384,9 +384,9 @@
         integer,public  :: BoxNumberZ
         integer,public  :: BoxNumberXY
 
-        real(RLEN),public                              :: LocalDelta ! 
+        real(RLEN),public                              :: LocalDelta !
 
-        integer,public                                 :: InitializeModel ! 
+        integer,public                                 :: InitializeModel !
 
 
 #ifdef INCLUDE_SEAICE
@@ -524,7 +524,7 @@
      & ppsediR2=29, ppsediR6=30, ppxEPS=31, ppABIO_eps=32,              &
      & ppflN4N3n=28, ppcxoO2=23, ppOCalc=17, ppOArag=18,                &
      & ppArea=10, ppCO2=11, ppERHO=3, ppEIR=4
-        
+
         integer,public ::           ppqpcPPY(iiPhytoPlankton),          &
      & ppqncPPY(iiPhytoPlankton), ppqscPPY(iiPhytoPlankton),            &
      & ppqlcPPY(iiPhytoPlankton), ppqpcMEZ(iiMesoZooPlankton),          &
@@ -542,7 +542,7 @@
      & totpelc, totpeln, totpelp, totpels, cxoO2, eO2mO2, Chla,         &
      & flN4N3n, sediR2, sediR6, xEPS, ABIO_eps,                         &
      & flPTN6r, flN3O4n, OCalc, OArag, ERHO, EIR, ESS, EPR
-        
+
         real(RLEN),public,dimension(:,:),pointer  :: qpcPPY,            &
      & qlcPPY, qpcMEZ, qncMEZ, qpcMIZ, qncMIZ, qpcOMT, qncOMT,          &
      & qncPBA, sediPPY, sediMIZ, sediMEZ, sunPPY, eiPPY, ELiPPY,        &
@@ -616,7 +616,7 @@
      & jsurR3c, jsurR6c, jsurR6n, jsurR6p, jsurR6s, jsurO3c, jsurO3h,   &
      & jsurR2c, jsurZ5n, jsurP4l, jsurP2l, jsurP1c, jsurN3n
 
-        
+
         real(RLEN),public,dimension(:),pointer  :: jbotO2o, jbotN1p,    &
      & jbotN4n, jbotO4n, jbotN5s, jbotN6r, jbotB1c, jbotB1n, jbotB1p,   &
      & jbotP1n, jbotP1p, jbotP1l, jbotP1s, jbotP2c, jbotP2n, jbotP2p,   &
@@ -626,7 +626,7 @@
      & jbotR3c, jbotR6c, jbotR6n, jbotR6p, jbotR6s, jbotO3c, jbotO3h,   &
      & jbotR2c, jbotZ5n, jbotP4l, jbotP2l, jbotP1c, jbotN3n
 
-        
+
         real(RLEN),public,dimension(:),pointer  :: jrivO2o, jrivN1p,    &
      & jrivN4n, jrivO4n, jrivN5s, jrivN6r, jrivB1c, jrivB1n, jrivB1p,   &
      & jrivP1n, jrivP1p, jrivP1l, jrivP1s, jrivP2c, jrivP2n, jrivP2p,   &
@@ -637,7 +637,7 @@
      & jrivR2c, jrivZ5n, jrivP4l, jrivP2l, jrivP1c, jrivN3n
 
         !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        !  Other 3d-Global Variables 
+        !  Other 3d-Global Variables
         !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 
@@ -645,7 +645,7 @@
 
         !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         !  Other 2d-Global Variables (pel)
-        !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=       
+        !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 
 
@@ -653,7 +653,7 @@
 #ifdef INCLUDE_SEAICE
         !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         !  Other 2d-Global Variables (ice)
-        !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=       
+        !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 
 
@@ -662,7 +662,7 @@
 #ifdef INCLUDE_BEN
         !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         !  Other 2d-Global Variables (ben)
-        !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=       
+        !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 
 
@@ -708,13 +708,13 @@
 
 
    function ppPelBacteria(n,constituent)
-   
+
      IMPLICIT NONE
-   
+
      integer ::ppPelBacteria
      integer, intent(IN)            :: n
      integer, intent(IN)            :: constituent
-     
+
      integer,dimension(1 * iiLastElement ) :: pointers = (/             &
      &         ppB1c ,ppB1n ,ppB1p ,0     ,0     ,0                     &
      &     /)
@@ -726,18 +726,18 @@
      ELSE
        ppPelBacteria = pointers( ( (n-1) * iiLastElement )+constituent )
      ENDIF
-   
+
    END function
 
    function ppPhytoPlankton(n,constituent)
-   
+
      IMPLICIT NONE
-   
+
      integer ::ppPhytoPlankton
      integer, intent(IN)            :: n
      integer, intent(IN)            :: constituent
-     
-     integer,dimension(4 * iiLastElement ) :: pointers = (/             & 
+
+     integer,dimension(4 * iiLastElement ) :: pointers = (/             &
      &        ppP1c ,ppP1n ,ppP1p ,ppP1l ,ppP1s ,0     ,                &
      &     ppP2c ,ppP2n ,ppP2p ,ppP2l ,0     ,0     ,                   &
      &     ppP3c ,ppP3n ,ppP3p ,ppP3l ,0     ,0     ,                   &
@@ -751,18 +751,18 @@
      ELSE
        ppPhytoPlankton = pointers(((n-1)*iiLastElement ) + constituent )
      ENDIF
-   
+
    END function
 
    function ppMesoZooPlankton(n,constituent)
-   
+
      IMPLICIT NONE
-   
+
      integer ::ppMesoZooPlankton
      integer, intent(IN)            :: n
      integer, intent(IN)            :: constituent
-     
-     integer,dimension(2 * iiLastElement ) :: pointers = (/             & 
+
+     integer,dimension(2 * iiLastElement ) :: pointers = (/             &
      &        ppZ3c ,ppZ3n ,ppZ3p ,0     ,0     ,0     ,                &
      &     ppZ4c ,ppZ4n ,ppZ4p ,0     ,0     ,0                         &
      &     /)
@@ -774,18 +774,18 @@
      ELSE
        ppMesoZooPlankton = pointers( ( (n-1) * iiLastElement ) + constituent )
      ENDIF
-   
+
    END function
 
    function ppMicroZooPlankton(n,constituent)
-   
+
      IMPLICIT NONE
-   
+
      integer ::ppMicroZooPlankton
      integer, intent(IN)            :: n
      integer, intent(IN)            :: constituent
-     
-     integer,dimension(2 * iiLastElement ) :: pointers = (/             & 
+
+     integer,dimension(2 * iiLastElement ) :: pointers = (/             &
      &        ppZ5c ,ppZ5n ,ppZ5p ,0     ,0     ,0     ,                &
      &     ppZ6c ,ppZ6n ,ppZ6p ,0     ,0     ,0                         &
      &     /)
@@ -797,18 +797,18 @@
      ELSE
        ppMicroZooPlankton = pointers( ( (n-1) * iiLastElement ) + constituent )
      ENDIF
-   
+
    END function
 
    function ppPelDetritus(n,constituent)
-   
+
      IMPLICIT NONE
-   
+
      integer ::ppPelDetritus
      integer, intent(IN)            :: n
      integer, intent(IN)            :: constituent
-     
-     integer,dimension(4 * iiLastElement ) :: pointers = (/             & 
+
+     integer,dimension(4 * iiLastElement ) :: pointers = (/             &
      &        ppR1c ,ppR1n ,ppR1p ,0     ,0     ,0     ,                &
      &     ppR2c ,0     ,0     ,0     ,0     ,0     ,                   &
      &     ppR3c ,0     ,0     ,0     ,0     ,0     ,                   &
@@ -822,18 +822,18 @@
      ELSE
        ppPelDetritus = pointers( ( (n-1) * iiLastElement ) + constituent )
      ENDIF
-   
+
    END function
 
    function ppInorganic(n,constituent)
-   
+
      IMPLICIT NONE
-   
+
      integer ::ppInorganic
      integer, intent(IN)            :: n
      integer, intent(IN)            :: constituent
-     
-     integer,dimension(1 * iiLastElement ) :: pointers = (/             & 
+
+     integer,dimension(1 * iiLastElement ) :: pointers = (/             &
      &        ppO3c ,0     ,0     ,0     ,0     ,ppO3h                  &
      &     /)
 
@@ -844,103 +844,103 @@
      ELSE
        ppInorganic = pointers( ( (n-1) * iiLastElement ) + constituent )
      ENDIF
-   
+
    END function
 
    function PelBacteria(n,constituent)
-   
+
      IMPLICIT NONE
-   
+
      real(RLEN),dimension(:),pointer ::PelBacteria
      integer, intent(IN)            :: n
      integer, intent(IN)            :: constituent
-     
+
      if ( ppPelBacteria(n,constituent) > 0 ) then
        PelBacteria => D3STATE(ppPelBacteria(n,constituent),:)
      else
        PelBacteria => NULL()
      end if
-   
+
    END function
 
    function PhytoPlankton(n,constituent)
-   
+
      IMPLICIT NONE
-   
+
      real(RLEN),dimension(:),pointer ::PhytoPlankton
      integer, intent(IN)            :: n
      integer, intent(IN)            :: constituent
-     
+
      if ( ppPhytoPlankton(n,constituent) > 0 ) then
        PhytoPlankton => D3STATE(ppPhytoPlankton(n,constituent),:)
      else
        PhytoPlankton => NULL()
      end if
-   
+
    END function
 
    function MesoZooPlankton(n,constituent)
-   
+
      IMPLICIT NONE
-   
+
      real(RLEN),dimension(:),pointer ::MesoZooPlankton
      integer, intent(IN)            :: n
      integer, intent(IN)            :: constituent
-     
+
      if ( ppMesoZooPlankton(n,constituent) > 0 ) then
        MesoZooPlankton => D3STATE(ppMesoZooPlankton(n,constituent),:)
      else
        MesoZooPlankton => NULL()
      end if
-   
+
    END function
 
    function MicroZooPlankton(n,constituent)
-   
+
      IMPLICIT NONE
-   
+
      real(RLEN),dimension(:),pointer ::MicroZooPlankton
      integer, intent(IN)            :: n
      integer, intent(IN)            :: constituent
-     
+
      if ( ppMicroZooPlankton(n,constituent) > 0 ) then
        MicroZooPlankton => D3STATE(ppMicroZooPlankton(n,constituent),:)
      else
        MicroZooPlankton => NULL()
      end if
-   
+
    END function
 
    function PelDetritus(n,constituent)
-   
+
      IMPLICIT NONE
-   
+
      real(RLEN),dimension(:),pointer ::PelDetritus
      integer, intent(IN)            :: n
      integer, intent(IN)            :: constituent
-     
+
      if ( ppPelDetritus(n,constituent) > 0 ) then
        PelDetritus => D3STATE(ppPelDetritus(n,constituent),:)
      else
        PelDetritus => NULL()
      end if
-   
+
    END function
 
    function Inorganic(n,constituent)
-   
+
      IMPLICIT NONE
-   
+
      real(RLEN),dimension(:),pointer ::Inorganic
      integer, intent(IN)            :: n
      integer, intent(IN)            :: constituent
-     
+
      if ( ppInorganic(n,constituent) > 0 ) then
        Inorganic => D3STATE(ppInorganic(n,constituent),:)
      else
        Inorganic => NULL()
      end if
-   
+
    END function
 
 

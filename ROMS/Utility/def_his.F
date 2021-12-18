@@ -473,6 +473,24 @@
         IF (FoundError(exit_flag, NoError, __LINE__,                    &
      &                 __FILE__)) RETURN
 #endif
+#ifdef BFM_COUPLING
+        IF (Hout(ruPTo,ng)) THEN
+          Vinfo( 1)=Vname(1,ruPTC)
+          Vinfo( 2)=Vname(2,ruPTC)
+          Vinfo( 3)=Vname(3,ruPTC)
+          Vinfo(14)=Vname(4,ruPTC)
+          Vinfo(16)=Vname(1,idtime)
+# if defined WRITE_WATER && defined MASKING
+          Vinfo(20)='mask_rho'
+# endif
+          Vinfo(22)='coordinates'
+          Aval(5)=REAL(r3dvar,r8)
+          status=def_var(ng, iNLM, HIS(ng)%ncid, HIS(ng)%Vid(ruPTC),    &
+     &                 NF_FOUT, nvd4, t3dgrd, Aval, Vinfo, ncname)
+          IF (FoundError(exit_flag, NoError, __LINE__,                  &
+     &                   __FILE__)) RETURN
+        END IF
+#endif
 #if defined SEDIMENT && defined SED_MORPH
 !
 !  Define time-varying bathymetry.

@@ -222,6 +222,62 @@
          END DO
       END DO
       END SUBROUTINE
+!
+!-----------------------------------------------------------------------
+      SUBROUTINE READ_BFM_DIAGNOSTICS(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, eTimeIdx)
+      USE mod_param
+      USE mod_grid
+      USE mod_biology
+      USE mod_ncparam
+      USE mod_scalars
+      USE mod_parallel
+      USE mod_ocean
+      USE mem
+      USE api_bfm
+      IMPLICIT NONE
+      integer, intent(in) :: LBi, UBi, LBj, UBj, UBk, UBt
+      integer, intent(in) :: ng, tile, eTimeIdx
+      integer tileS, i, j, k, iZ, idx, iNode, NO_BOXES_XY_loc
+      real(RLEN) ARR(NO_BOXES)
+      integer :: idx_ruptc = 1
+      integer :: idx_ruztc = 2
+
+      tileS = tile - first_tile(ng) + 1
+      NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
+      CALL correct_flux_output(1,idx_ruptc,1,ARR)
+      DO iNode=1,NO_BOXES_XY_loc
+         i = ListArrayWet(ng) % TheArr(tileS) % ListI(iNode)
+         j = ListArrayWet(ng) % TheArr(tileS) % ListJ(iNode)
+         DO k=1,NO_BOXES_Z
+            iZ = k
+            idx = iZ + NO_BOXES_Z * (iNode-1)
+            ROMS_ruPTC(i,j,k) = ARR(idx)
+         END DO
+      END DO
+      CALL correct_flux_output(1,idx_ruztc,1,ARR)
+      DO iNode=1,NO_BOXES_XY_loc
+         i = ListArrayWet(ng) % TheArr(tileS) % ListI(iNode)
+         j = ListArrayWet(ng) % TheArr(tileS) % ListJ(iNode)
+         DO k=1,NO_BOXES_Z
+            iZ = k
+            idx = iZ + NO_BOXES_Z * (iNode-1)
+            ROMS_ruZTC(i,j,k) = ARR(idx)
+         END DO
+      END DO
+
+      DO iNode=1,NO_BOXES_XY_loc
+         i = ListArrayWet(ng) % TheArr(tileS) % ListI(iNode)
+         j = ListArrayWet(ng) % TheArr(tileS) % ListJ(iNode)
+         DO k=1,NO_BOXES_Z
+            iZ = k
+            idx = iZ + NO_BOXES_Z * (iNode-1)
+            ROMS_EIR(i,j,k) = EIR(idx)
+            ROMS_DIC(i,j,k) = DIC(idx)
+            ROMS_Chlo(i,j,k)  = Chla(idx)
+            ROMS_ixEPS(i,j,k) = xEPS(idx)
+         END DO
+      END DO
+      END SUBROUTINE
 !-----------------------------------------------------------------------
       SUBROUTINE COPY_T_to_D3STATE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, eTimeIdx, t)
       USE mod_param
@@ -246,6 +302,7 @@
       REAL(r8) eVal
 !      Print *, 'CP_T_D3 : stPelStateS=', stPelStateS, ' stPelStateE=', stPelStateE
 !      Print *, 'first_tile=', first_tile(ng)
+      Print *, 'stPelStateS=', stPelStateS, ' stPelStateE=', stPelStateE
       tileS = tile - first_tile(ng) + 1
       NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
       DO iNode=1,NO_BOXES_XY_loc

@@ -78,6 +78,7 @@
       USE mod_netcdf
       USE mod_ocean
       USE mod_scalars
+      USE mod_biology, only : ROMS_ruPTc
 #if defined SEDIMENT || defined BBL_MODEL
       USE mod_sedbed
       USE mod_sediment
@@ -288,6 +289,29 @@
         exit_flag=3
         ioerror=status
         RETURN
+      END IF
+#endif
+#ifdef BFM_COUPLING
+      IF (Hout(ruPTo,ng)) THEN
+        scale=1.0_r8
+        gtype=gfactor*r3dvar
+        status=nf_fwrite3d(ng, iNLM, HIS(ng)%ncid, HIS(ng)%Vid(ruPTo),  &
+     &                     HIS(ng)%Rindex, gtype,                       &
+     &                     LBi, UBi, LBj, UBj, 1, N(ng), scale,         &
+# ifdef MASKING
+     &                     GRID(ng) % rmask,                            &
+# endif
+     &                     ROMS_ruPTC)
+        IF (FoundError(status, nf90_noerr, __LINE__,                    &
+     &                 __FILE__)) THEN
+          IF (Master) THEN
+            WRITE (stdout,10) TRIM(Vname(1,idTvar(itrc))),              &
+     &                          HIS(ng)%Rindex
+          END IF
+          exit_flag=3
+          ioerror=status
+          RETURN
+        END IF
       END IF
 #endif
 #ifdef SOLVE3D
