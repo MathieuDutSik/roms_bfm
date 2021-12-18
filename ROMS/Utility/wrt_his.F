@@ -78,7 +78,6 @@
       USE mod_netcdf
       USE mod_ocean
       USE mod_scalars
-      USE mod_biology, only : ROMS_ruPTc
 #if defined SEDIMENT || defined BBL_MODEL
       USE mod_sedbed
       USE mod_sediment
@@ -301,7 +300,7 @@
 # ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 # endif
-     &                     ROMS_ruPTC)
+     &                     OCEAN(ng) % ROMS_ruPTC)
         IF (FoundError(status, nf90_noerr, __LINE__,                    &
      &                 __FILE__)) THEN
           IF (Master) THEN

@@ -98,6 +98,23 @@
 # if defined BIO_FENNEL && defined CARBON
           real(r8), pointer :: pH(:,:)
 # endif
+# if defined BFM_COUPLING
+          real(r8), pointer :: ROMS_EIR(:,:,:)
+          real(r8), pointer :: ROMS_DIC(:,:,:)
+          real(r8), pointer :: ROMS_Chlo(:,:,:)
+          real(r8), pointer :: ROMS_siP1(:,:,:)
+          real(r8), pointer :: ROMS_siP2(:,:,:)
+          real(r8), pointer :: ROMS_siP3(:,:,:)
+          real(r8), pointer :: ROMS_siP4(:,:,:)
+          real(r8), pointer :: ROMS_eiP1(:,:,:)
+          real(r8), pointer :: ROMS_eiP2(:,:,:)
+          real(r8), pointer :: ROMS_eiP3(:,:,:)
+          real(r8), pointer :: ROMS_eiP4(:,:,:)
+          real(r8), pointer :: ROMS_ruPTC(:,:,:)
+          real(r8), pointer :: ROMS_ruZTC(:,:,:)
+          real(r8), pointer :: ROMS_ixEPS(:,:,:)
+# endif
+
 # ifdef RED_TIDE
           real(r8), pointer :: CystIni(:,:)
           real(r8), pointer :: DIN_obs(:,:,:)
@@ -351,6 +368,24 @@
 # if defined BIO_FENNEL && defined CARBON
       allocate ( OCEAN(ng) % pH(LBi:UBi,LBj:UBj) )
 # endif
+
+# if defined BFM_COUPLING
+      allocate( OCEAN(ng) % ROMS_EIR(LBi:UBi,LBj:UBj,N(ng)))
+      allocate( OCEAN(ng) % ROMS_DIC(LBi:UBi,LBj:UBj,N(ng)))
+      allocate( OCEAN(ng) % ROMS_Chlo(LBi:UBi,LBj:UBj,N(ng)))
+      allocate( OCEAN(ng) % ROMS_siP1(LBi:UBi,LBj:UBj,N(ng)))
+      allocate( OCEAN(ng) % ROMS_siP2(LBi:UBi,LBj:UBj,N(ng)))
+      allocate( OCEAN(ng) % ROMS_siP3(LBi:UBi,LBj:UBj,N(ng)))
+      allocate( OCEAN(ng) % ROMS_siP4(LBi:UBi,LBj:UBj,N(ng)))
+      allocate( OCEAN(ng) % ROMS_eiP1(LBi:UBi,LBj:UBj,N(ng)))
+      allocate( OCEAN(ng) % ROMS_eiP2(LBi:UBi,LBj:UBj,N(ng)))
+      allocate( OCEAN(ng) % ROMS_eiP3(LBi:UBi,LBj:UBj,N(ng)))
+      allocate( OCEAN(ng) % ROMS_eiP4(LBi:UBi,LBj:UBj,N(ng)))
+      allocate( OCEAN(ng) % ROMS_ruPTC(LBi:UBi,LBj:UBj,N(ng)))
+      allocate( OCEAN(ng) % ROMS_ruZTC(LBi:UBi,LBj:UBj,N(ng)))
+      allocate( OCEAN(ng) % ROMS_ixEPS(LBi:UBi,LBj:UBj,N(ng)))
+# endif 
+
 
 # ifdef RED_TIDE
       allocate ( OCEAN(ng) % CystIni(LBi:UBi,LBj:UBj) )

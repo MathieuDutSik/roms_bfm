@@ -245,13 +245,14 @@
       tileS = tile - first_tile(ng) + 1
       NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
       CALL correct_flux_output(1,idx_ruptc,1,ARR)
+
       DO iNode=1,NO_BOXES_XY_loc
          i = ListArrayWet(ng) % TheArr(tileS) % ListI(iNode)
          j = ListArrayWet(ng) % TheArr(tileS) % ListJ(iNode)
          DO k=1,NO_BOXES_Z
             iZ = k
             idx = iZ + NO_BOXES_Z * (iNode-1)
-            ROMS_ruPTC(i,j,k) = ARR(idx)
+            OCEAN(ng) % ROMS_ruPTC(i,j,k) = ARR(idx)
          END DO
       END DO
       CALL correct_flux_output(1,idx_ruztc,1,ARR)
@@ -261,7 +262,7 @@
          DO k=1,NO_BOXES_Z
             iZ = k
             idx = iZ + NO_BOXES_Z * (iNode-1)
-            ROMS_ruZTC(i,j,k) = ARR(idx)
+            OCEAN(ng) % ROMS_ruZTC(i,j,k) = ARR(idx)
          END DO
       END DO
 
@@ -271,10 +272,10 @@
          DO k=1,NO_BOXES_Z
             iZ = k
             idx = iZ + NO_BOXES_Z * (iNode-1)
-            ROMS_EIR(i,j,k) = EIR(idx)
-            ROMS_DIC(i,j,k) = DIC(idx)
-            ROMS_Chlo(i,j,k)  = Chla(idx)
-            ROMS_ixEPS(i,j,k) = xEPS(idx)
+            OCEAN(ng) % ROMS_EIR(i,j,k) = EIR(idx)
+            OCEAN(ng) % ROMS_DIC(i,j,k) = DIC(idx)
+            OCEAN(ng) % ROMS_Chlo(i,j,k)  = Chla(idx)
+            OCEAN(ng) % ROMS_ixEPS(i,j,k) = xEPS(idx)
          END DO
       END DO
       END SUBROUTINE

@@ -100,23 +100,6 @@
 
       integer, allocatable :: MULTIPLIER(:)
       integer PosMultiplier
-      real(r8), allocatable :: ROMS_EIR(:,:,:)
-      real(r8), allocatable :: ROMS_DIC(:,:,:)
-      real(r8), allocatable :: ROMS_Chlo(:,:,:)
-      real(r8), allocatable :: ROMS_siP1(:,:,:)
-      real(r8), allocatable :: ROMS_siP2(:,:,:)
-      real(r8), allocatable :: ROMS_siP3(:,:,:)
-      real(r8), allocatable :: ROMS_siP4(:,:,:)
-      real(r8), allocatable :: ROMS_eiP1(:,:,:)
-      real(r8), allocatable :: ROMS_eiP2(:,:,:)
-      real(r8), allocatable :: ROMS_eiP3(:,:,:)
-      real(r8), allocatable :: ROMS_eiP4(:,:,:)
-      real(r8), allocatable :: ROMS_ruPTC(:,:,:)
-      real(r8), allocatable :: ROMS_ruZTC(:,:,:)
-      real(r8), allocatable :: ROMS_ixEPS(:,:,:)
-      integer dim1
-      integer dim2
-      integer dim3
 
       type(ARRAY_WET), allocatable :: ListArrayWet(:)
 
@@ -252,22 +235,6 @@
 !      ruPTc = ic+62
 !      ruZTc = ic+63
 !      ixEPS = ic+64
-
-      allocate(ROMS_EIR(dim1, dim2, dim3))
-      allocate(ROMS_DIC(dim1, dim2, dim3))
-      allocate(ROMS_Chlo(dim1, dim2, dim3))
-      allocate(ROMS_siP1(dim1, dim2, dim3))
-      allocate(ROMS_siP2(dim1, dim2, dim3))
-      allocate(ROMS_siP3(dim1, dim2, dim3))
-      allocate(ROMS_siP4(dim1, dim2, dim3))
-      allocate(ROMS_eiP1(dim1, dim2, dim3))
-      allocate(ROMS_eiP2(dim1, dim2, dim3))
-      allocate(ROMS_eiP3(dim1, dim2, dim3))
-      allocate(ROMS_eiP4(dim1, dim2, dim3))
-      allocate(ROMS_ruPTC(dim1, dim2, dim3))
-      allocate(ROMS_ruZTC(dim1, dim2, dim3))
-      allocate(ROMS_ixEPS(dim1, dim2, dim3))
-
 
 
       RETURN
