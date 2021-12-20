@@ -81,6 +81,9 @@ subroutine correct_flux_output(mode, nr0,zlev,nlev,out)
   real(RLEN),dimension(NO_BOXES)   :: hulp
 #endif
   nr=nr0
+  Print *, 'nr0=', nr0, ' RLEN=', RLEN, ' nlev=', nlev
+  Print *, 'size(out)=', size(out)
+  Print *, 'size(D3FLUX_FUNC)=', size(D3FLUX_FUNC,1), size(D3FLUX_FUNC,2)
   out(:) = D3FLUX_FUNC(nr0,:)
   do idx_i=stPelStateS, stPelStateE
        origin      = idx_i

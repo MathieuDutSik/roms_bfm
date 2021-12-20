@@ -245,7 +245,8 @@
 
       tileS = tile - first_tile(ng) + 1
       NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
-      CALL correct_flux_output(1,idx_ruptc,1,ARR)
+      Print *, 'NO_BOXES=', NO_BOXES, ' RLEN=', RLEN
+      CALL correct_flux_output(1,idx_ruptc,1,NO_BOXES,ARR)
       sumABS_ruPTc = 0
       DO iNode=1,NO_BOXES_XY_loc
          i = ListArrayWet(ng) % TheArr(tileS) % ListI(iNode)
@@ -258,7 +259,7 @@
          END DO
       END DO
       Print *, 'sumABS_ruPTc=', sumABS_ruPTc
-      CALL correct_flux_output(1,idx_ruztc,1,ARR)
+      CALL correct_flux_output(1,idx_ruztc,1,NO_BOXES,ARR)
       DO iNode=1,NO_BOXES_XY_loc
          i = ListArrayWet(ng) % TheArr(tileS) % ListI(iNode)
          j = ListArrayWet(ng) % TheArr(tileS) % ListJ(iNode)
