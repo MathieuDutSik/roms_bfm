@@ -384,7 +384,7 @@
       allocate( OCEAN(ng) % ROMS_ruPTC(LBi:UBi,LBj:UBj,N(ng)))
       allocate( OCEAN(ng) % ROMS_ruZTC(LBi:UBi,LBj:UBj,N(ng)))
       allocate( OCEAN(ng) % ROMS_ixEPS(LBi:UBi,LBj:UBj,N(ng)))
-# endif 
+# endif
 
 
 # ifdef RED_TIDE

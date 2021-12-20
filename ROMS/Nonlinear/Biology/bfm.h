@@ -224,7 +224,7 @@
       END SUBROUTINE
 !
 !-----------------------------------------------------------------------
-      SUBROUTINE READ_BFM_DIAGNOSTICS(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, eTimeIdx)
+      SUBROUTINE READ_BFM_DIAGNOSTICS(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile)
       USE mod_param
       USE mod_grid
       USE mod_biology
@@ -236,16 +236,17 @@
       USE api_bfm
       IMPLICIT NONE
       integer, intent(in) :: LBi, UBi, LBj, UBj, UBk, UBt
-      integer, intent(in) :: ng, tile, eTimeIdx
+      integer, intent(in) :: ng, tile
       integer tileS, i, j, k, iZ, idx, iNode, NO_BOXES_XY_loc
       real(RLEN) ARR(NO_BOXES)
+      REAL(8) sumABS_ruPTc
       integer :: idx_ruptc = 1
       integer :: idx_ruztc = 2
 
       tileS = tile - first_tile(ng) + 1
       NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
       CALL correct_flux_output(1,idx_ruptc,1,ARR)
-
+      sumABS_ruPTc = 0
       DO iNode=1,NO_BOXES_XY_loc
          i = ListArrayWet(ng) % TheArr(tileS) % ListI(iNode)
          j = ListArrayWet(ng) % TheArr(tileS) % ListJ(iNode)
@@ -253,8 +254,10 @@
             iZ = k
             idx = iZ + NO_BOXES_Z * (iNode-1)
             OCEAN(ng) % ROMS_ruPTC(i,j,k) = ARR(idx)
+            sumABS_ruPTc = sumABS_ruPTc + ABS(ARR(idx))
          END DO
       END DO
+      Print *, 'sumABS_ruPTc=', sumABS_ruPTc
       CALL correct_flux_output(1,idx_ruztc,1,ARR)
       DO iNode=1,NO_BOXES_XY_loc
          i = ListArrayWet(ng) % TheArr(tileS) % ListI(iNode)
@@ -976,6 +979,7 @@
 !       for outputting results.
 !
         CALL COPY_D3STATE_to_T(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, nstp, t)
+        CALL READ_BFM_DIAGNOSTICS(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile)
 !       Need to put code for the diagnostics. We do not put yet the dlux. Maybe never.
       END IF
       END SUBROUTINE biology_tile

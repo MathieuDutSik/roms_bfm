@@ -79,8 +79,8 @@
       integer :: eiP2_                  !
       integer :: eiP3_                  !
       integer :: eiP4_                  !
-      integer :: ruPTc                  !
-      integer :: ruZTc                  !
+      integer :: ruPTo                  !
+      integer :: ruZTo                  !
       integer :: ixEPS                  !
 !
 !  Biological parameters.

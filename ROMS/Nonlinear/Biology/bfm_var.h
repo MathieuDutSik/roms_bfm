@@ -139,36 +139,36 @@
 
 
             CASE ('EIR_')
-              idTvar(iEIR_)=varid
+              iEIR_=varid
             CASE ('iDIC_')
-              idTvar(iDIC_)=varid
+              iDIC_=varid
             CASE ('iChlo')
-              idTvar(iChlo)=varid
+              iChlo=varid
 
             CASE ('siP1_')
-              idTvar(siP1_)=varid
+              siP1_=varid
             CASE ('siP2_')
-              idTvar(siP2_)=varid
+              siP2_=varid
             CASE ('siP3_')
-              idTvar(siP3_)=varid
+              siP3_=varid
             CASE ('siP4_')
-              idTvar(siP4_)=varid
+              siP4_=varid
 
             CASE ('eiP1_')
-              idTvar(eiP1_)=varid
+              eiP1_=varid
             CASE ('eiP2_')
-              idTvar(eiP2_)=varid
+              eiP2_=varid
             CASE ('eiP3_')
-              idTvar(eiP3_)=varid
+              eiP3_=varid
             CASE ('eiP4_')
-              idTvar(eiP4_)=varid
+              eiP4_=varid
 
-            CASE ('ruPTc')
-              idTvar(ruPTc)=varid
-            CASE ('ruZTc')
-              idTvar(ruZTc)=varid
+            CASE ('ruPTo')
+              ruPTo=varid
+            CASE ('ruZTo')
+              ruZTo=varid
             CASE ('ixEPS')
-              idTvar(ixEPS)=varid
+              ixEPS=varid
 
 /*
 **  Biological tracers open boundary conditions.
@@ -304,34 +304,3 @@
             CASE ('idRtrc(iO3h_)')
               idRtrc(iO3h_)=varid
 
-            CASE ('idRtrc(iEIR_)')
-              idRtrc(iEIR_)=varid
-            CASE ('idRtrc(iDIC_)')
-              idRtrc(iDIC_)=varid
-            CASE ('idRtrc(iChlo)')
-              idRtrc(iChlo)=varid
-
-            CASE ('idRtrc(siP1_)')
-              idRtrc(siP1_)=varid
-            CASE ('idRtrc(siP2_)')
-              idRtrc(siP2_)=varid
-            CASE ('idRtrc(siP3_)')
-              idRtrc(siP3_)=varid
-            CASE ('idRtrc(siP4_)')
-              idRtrc(siP4_)=varid
-
-            CASE ('idRtrc(eiP1_)')
-              idRtrc(eiP1_)=varid
-            CASE ('idRtrc(eiP2_)')
-              idRtrc(eiP2_)=varid
-            CASE ('idRtrc(eiP3_)')
-              idRtrc(eiP3_)=varid
-            CASE ('idRtrc(eiP4_)')
-              idRtrc(eiP4_)=varid
-
-            CASE ('idRtrc(ruPTc)')
-              idRtrc(ruPTc)=varid
-            CASE ('idRtrc(ruZTc)')
-              idRtrc(ruZTc)=varid
-            CASE ('idRtrc(ixEPS)')
-              idRtrc(ixEPS)=varid

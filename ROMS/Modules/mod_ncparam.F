@@ -362,21 +362,6 @@
         integer  :: id2dRV        ! 2D relative vorticity
         integer  :: id3dPV        ! 3D potential vorticity
         integer  :: id3dRV        ! 3D relative vorticity
-#ifdef BFM_COUPLING
-        integer  :: iEIR_
-        integer  :: iDIC_
-        integer  :: ixEPS
-        integer  :: siP1_
-        integer  :: siP2_
-        integer  :: siP3_
-        integer  :: siP4_
-        integer  :: eiP1_
-        integer  :: eiP2_
-        integer  :: eiP3_
-        integer  :: eiP4_
-        integer  :: ruPTo
-        integer  :: ruZTo
-#endif
 
 
 
@@ -870,6 +855,7 @@
 !
 !  Open input variable information file.
 !
+      Print *, 'varname=', varname
       OPEN (inp, FILE=TRIM(varname), FORM='formatted', STATUS='old',    &
      &      ERR=10)
       GOTO 20

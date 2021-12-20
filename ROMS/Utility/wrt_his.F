@@ -100,6 +100,9 @@
       USE uv_rotate_mod,       ONLY : uv_rotate3d
 #endif
       USE strings_mod,         ONLY : FoundError
+#ifdef BIOLOGY
+      USE mod_biology
+#endif
 !
       implicit none
 !
@@ -291,6 +294,8 @@
       END IF
 #endif
 #ifdef BFM_COUPLING
+      Print *, 'wrt_his : Before Hout(ruPTo,ng)=', Hout(ruPTo,ng), ' ruPTo=', ruPTo
+      Print *, 'wrt_his : SIZE(HOUT)=', size(Hout,1), size(Hout,2)
       IF (Hout(ruPTo,ng)) THEN
         scale=1.0_r8
         gtype=gfactor*r3dvar

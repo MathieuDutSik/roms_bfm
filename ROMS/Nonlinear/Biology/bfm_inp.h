@@ -171,6 +171,13 @@
                   Hout(i,ng)=Ltrc(itrc,ng)
                 END DO
               END DO
+            CASE ('Hout(ruPTo)')
+              IF (ruPTo.eq.0) THEN
+                IF (Master) WRITE (out,280) 'ruPTo'
+                exit_flag=5
+                RETURN
+              END IF
+              Npts=load_l(Nval, Cval, Ngrids, Hout(ruPTo,:))
             CASE ('Qout(idTvar)')
               Npts=load_l(Nval, Cval, NBT*Ngrids, Ltrc)
               DO ng=1,Ngrids
@@ -204,7 +211,8 @@
           END SELECT
         END IF
       END DO
-  10  IF (Master) WRITE (out,40) line
+280 FORMAT (/,' READ_biology - Variable index not yet loaded, ', a)
+10  IF (Master) WRITE (out,40) line
       exit_flag=4
       RETURN
   20  CONTINUE
