@@ -10,11 +10,11 @@
 !
 ! DESCRIPTION
 !   Definition of Global Shared Memory
-!  
+!
 !   This module contains all the structural definitions of the BFM
 !   and sets up the memory layout.
-!   It is automatically generated from the prototype file 
-!   BFM/proto/ModuleMem.proto by including the information from 
+!   It is automatically generated from the prototype file
+!   BFM/proto/ModuleMem.proto by including the information from
 !   BFM/General/GlobalDefsBFM.model
 !   Do not directly edit this code because changes will be lost at
 !   any new compilation.
@@ -26,7 +26,7 @@
 !   ---
 !
 ! COPYING
-!   
+!
 !   Copyright (C) 2015 BFM System Team (bfm_st@lists.cmcc.it)
 !   Copyright (C) 2006 P. Ruardij, M. Vichi
 !   (rua@nioz.nl, vichi@bo.ingv.it)
@@ -44,7 +44,7 @@
 !
 !
 !! IMPORTANT NOTE:
-!! Do not change the lines starting with two comment characters "!" 
+!! Do not change the lines starting with two comment characters "!"
 !! These lines are used by the parser to generate the final module file
 
 !
@@ -91,7 +91,7 @@
         ! Definition of arrays which will hold all state variables and other
         ! global variables  used for exchange between submodels and/or output
         !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        
+
         real(RLEN),public,pointer,dimension(:,:) :: D3STATE
 
 #ifndef EXPLICIT_SINK
@@ -376,7 +376,7 @@
         real(RLEN),public,dimension(:),pointer  :: %pel-field-pointer river
 
         !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        !  Other 3d-Global Variables 
+        !  Other 3d-Global Variables
         !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
         real(RLEN),public %3d-variable-pel
@@ -384,7 +384,7 @@
 
         !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         !  Other 2d-Global Variables (pel)
-        !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=       
+        !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
         real(RLEN),public %2d-variable-pel
         integer,public    %2d-intvar-pel
@@ -392,7 +392,7 @@
 #ifdef INCLUDE_SEAICE
         !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         !  Other 2d-Global Variables (ice)
-        !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=       
+        !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
         real(RLEN),public %2d-variable-ice
         integer,public    %2d-intvar-ice
@@ -401,7 +401,7 @@
 #ifdef INCLUDE_BEN
         !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         !  Other 2d-Global Variables (ben)
-        !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=       
+        !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
         real(RLEN),public %2d-variable-ben
         integer,public    %2d-intvar-ben
@@ -462,9 +462,7 @@
 #endif
 
 
-#ifdef BFM_ROMS
-#include "FluxFunctions.h"
-#elif defined EXPLICIT_SINK
+#if defined EXPLICIT_SINK
 #include "FluxFunctions_sourcesink.h90"
 #else
 #include "FluxFunctions.h90"

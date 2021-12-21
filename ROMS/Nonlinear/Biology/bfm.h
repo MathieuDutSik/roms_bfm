@@ -972,7 +972,6 @@
              GRID(ng) % z_r(icFound,jcFound,kcFound)
 #endif
           END DO
-          call ResetFluxes
         END IF
 !
 !       Now copying back the field values
@@ -981,6 +980,9 @@
 !
         CALL COPY_D3STATE_to_T(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, nstp, t)
         CALL READ_BFM_DIAGNOSTICS(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile)
+        IF (SourceTermD3STATE) THEN
+          CALL ResetFluxes
+        END IF
 !       Need to put code for the diagnostics. We do not put yet the dlux. Maybe never.
       END IF
       END SUBROUTINE biology_tile

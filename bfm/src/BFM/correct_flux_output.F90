@@ -85,9 +85,11 @@ subroutine correct_flux_output(mode, nr0,zlev,nlev,out)
   Print *, 'size(out)=', size(out)
   Print *, 'size(D3FLUX_FUNC)=', size(D3FLUX_FUNC,1), size(D3FLUX_FUNC,2)
   out(:) = D3FLUX_FUNC(nr0,:)
+  Print *, '1 : max(out)=', maxval(out)
   do idx_i=stPelStateS, stPelStateE
        origin      = idx_i
        destination = idx_i
+       Print *, 'allocated(D3FLUX_MATRIX(origin,destination)%p)=', allocated(D3FLUX_MATRIX(origin,destination)%p)
        if( allocated( D3FLUX_MATRIX(origin,destination)%p ) ) then
         do idx_j=1, SIZE(D3FLUX_MATRIX(origin,destination)%p)
     if( ABS(D3FLUX_MATRIX(origin,destination)%p(idx_j)) .eq. nr0 ) then
@@ -110,4 +112,5 @@ subroutine correct_flux_output(mode, nr0,zlev,nlev,out)
         end do
      end if
   end do
+  Print *, '2 : max(out)=', maxval(out)
 end subroutine correct_flux_output

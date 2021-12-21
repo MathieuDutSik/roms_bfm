@@ -961,9 +961,7 @@
 #endif
 
 
-#ifdef BFM_ROMS
-#include "FluxFunctions.h"
-#elif defined EXPLICIT_SINK
+#if defined EXPLICIT_SINK
 #include "FluxFunctions_sourcesink.h"
 #else
 #include "FluxFunctions.h"

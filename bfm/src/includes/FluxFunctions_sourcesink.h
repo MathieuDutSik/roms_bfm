@@ -43,6 +43,7 @@
             !BEGIN compute
             !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
+            Print *, 'Passing by FluxFunctions_sourcesink : flux_vector'
             if ( destination ==0 ) then
                ! call (iiSub,origin,origin,-flux)
                destination = origin
@@ -65,24 +66,30 @@
                 enddo
                 D23="Pelagic"
                 if ( iiSub == iiBen) D23="Benthic"
-                write(LOGUNIT,'(''In '',A,'':origin='',i4,'' destination='',i4)') &
-                  D23, origin,destination
+                write(LOGUNIT,'(''In '',A,'':origin='',i4,''            &
+     &            destination='',i4)') D23, origin,destination
                 write(LOGUNIT,'(''flux='',(G16.8))') flux
                 STDERR  "Error in flux_vector function: negative flux !"
                 do i=1,size(flux)
                   if (flux(i)< 0.0D+00) then
                     if( iiSub == iiPel ) then
-                      write(LOGUNIT,*) "state value origin:",D3STATE(origin,i)
-                      write(LOGUNIT,*) "state value destination:",D3STATE(destination,i)
+                      write(LOGUNIT,*) "state value origin:",           &
+     &                  D3STATE(origin,i)
+                      write(LOGUNIT,*) "state value destination:",      &
+     &                  D3STATE(destination,i)
 #if defined INCLUDE_SEAICE
                     elseif ( iiSub == iiIce ) then
-                      write(LOGUNIT,*) "state value origin:",D2STATE_ICE(origin,i)
-                      write(LOGUNIT,*) "state value destination:",D2STATE_ICE(destination,i)
+                      write(LOGUNIT,*) "state value origin:",           &
+     &                  D2STATE_ICE(origin,i)
+                      write(LOGUNIT,*) "state value destination:",      &
+     &                  D2STATE_ICE(destination,i)
 #endif
 #if defined INCLUDE_BEN
                     elseif ( iiSub == iiBen ) then
-                      write(LOGUNIT,*) "state value origin:",D2STATE_BEN(origin,i)
-                      write(LOGUNIT,*) "state value destination:",D2STATE_BEN(destination,i)
+                      write(LOGUNIT,*) "state value origin:",           &
+     &                  D2STATE_BEN(origin,i)
+                      write(LOGUNIT,*) "state value destination:",      &
+     &                  D2STATE_BEN(destination,i)
 #endif
                     endif
                   endif
@@ -92,46 +99,52 @@
 #endif
               select case ( iiSub )
                 case (iiPel)
-                   D3SINK(origin,destination,:)  =  D3SINK(origin,destination,:) + & 
-                        flux*DAY_PER_SEC
-                   D3SOURCE(destination,origin,:)=  D3SOURCE(destination,origin,:) + &
-                        flux*DAY_PER_SEC
-                   if( allocated( D3FLUX_MATRIX ) .AND. &
-                        allocated( D3FLUX_MATRIX(origin,destination)%p ) ) then
-                      do j=1, SIZE(D3FLUX_MATRIX(origin,destination)%p)
-                         D3FLUX_FUNC( ABS(D3FLUX_MATRIX(origin,destination)%p(j)), : ) =      &
-                              D3FLUX_FUNC( ABS(D3FLUX_MATRIX(origin,destination)%p(j)), : ) + &
-                              (SIGN( 1, D3FLUX_MATRIX(origin,destination)%p(j) ) * flux )
-                      end do
+                   D3SINK(origin,destination,:) =                       &
+     &               D3SINK(origin,destination,:) +                     &
+     &               flux*DAY_PER_SEC
+                   D3SOURCE(destination,origin,:) =                     &
+     &               D3SOURCE(destination,origin,:) +                   &
+     &               flux*DAY_PER_SEC
+                   if( allocated( D3FLUX_MATRIX ) .AND.                 &
+     &        allocated( D3FLUX_MATRIX(origin,destination)%p ) ) then
+      do j=1, SIZE(D3FLUX_MATRIX(origin,destination)%p)
+       D3FLUX_FUNC( ABS(D3FLUX_MATRIX(origin,destination)%p(j)), : ) =  &
+     &  D3FLUX_FUNC( ABS(D3FLUX_MATRIX(origin,destination)%p(j)), : ) + &
+     &     (SIGN( 1, D3FLUX_MATRIX(origin,destination)%p(j) ) * flux )
+      end do
                    endif
 #if defined INCLUDE_SEAICE
                 case (iiIce)
-                   D2SINK_ICE(origin,destination,:)  =  D2SINK_ICE(origin,destination,:) + & 
-                        flux*DAY_PER_SEC
-                   D2SOURCE_ICE(destination,origin,:)=  D2SOURCE_ICE(destination,origin,:) + &
-                        flux*DAY_PER_SEC
-                   if( allocated( D2FLUX_MATRIX_ICE ) .AND. &
-                        allocated( D2FLUX_MATRIX_ICE(origin,destination)%p ) ) then
-                      do j=1, SIZE(D2FLUX_MATRIX_ICE(origin,destination)%p)
-                         D2FLUX_FUNC_ICE( ABS(D2FLUX_MATRIX_ICE(origin,destination)%p(j)) ) =      &
-                              D2FLUX_FUNC_ICE( ABS(D2FLUX_MATRIX_ICE(origin,destination)%p(j)) ) + &
-                              (SIGN( 1, D2FLUX_MATRIX_ICE(origin,destination)%p(j) ) * flux(1) )
-                      end do
+                   D2SINK_ICE(origin,destination,:)  =                  &
+     &               D2SINK_ICE(origin,destination,:) +                 &
+     &               flux*DAY_PER_SEC
+                   D2SOURCE_ICE(destination,origin,:) =                 &
+     &               D2SOURCE_ICE(destination,origin,:) +               &
+     &               flux*DAY_PER_SEC
+                   if( allocated( D2FLUX_MATRIX_ICE ) .AND.             &
+     &  allocated( D2FLUX_MATRIX_ICE(origin,destination)%p ) ) then
+      do j=1, SIZE(D2FLUX_MATRIX_ICE(origin,destination)%p)
+      D2FLUX_FUNC_ICE(ABS(D2FLUX_MATRIX_ICE(origin,destination)%p(j)))= &
+     &D2FLUX_FUNC_ICE(ABS(D2FLUX_MATRIX_ICE(origin,destination)%p(j)))+ &
+     & (SIGN(1,D2FLUX_MATRIX_ICE(origin,destination)%p(j) ) * flux(1))
+      end do
                    end if
 #endif
 #if defined INCLUDE_BEN
                 case (iiBen)
-                   D2SINK_BEN(origin,destination,:)  =  D2SINK_BEN(origin,destination,:) + & 
-                        flux*DAY_PER_SEC
-                   D2SOURCE_BEN(destination,origin,:)=  D2SOURCE_BEN(destination,origin,:) + &
-                        flux*DAY_PER_SEC
-                   if( allocated( D2FLUX_MATRIX_BEN ) .AND. &
-                        allocated( D2FLUX_MATRIX_BEN(origin,destination)%p ) ) then
-                      do j=1, SIZE(D2FLUX_MATRIX_BEN(origin,destination)%p)
-                         D2FLUX_FUNC_BEN( ABS(D2FLUX_MATRIX_BEN(origin,destination)%p(j)) ) =      &
-                              D2FLUX_FUNC_BEN( ABS(D2FLUX_MATRIX_BEN(origin,destination)%p(j)) ) + &
-                              (SIGN( 1, D2FLUX_MATRIX_BEN(origin,destination)%p(j) ) * flux(1) )
-                      end do
+                   D2SINK_BEN(origin,destination,:)  =                  &
+      &              D2SINK_BEN(origin,destination,:) +                 &
+      &              flux*DAY_PER_SEC
+                   D2SOURCE_BEN(destination,origin,:) =                 &
+      &              D2SOURCE_BEN(destination,origin,:) +               &
+      &              flux*DAY_PER_SEC
+                   if( allocated( D2FLUX_MATRIX_BEN ) .AND.             &
+      &  allocated( D2FLUX_MATRIX_BEN(origin,destination)%p ) ) then
+       do j=1, SIZE(D2FLUX_MATRIX_BEN(origin,destination)%p)
+       D2FLUX_FUNC_BEN(ABS(D2FLUX_MATRIX_BEN(origin,destination)%p(j)))=&
+      &D2FLUX_FUNC_BEN(ABS(D2FLUX_MATRIX_BEN(origin,destination)%p(j)))+&
+      & (SIGN(1,D2FLUX_MATRIX_BEN(origin,destination)%p(j) ) * flux(1))
+       end do
                    end if
 #endif
               end select
@@ -139,78 +152,93 @@
               select case ( iiSub )
                 case (iiPel)
                   where ( flux > ZERO )
-                    D3SOURCE(origin,destination,:) =D3SOURCE(origin,destination,:) + &
-                      flux*DAY_PER_SEC
+                    D3SOURCE(origin,destination,:) =                    &
+      &               D3SOURCE(origin,destination,:) +                  &
+      &               flux*DAY_PER_SEC
                   elsewhere
-                    D3SINK(destination,origin,:) =D3SINK(destination,origin,:) - &
-                      flux*DAY_PER_SEC
+                    D3SINK(destination,origin,:) =                      &
+      &               D3SINK(destination,origin,:) -                    &
+      &               flux*DAY_PER_SEC
                   end where
-                  if( allocated( D3FLUX_MATRIX ) .AND. &
-                       allocated( D3FLUX_MATRIX(origin,destination)%p ) ) then
-                     do j=1, SIZE(D3FLUX_MATRIX(origin,destination)%p)
-                        if( D3FLUX_MATRIX(origin,destination)%dir(j) == 1 ) then ! "A->B" => (out flow) => flux < ZERO => D3SINK
-                           where( flux < ZERO )
-                              D3FLUX_FUNC( ABS(D3FLUX_MATRIX(origin,destination)%p(j)), : ) =     &
-                                   D3FLUX_FUNC( ABS(D3FLUX_MATRIX(origin,destination)%p(j)), : ) - flux
-                           end where
-                        else ! "A<-B" => (in flow) => flux > ZERO => D3SOURCE
-                           where( flux > ZERO )
-                              D3FLUX_FUNC( ABS(D3FLUX_MATRIX(origin,destination)%p(j)), : ) =     &
-                                   D3FLUX_FUNC( ABS(D3FLUX_MATRIX(origin,destination)%p(j)), : ) + flux
-                           end where
-                        end if
-                     end do
+                  if( allocated( D3FLUX_MATRIX ) .AND.                  &
+      & allocated(D3FLUX_MATRIX(origin,destination)%p ) ) then
+       do j=1, SIZE(D3FLUX_MATRIX(origin,destination)%p)
+! "A->B" => (out flow) => flux < ZERO => D3SINK
+         if( D3FLUX_MATRIX(origin,destination)%dir(j) == 1 ) then
+           where( flux < ZERO )
+        D3FLUX_FUNC(ABS(D3FLUX_MATRIX(origin,destination)%p(j)),:) =    &
+      & D3FLUX_FUNC(ABS(D3FLUX_MATRIX(origin,destination)%p(j)),:) -    &
+      &   flux
+           end where
+         else ! "A<-B" => (in flow) => flux > ZERO => D3SOURCE
+           where( flux > ZERO )
+        D3FLUX_FUNC(ABS(D3FLUX_MATRIX(origin,destination)%p(j)),:) =    &
+      & D3FLUX_FUNC(ABS(D3FLUX_MATRIX(origin,destination)%p(j)),:) +    &
+      &   flux
+           end where
+         end if
+       end do
                   endif
 #if defined INCLUDE_SEAICE
                 case (iiIce)
                   where ( flux > ZERO )
-                    D2SOURCE_ICE(origin,destination,:) =D2SOURCE_ICE(origin,destination,:) + &
-                      flux*DAY_PER_SEC
+                    D2SOURCE_ICE(origin,destination,:) =                &
+      &               D2SOURCE_ICE(origin,destination,:) +              &
+      &               flux*DAY_PER_SEC
                   elsewhere
-                    D2SINK_ICE(destination,origin,:) =D2SINK_ICE(destination,origin,:) - &
-                      flux*DAY_PER_SEC
+                    D2SINK_ICE(destination,origin,:) =                  &
+      &               D2SINK_ICE(destination,origin,:) -                &
+      &               flux*DAY_PER_SEC
                   end where
-                  if( allocated( D2FLUX_MATRIX_ICE ) .AND. &
-                       allocated( D2FLUX_MATRIX_ICE(origin,destination)%p ) ) then
-                     do j=1, SIZE(D2FLUX_MATRIX_ICE(origin,destination)%p)
-                        if( D2FLUX_MATRIX_ICE(origin,destination)%dir(j) == 1 ) then ! "A->B" => (out flow) => flux < ZERO => D2SINK_ICE
-                           if( flux(1) < ZERO ) then 
-                              D2FLUX_FUNC_ICE( ABS(D2FLUX_MATRIX_ICE(origin,destination)%p(j)) ) =     &
-                                   D2FLUX_FUNC_ICE( ABS(D2FLUX_MATRIX_ICE(origin,destination)%p(j)) ) - flux(1)
-                           end if
-                        else ! "A<-B" => (in flow) => flux > ZERO => D2SOURCE_ICE
-                           if( flux(1) > ZERO ) then
-                              D2FLUX_FUNC_ICE( ABS(D2FLUX_MATRIX_ICE(origin,destination)%p(j)) ) =     &
-                                   D2FLUX_FUNC_ICE( ABS(D2FLUX_MATRIX_ICE(origin,destination)%p(j)) ) + flux(1)
-                           end if
-                        end if
-                     end do
+                  if( allocated( D2FLUX_MATRIX_ICE ) .AND.              &
+      &  allocated( D2FLUX_MATRIX_ICE(origin,destination)%p ) ) then
+         do j=1, SIZE(D2FLUX_MATRIX_ICE(origin,destination)%p)
+! "A->B" => (out flow) => flux < ZERO => D2SINK_ICE
+           if( D2FLUX_MATRIX_ICE(origin,destination)%dir(j) == 1 ) then
+             if( flux(1) < ZERO ) then
+       D2FLUX_FUNC_ICE(ABS(D2FLUX_MATRIX_ICE(origin,destination)%p(j)))=&
+      &D2FLUX_FUNC_ICE(ABS(D2FLUX_MATRIX_ICE(origin,destination)%p(j)))-&
+      &flux(1)
+             end if
+           else ! "A<-B" => (in flow) => flux > ZERO => D2SOURCE_ICE
+             if( flux(1) > ZERO ) then
+       D2FLUX_FUNC_ICE(ABS(D2FLUX_MATRIX_ICE(origin,destination)%p(j)))=&
+      &D2FLUX_FUNC_ICE(ABS(D2FLUX_MATRIX_ICE(origin,destination)%p(j)))+&
+      &  flux(1)
+             end if
+           end if
+         end do
                   endif
 #endif
 #if defined INCLUDE_BEN
                 case (iiBen)
                   where ( flux > ZERO )
-                    D2SOURCE_BEN(origin,destination,:) =D2SOURCE_BEN(origin,destination,:) + &
-                      flux*DAY_PER_SEC
+                    D2SOURCE_BEN(origin,destination,:) =                &
+      &               D2SOURCE_BEN(origin,destination,:) +              &
+      &               flux*DAY_PER_SEC
                   elsewhere
-                    D2SINK_BEN(destination,origin,:) =D2SINK_BEN(destination,origin,:) - &
-                      flux*DAY_PER_SEC
+                    D2SINK_BEN(destination,origin,:) =                  &
+      &               D2SINK_BEN(destination,origin,:) -                &
+      &               flux*DAY_PER_SEC
                   end where
-                  if( allocated( D2FLUX_MATRIX_BEN ) .AND. &
-                       allocated( D2FLUX_MATRIX_BEN(origin,destination)%p ) ) then
-                     do j=1, SIZE(D2FLUX_MATRIX_BEN(origin,destination)%p)
-                        if( D2FLUX_MATRIX_BEN(origin,destination)%dir(j) == 1 ) then ! "A->B" => (out flow) => flux < ZERO => D2SINK_BEN
-                           if( flux(1) < ZERO ) then 
-                              D2FLUX_FUNC_BEN( ABS(D2FLUX_MATRIX_BEN(origin,destination)%p(j)) ) =     &
-                                   D2FLUX_FUNC_BEN( ABS(D2FLUX_MATRIX_BEN(origin,destination)%p(j)) ) - flux(1)
-                           end if
-                        else ! "A<-B" => (in flow) => flux > ZERO => D2SOURCE_BEN
-                           if( flux(1) > ZERO ) then
-                              D2FLUX_FUNC_BEN( ABS(D2FLUX_MATRIX_BEN(origin,destination)%p(j)) ) =     &
-                                   D2FLUX_FUNC_BEN( ABS(D2FLUX_MATRIX_BEN(origin,destination)%p(j)) ) + flux(1)
-                           end if
-                        end if
-                     end do
+                  if( allocated( D2FLUX_MATRIX_BEN ) .AND.              &
+      &  allocated( D2FLUX_MATRIX_BEN(origin,destination)%p ) ) then
+        do j=1, SIZE(D2FLUX_MATRIX_BEN(origin,destination)%p)
+! "A->B" => (out flow) => flux < ZERO => D2SINK_BEN
+          if( D2FLUX_MATRIX_BEN(origin,destination)%dir(j) == 1 ) then
+            if( flux(1) < ZERO ) then
+       D2FLUX_FUNC_BEN(ABS(D2FLUX_MATRIX_BEN(origin,destination)%p(j)))=&
+      &D2FLUX_FUNC_BEN(ABS(D2FLUX_MATRIX_BEN(origin,destination)%p(j)))-&
+      &flux(1)
+            end if
+          else ! "A<-B" => (in flow) => flux > ZERO => D2SOURCE_BEN
+            if( flux(1) > ZERO ) then
+       D2FLUX_FUNC_BEN(ABS(D2FLUX_MATRIX_BEN(origin,destination)%p(j)))=&
+      &D2FLUX_FUNC_BEN(ABS(D2FLUX_MATRIX_BEN(origin,destination)%p(j)))+&
+      &  flux(1)
+            end if
+          end if
+        end do
                   endif
 #endif
               end select
@@ -255,18 +283,24 @@
               write(LOGUNIT,*) "Error in (scalar) vector  function: negative flux!"
               write(LOGUNIT,*) "origin,destination:", origin,destination
               write(LOGUNIT,*) flow
-              if( iiSub == iiPel ) 
-                 write(LOGUNIT,*) "state value origin:",D3STATE(origin,grid_nr)
-                 write(LOGUNIT,*) "state value destination:",D3STATE(destination,grid_nr)
+              if( iiSub == iiPel )
+                 write(LOGUNIT,*) "state value origin:",                        &
+      &            D3STATE(origin,grid_nr)
+                 write(LOGUNIT,*) "state value destination:",                   &
+      &            D3STATE(destination,grid_nr)
 #if defined INCLUDE_SEAICE
               elseif ( iiSub == iiIce)  then
-                 write(LOGUNIT,*) "state value origin:",D2STATE_ICE(origin,grid_nr)
-                 write(LOGUNIT,*) "state value destination:",D2STATE_ICE(destination,grid_nr)
+                 write(LOGUNIT,*) "state value origin:",                        &
+      &            D2STATE_ICE(origin,grid_nr)
+                 write(LOGUNIT,*) "state value destination:",                   &
+      &            D2STATE_ICE(destination,grid_nr)
 #endif
 #if defined INCLUDE_BEN
               elseif ( iiSub == iiBen)  then
-                 write(LOGUNIT,*) "state value origin:",D2STATE_BEN(origin,grid_nr)
-                 write(LOGUNIT,*) "state value destination:",D2STATE_BEN(destination,grid_nr)
+                 write(LOGUNIT,*) "state value origin:",                        &
+      &            D2STATE_BEN(origin,grid_nr)
+                 write(LOGUNIT,*) "state value destination:",                   &
+      &            D2STATE_BEN(destination,grid_nr)
 #endif
               endif
               STDERR "Error in (scalar)flux function:negative flux !"
