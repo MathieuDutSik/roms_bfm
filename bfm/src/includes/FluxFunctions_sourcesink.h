@@ -25,7 +25,7 @@
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
           !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          subroutine flux_vector(iiSub,origin,destination,flux)
+          subroutine flux_vector(iiSub,iiorigin,iidestination,flux)
           !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             use constants, only: RLEN, ZERO,  SEC_PER_DAY, DAY_PER_SEC
             use global_mem, only: LOGUNIT
@@ -33,7 +33,7 @@
             ! Implicit typing is never allowed
             !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             implicit none
-            integer,intent(IN) :: iiSub
+            integer,intent(IN) :: iiSub, iiorigin, iidestination
             integer :: origin
             integer :: destination
             real(RLEN) :: flux(:)
@@ -42,7 +42,8 @@
             !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             !BEGIN compute
             !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
+            origin = iiorigin
+            destination = iidestination
             Print *, 'Passing by FluxFunctions_sourcesink : flux_vector'
             if ( destination ==0 ) then
                ! call (iiSub,origin,origin,-flux)
