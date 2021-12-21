@@ -29,6 +29,7 @@ subroutine correct_flux_output(mode, nr0,zlev,nlev,out)
 #else
 
   use mem, only: NO_BOXES, PELBOTTOM,PELSURFACE,Depth, D3FLUX_FUNC, D3FLUX_MATRIX
+  use mem, only : NO_D3_BOX_FLUX
 
 #ifdef BFM_GOTM
   use bio_var, only: stPelStateS, stPelStateE
@@ -84,12 +85,17 @@ subroutine correct_flux_output(mode, nr0,zlev,nlev,out)
   Print *, 'nr0=', nr0, ' RLEN=', RLEN, ' nlev=', nlev
   Print *, 'size(out)=', size(out)
   Print *, 'size(D3FLUX_FUNC)=', size(D3FLUX_FUNC,1), size(D3FLUX_FUNC,2)
+  DO idx_i=1,NO_D3_BOX_FLUX
+      Print *, 'idx_i=', idx_i, ' sum(D3FLUX_FUNC(idx_i,:))=',          &
+     &   sum(abs(D3FLUX_FUNC(idx_i, :)))
+  END DO
+  Print *, 'sum(abs(D3FLUX_FUNC))=', sum(abs(D3FLUX_FUNC))
   out(:) = D3FLUX_FUNC(nr0,:)
   Print *, '1 : max(out)=', maxval(out)
   do idx_i=stPelStateS, stPelStateE
        origin      = idx_i
        destination = idx_i
-       Print *, 'allocated(D3FLUX_MATRIX(origin,destination)%p)=', allocated(D3FLUX_MATRIX(origin,destination)%p)
+!       Print *, 'allocated(D3FLUX_MATRIX(origin,destination)%p)=', allocated(D3FLUX_MATRIX(origin,destination)%p)
        if( allocated( D3FLUX_MATRIX(origin,destination)%p ) ) then
         do idx_j=1, SIZE(D3FLUX_MATRIX(origin,destination)%p)
     if( ABS(D3FLUX_MATRIX(origin,destination)%p(idx_j)) .eq. nr0 ) then

@@ -4,7 +4,7 @@
 
 #ifdef INCLUDE_PELCO2
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-! MODEL  BFM - Biogeochemical Flux Model 
+! MODEL  BFM - Biogeochemical Flux Model
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 !BOP
 !
@@ -31,7 +31,7 @@
     OCalc, OArag, EPR
 #endif
   use CO2System, ONLY: CalcCO2System,CalcK0
-  use mem_CO2    
+  use mem_CO2
   use BFM_ERROR_MSG, ONLY: BFM_ERROR
 #ifdef BFM_GOTM
   use bio_var, ONLY: SRFindices
@@ -40,7 +40,7 @@
 #endif
   IMPLICIT NONE
 
-!  
+!
 !
 ! !AUTHORS
 !   M. Vichi, H. Thomas and P. Ruardij
@@ -51,7 +51,7 @@
   integer            ::error=0
 !
 ! COPYING
-!   
+!
 !   Copyright (C) 2015 BFM System Team (bfm_st@lists.cmcc.it)
 !   Copyright (C) 2006 P. Ruardij and M. Vichi
 !   (rua@nioz.nl, vichi@bo.ingv.it)
@@ -76,12 +76,13 @@
      ! mmol eq/m3 --> umol/kg
      DIC(BoxNumber) = O3c(BoxNumber)/MW_C/ERHO(BoxNumber)*1000.0_RLEN
      ALK(BoxNumber) = O3h(BoxNumber)/ERHO(BoxNumber)*1000.0_RLEN
-     error= CalcCO2System(MethodCalcCO2,ESW(BoxNumber),    &
-              ETW(BoxNumber),ERHO(BoxNumber),  &
-              N1p(BoxNumber),N5s(BoxNumber),ALK(BoxNumber),&
-              CO2(BoxNumber),HCO3(BoxNumber),CO3(BoxNumber),pH(BoxNumber),&
-              pr_in=EPR(BoxNumber), DIC_in=DIC(BoxNumber),pCO2_out=pCO2(BoxNumber),& 
-              omegacal=OCalc(BoxNumber),omegarag=OArag(BoxNumber))
+      error= CalcCO2System(MethodCalcCO2,ESW(BoxNumber),                &
+     &    ETW(BoxNumber),ERHO(BoxNumber),                               &
+     &    N1p(BoxNumber),N5s(BoxNumber),ALK(BoxNumber),                 &
+     &    CO2(BoxNumber),HCO3(BoxNumber),CO3(BoxNumber),pH(BoxNumber),  &
+     &    pr_in=EPR(BoxNumber), DIC_in=DIC(BoxNumber),                  &
+     &    pCO2_out=pCO2(BoxNumber),                                     &
+     &    omegacal=OCalc(BoxNumber),omegarag=OArag(BoxNumber))
 #ifdef DEBUG
      write(LOGUNIT,*) "in PelCO2:"
      write(LOGUNIT,'(A,'' ='',f12.6)') 'ERHO',ERHO(BoxNumber)
@@ -127,6 +128,6 @@
   end subroutine PelCO2Dynamics
 !EOC
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-! MODEL  BFM - Biogeochemical Flux Model 
+! MODEL  BFM - Biogeochemical Flux Model
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 #endif

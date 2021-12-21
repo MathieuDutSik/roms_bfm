@@ -42,7 +42,7 @@
             !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             origin      = iiorigin
             destination = iidestination
-            fluxsign    = .FALSE. 
+            fluxsign    = .FALSE.
 
             if ( destination == 0 ) then
                ! call (iiSub,origin,origin,-flux)
@@ -200,8 +200,8 @@
 #endif
             end if !origin <> destination
 
-            ! if destination == 0 => need to restore original input sign 
-            if ( fluxsign ) flux = -flux 
+            ! if destination == 0 => need to restore original input sign
+            if ( fluxsign ) flux = -flux
             !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             !END compute
             !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -300,7 +300,7 @@
           real(RLEN) ::Source_D2_vector_ice(size(D2SOURCE_ICE,DIM=2))
 
           Source_D2_vector_ice = ZERO
-          Source_D2_vector_ice = D2SOURCE_ICE(iistate,:)*SEC_PER_DAY 
+          Source_D2_vector_ice = D2SOURCE_ICE(iistate,:)*SEC_PER_DAY
         end function Source_D2_vector_ice
 #endif
 
@@ -315,7 +315,7 @@
           real(RLEN) ::Source_D2_vector_ben(size(D2SOURCE_BEN,DIM=2))
 
           Source_D2_vector_ben = ZERO
-          Source_D2_vector_ben = D2SOURCE_BEN(iistate,:)*SEC_PER_DAY 
+          Source_D2_vector_ben = D2SOURCE_BEN(iistate,:)*SEC_PER_DAY
         end function Source_D2_vector_ben
 #endif
         !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -390,7 +390,7 @@
       integer,intent(IN) :: origin
       integer,intent(IN) :: destination
       real(RLEN),intent(IN),dimension(:) :: flux
-      real(RLEN),intent(INOUT),dimension(:) :: collect ! save fluxes  
+      real(RLEN),intent(INOUT),dimension(:) :: collect ! save fluxes
       !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
       !BEGIN compute
       if (iiSub >= 0 ) then
@@ -405,7 +405,7 @@
               endif
               return
          endif
-      endif      
+      endif
       if ( mode==1 ) then
         if ( (which == origin) .and.(origin.ne.destination)) then
            collect=collect-flux

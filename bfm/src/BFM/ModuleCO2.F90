@@ -2,7 +2,7 @@
 
 #if defined INCLUDE_PELCO2 || defined INCLUDE_BENCO2
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-! MODEL  BFM - Biogeochemical Flux Model 
+! MODEL  BFM - Biogeochemical Flux Model
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 !BOP
 !
@@ -16,9 +16,13 @@
 !
 ! !USES:
   use global_mem
-  use SystemForcing, only :ForcingName, ForcingField, FieldInit, FieldClose
+#ifndef BFM_ROMS
+  use SystemForcing, only : ForcingName, ForcingField, FieldInit, FieldClose
+#else
+  use SystemForcing, only : ForcingName, ForcingField
+#endif
   IMPLICIT NONE
-!  
+!
 !
 ! !AUTHORS
 !   L. Patara, M. Vichi (INGV-CMCC)
@@ -27,7 +31,7 @@
 ! !REVISION_HISTORY
 !   T. Lovato (CMCC) 2012
 ! COPYING
-!   
+!
 !   Copyright (C) 2015 BFM System Team (bfm_st@lists.cmcc.it)
 !   Copyright (C) 2007 P. Ruardij and M. Vichi
 !   (rua@nioz.nl, vichi@bo.ingv.it)
@@ -68,23 +72,23 @@
   !                                     Mehrbach et al (1973) refit by Dickson & Millero (1987)
   !                                 3 : Mehrbach et al (1973) refit by Lueker et al. (2000)
   !                                     pH on total scale
-  !                                 4 : Hansson (1973b) data as refitted by Dickson and 
-  !                                     Millero (1987);  pH on Sea Water Scale 
-  ! MethodCalcCO2  numeric          Switch for the choice of [H+] numerical computation 
-  !                                 1 : Approximate static solution 
-  !                                 2 : Default. Standard OCMIP iteration 
-  !                                 3 : Follows et al., Ocean Modelling 2006 
+  !                                 4 : Hansson (1973b) data as refitted by Dickson and
+  !                                     Millero (1987);  pH on Sea Water Scale
+  ! MethodCalcCO2  numeric          Switch for the choice of [H+] numerical computation
+  !                                 1 : Approximate static solution
+  !                                 2 : Default. Standard OCMIP iteration
+  !                                 3 : Follows et al., Ocean Modelling 2006
   ! CalcBioAlkFlag logical          Compute biological processes corrections on total alkalinity
   !              ---------  Parameters for MethodCalcCO2=2 -----------
-  ! M2XACC         real             Accuracy of the iterative scheme for OCMIP (default 1.E-10) 
+  ! M2XACC         real             Accuracy of the iterative scheme for OCMIP (default 1.E-10)
   ! M2PHDELT       [pH]             Delta of pH for the root search (realized pH+/-DELT)
   !                                 in the OCMIP scheme (default 0.5)
   ! M2MAXIT        integer          Maximum number of iterations for OCMIP (default 100 )
-  !              ----------------------------------------------------- 
-  ! Caconc0        [mol/m3]         Calcium ion concentration 
-  !                                 ["Seawater : Its composition, properties and behaviour" 
+  !              -----------------------------------------------------
+  ! Caconc0        [mol/m3]         Calcium ion concentration
+  !                                 ["Seawater : Its composition, properties and behaviour"
   !                                 (2nd Edition), Open University Course Team, 1995]
-  !                                 Seawater concentration   = 412 mg / l 
+  !                                 Seawater concentration   = 412 mg / l
   !                                                        -> atomic weight = 40.078 g / mol
   !                                 therefore, concentration = 10.279 mmol / l = 10.279 mol / m3
   ! Canorm          logical         Normalize Calcium ion concentration by sea water salinity
@@ -105,13 +109,13 @@
   !                               4 = field from a coupled model (e.g. atmospheric SLP from OGCM)
   ! NOTE: The file "CMIP5_Historical_GHG_1765_2005.dat" is located in "$BFMDIR/tools" folder
   !-----------------------------------------------------------------------------------!
-   real(RLEN)   :: AtmCO20=365.0_RLEN ! ppm 
-   logical      :: calcAtmpCO2=.FALSE. 
+   real(RLEN)   :: AtmCO20=365.0_RLEN ! ppm
+   logical      :: calcAtmpCO2=.FALSE.
    integer      :: pCO2Method=1
    type(ForcingName)    :: AtmCO2_N, AtmSLP_N, AtmTDP_N
    type(ForcingField)   :: AtmCO2, AtmSLP, AtmTDP
    integer      :: K1K2=2
-   integer      :: MethodCalcCO2=2 
+   integer      :: MethodCalcCO2=2
    real(RLEN)   :: M2XACC=1.E-20_RLEN
    real(RLEN)   :: M2PHDELT=0.5_RLEN
    integer      :: M2MAXIT=100
@@ -138,29 +142,30 @@
   use api_bfm, ONLY: bfm_init
   use mem_Param, ONLY: slp0
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    namelist /CO2_parameters/ AtmCO20,calcAtmpCO2,pCO2Method,K1K2,MethodCalcCO2,     &
-                              phscale,phstart,M2XACC,M2PHDELT,M2MAXIT,         &
-                              Caconc0,Canorm,AtmCO2_N,AtmSLP_N,AtmTDP_N, &
-                              CalcBioAlkFlag
+    namelist /CO2_parameters/ AtmCO20,calcAtmpCO2,pCO2Method,K1K2,      &
+     & MethodCalcCO2, phscale,phstart,M2XACC,M2PHDELT,M2MAXIT,          &
+     & Caconc0,Canorm,AtmCO2_N,AtmSLP_N,AtmTDP_N, CalcBioAlkFlag
+
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   integer            ::error=0
   !---------------------------------------------------------------------------
-  ! Initialize the structured array that defines if a variable is initialized  
+  ! Initialize the structured array that defines if a variable is initialized
   ! with external data.
   !---------------------------------------------------------------------------
                         ! Read  !   File     ! Netcdf  !  Var   ! File    ! Input      !   Time   !
                         ! Input !   name     ! Logical !  name  ! RefTime ! Frequency  !  interp  !
+#ifndef BFM_ROMS
     AtmCO2_N = ForcingName( 0  , "dummy.nc" , .TRUE.  ,"AtmCO2" , "dummy" ,  "dummy"   ,  .TRUE.  )
     AtmSLP_N = ForcingName( 0  , "dummy.nc" , .TRUE.  ,"AtmSLP" , "dummy" ,  "dummy"   ,  .TRUE.  )
     AtmTDP_N = ForcingName( 0  , 'dummy.nc' , .TRUE.  ,'AtmTDP' , 'dummy' ,  'dummy'   ,  .TRUE.  )
-
+#endif
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   !  Open the namelist file(s)
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
     LEVEL1 '-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
     LEVEL1 ' '
-    LEVEL1 '     INITIALIZE PELAGIC CARBONATE SYSTEM       ' 
+    LEVEL1 '     INITIALIZE PELAGIC CARBONATE SYSTEM       '
     LEVEL1 ' '
     LEVEL2 'Namelist content:'
     open(NMLUNIT,file='Carbonate_Dynamics.nml',status='old',action='read',err=100)
@@ -168,14 +173,15 @@
     close(NMLUNIT)
     write(LOGUNIT,nml=CO2_parameters)
     LEVEL1 ' '
- 
+
   ! -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   ! Set initial conditions
   ! -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     ! Atmospheric CO2 concentration
-    AtmCO2%init = AtmCO2_N%init 
+#ifndef BFM_ROMS
+    AtmCO2%init = AtmCO2_N%init
     if (AtmCO2%init == 0) then
-       ! Use constant  
+       ! Use constant
        CALL FieldInit(AtmCO2_N, AtmCO2)
        ! the following check is needed to avoid allocation of empty arrays
        ! with MPI and land domains
@@ -204,11 +210,14 @@
           write(LOGUNIT,*) ' '
        end if
     endif
+#else
+#endif
     ! Rough approximation: pCO2 is assumed equal to the mixing ratio of CO2
     if (.not. calcAtmpCO2) EPCO2air = AtmCO2%fnow
 
     ! COMPUTATION OF pCO2
     ! Sea Level Pressure
+#ifndef BFM_ROMS
     AtmSLP%init = AtmSLP_N%init
     AtmTDP%init = AtmTDP_N%init
     if (calcAtmpCO2) then
@@ -244,21 +253,22 @@
           write(LOGUNIT,*) 'pCO2Method is forced to 1 because AtmTDP%init is set to 0.'
        endif
     endif
-
-    ! Assign initial pH 
+#else
+#endif
+    ! Assign initial pH
     if (bfm_init /= 1 ) pH(:) = phstart
 
     ! Check consistency of input parameters
     select case (K1K2)
-    case (1) 
+    case (1)
         phscale = TOTAL
-    case (2) 
+    case (2)
         phscale = SWS
     end select
-    
+
     if (calcAtmpCO2) write(LOGUNIT,*) 'BFM computes pCO2 with method: ', pCO2Method
-    if (AtmSLP%init == 4 ) write(LOGUNIT,*) 'SLP is provided by external model.' 
-    if (AtmTDP%init == 4 ) write(LOGUNIT,*) 'TDP is provided by external model.' 
+    if (AtmSLP%init == 4 ) write(LOGUNIT,*) 'SLP is provided by external model.'
+    if (AtmTDP%init == 4 ) write(LOGUNIT,*) 'TDP is provided by external model.'
     LEVEL1 '-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
     LEVEL1 ' '
 
@@ -275,10 +285,12 @@
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   subroutine CloseCO2()
     implicit none
-    
+
     if (AtmCO2%init == 2) then
+#ifndef BFM_ROMS
        ! close external 0-D timeseries
        CALL FieldClose(AtmCO2_N, AtmCO2)
+#endif
     end if
   end subroutine CloseCO2
 
@@ -288,6 +300,6 @@
 
 !EOC
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-! MODEL  BFM - Biogeochemical Flux Model 
+! MODEL  BFM - Biogeochemical Flux Model
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 #endif

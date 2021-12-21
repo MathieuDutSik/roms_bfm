@@ -16,7 +16,7 @@ FC        = gfortran
 
 FFLAGS += -I../includes
 
-FFLAGS += -DINCLUDE_PELCO2 -DINCLUDE_DIAG
+#FFLAGS += -DINCLUDE_PELCO2 -DINCLUDE_DIAG
 
 
 BINDIR = exe

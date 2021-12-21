@@ -63,7 +63,8 @@ endif
 
 ifdef USE_MPI
 #         CPPFLAGS += -DMPI -DBFM_DEBUG
-         CPPFLAGS += -DMPI -DEXPLICIT_SINK
+#         CPPFLAGS += -DMPI -DEXPLICIT_SINK
+         CPPFLAGS += -DMPI -DINCLUDE_PELCO2 -DINCLUDE_DIAG -DBFM_ROMS
  ifdef USE_MPIF90
                FC := mpif90
  else

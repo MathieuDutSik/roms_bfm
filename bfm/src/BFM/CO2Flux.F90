@@ -4,7 +4,7 @@
 #ifdef INCLUDE_PELCO2
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 ! MODEL
-!  BFM - Biogeochemical Flux Model 
+!  BFM - Biogeochemical Flux Model
 !
 ! SUBROUTINE
 !
@@ -20,17 +20,17 @@
 !   exchange over the oecean
 !   J. GeoPhys. Res. 97, 7373-7382
 !
-!   notes: 
+!   notes:
 !   - K0 = co2/pco2 [1.e-6 mol / (l * 1.e-6 atm)]
-!   - exchange coefficient: deltapCO2 * bt * K0 
+!   - exchange coefficient: deltapCO2 * bt * K0
 !   [1.e-6atm * cm/hr * 1.e-6mol/(l * 1.e-6atm)] = [cm/hr * 1.e-6mol / l]
-!   - Temperature in degrees C	
+!   - Temperature in degrees C
 !   test parameter  (DIC=2133, AC=2260, pco2=341), O7.c = AC-2210,
 !*/
 ! AUTHORS
 !   H. Thomas (NIOZ) adapted from the OCMIP standard files
 !   T. Lovato (CMCC) added atmospheric pCO2 and chemical enhancement
-! 
+!
 ! CHANGE_LOG
 !
 ! COPYING
@@ -43,7 +43,7 @@
 !   This program is distributed in the hope that it will be useful,
 !   but WITHOUT ANY WARRANTY; without even the implied warranty of
 !   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-!   GNU General Public License for more details. 
+!   GNU General Public License for more details.
 !
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
   subroutine CO2Flux()
@@ -126,10 +126,10 @@ IMPLICIT NONE
     pco2air = EPCO2air(:)
     pco2sea = pCO2(SRFindices)
     tmpflux(:) = ZERO
-    
+
     !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     ! Calculate Schmidt number,
-    ! ratio between the kinematic viscosity and the molecular 
+    ! ratio between the kinematic viscosity and the molecular
     ! diffusivity of carbon dioxide.
     !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     temp2 = temp*temp
@@ -137,13 +137,14 @@ IMPLICIT NONE
 
     ScRatio = CO2SCHMIDT/pschmidt
     !
-    ! ScRatio is limited to 0 when T > 40 °C  
-    WHERE(ScRatio .le. 0.0_RLEN); ScRatio=0.0_RLEN ; END WHERE    
+    ! ScRatio is limited to 0 when T > 40 °C
+    WHERE(ScRatio .le. 0.0_RLEN); ScRatio=0.0_RLEN ; END WHERE
     !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     ! Compute Chemical enhancement the Temperature dependent
-    ! gas transfer 
+    ! gas transfer
     !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    bt = 2.5_RLEN*(0.5246_RLEN + 1.6256E-02_RLEN*temp + 4.9946E-04_RLEN*temp2) 
+    bt = 2.5_RLEN*(0.5246_RLEN + 1.6256E-02_RLEN*temp +                 &
+     &   4.9946E-04_RLEN*temp2)
 
     !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     ! Calculate wind dependency + Chemical enhancement
@@ -161,11 +162,14 @@ IMPLICIT NONE
     tk = temp - ZERO_KELVIN
     tk100 = tk/100.0_RLEN
     tk1002 = tk100*tk100
-    k0 = exp(93.4517_RLEN/tk100 - 60.2409_RLEN + 23.3585_RLEN * log(tk100) +   &
-       salt * (.023517_RLEN - 0.023656_RLEN * tk100 + 0.0047036_RLEN * tk1002))
+    k0 = exp(93.4517_RLEN/tk100 - 60.2409_RLEN +                        &
+     &  23.3585_RLEN * log(tk100) +                                     &
+     &  salt * (.023517_RLEN - 0.023656_RLEN * tk100 +                  &
+     &  0.0047036_RLEN * tk1002))
+       
 
     !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    ! flux co2 in mmol/m2/day   
+    ! flux co2 in mmol/m2/day
     !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     ! (m * d-1) * uatm * (mol * kg-1 * atm-1) * (kg * m-3)
     !     d-1   1.e-6      mol   m-2
@@ -173,10 +177,10 @@ IMPLICIT NONE
     CO2airflux(:) = ken * (pco2air - pco2sea) * k0 * rho / 1000.0_RLEN
 
   !---------------------------------------------------------------
-  ! flux is positive downward. 
+  ! flux is positive downward.
   ! Conversion from mmolC/m2/d to mgC/m3/d.
   ! The fraction of ice-free water is also considered
-  ! Boundary variable first assigned, then the source term is 
+  ! Boundary variable first assigned, then the source term is
   ! added to the Source/Sink arrays if the Flag is TRUE
   ! In the water, the flux is subtracted from
   ! (or added to) the diagonal element of O3c (i.e. infinite source)
@@ -197,18 +201,18 @@ IMPLICIT NONE
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
   subroutine CalcPCO2Air()
   !
-  ! Covert the atmospheric CO2 conctration into pCO2 
-  ! 
+  ! Covert the atmospheric CO2 conctration into pCO2
+  !
   ! VARIABLES:
   ! AtmCO2   CO2 air Mixing Ratio                    ppmv
   ! EPCO2air Partial Pressure of atmospheric CO2     uatm
   ! EAPR     Atmospheric Sea Level Pressure          hPa
   ! ETDP     Air Dew Point temperature               °
-  !  
+  !
   ! NOTES:
   ! The p(H2O vapor) is computed wiht August-Roche-Magnus formula,
   ! coefficients for water (aw,bw, cw) from Lawrence(2005)
-  ! and ice (ai,bi,ci) surfaces from WMO 2000 Technical Regulations. 
+  ! and ice (ai,bi,ci) surfaces from WMO 2000 Technical Regulations.
   ! These parameters are to be used with temperature in  °C.
   ! Alternatively it is possible to use the formulations of Buck (1996) or
   ! Goff (1957) for water and Goff and Gratch (1946) for ice.
@@ -223,7 +227,7 @@ IMPLICIT NONE
   use constants,   ONLY: ZERO_KELVIN
   !
   ! LOCAL variables
-  ! 
+  !
   IMPLICIT NONE
 
   real(RLEN),dimension(NO_BOXES_XY) :: EATD, EAPR, e
@@ -235,8 +239,8 @@ IMPLICIT NONE
 
   EAPR = AtmSLP%fnow
 
-  select case (pCO2Method) 
-    ! 
+  select case (pCO2Method)
+    !
     ! Approximate pCO2, pCO2 = Mixing ratio * p(atm)
   case(1)
        EPCO2air = AtmCO2%fnow * (EAPR * 100.0_RLEN) * atm2pa
@@ -246,17 +250,17 @@ IMPLICIT NONE
     write(LOGUNIT,*) " Atm Press: ",EAPR(1)," CO2 ppm: ",AtmCO2%fnow(1)," pCO2 : ", EPCO2air(1)
     write(LOGUNIT,*)
 #endif
-    ! 
+    !
     ! pCO2 = Mixing ratio * (p(air) - p(water vapor))
   case(2)
        EATD = AtmTDP%fnow
        ! Convert Temperature at Dew Point to Celsius degrees
-       if (EATD(1) > 200.0) EATD = EATD + ZERO_KELVIN 
+       if (EATD(1) > 200.0) EATD = EATD + ZERO_KELVIN
        ! August-Roche-Magnus formula, with coefficients from Lawrence(2005)
        ! Input : ETDP and EAPR
-       ! Partial pressure of water vapor 
-       e = cw * exp((aw * EATD) / (bw + EATD))  
-       ! Partial pressure of CO2 
+       ! Partial pressure of water vapor
+       e = cw * exp((aw * EATD) / (bw + EATD))
+       ! Partial pressure of CO2
        EPCO2air = AtmCO2%fnow * (EAPR - e) * 100.0_RLEN * atm2pa
 #ifdef DEBUG
     write(LOGUNIT,*)
@@ -273,6 +277,6 @@ IMPLICIT NONE
 
 
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-! MODEL  BFM - Biogeochemical Flux Model 
+! MODEL  BFM - Biogeochemical Flux Model
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 #endif

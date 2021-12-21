@@ -115,7 +115,7 @@
       REAL(R8) lat
       REAL(RLEN) b_dew, c_dew
       REAL(RLEN) eTempDewPoint
-      REAL(r8) eTemp, eSalt
+      REAL(r8) eTemp, eSalt, gamma, RH
       REAL(r8) wlight
       REAL(r8) ux, uy
       integer k
@@ -853,6 +853,7 @@
       real(r8) themax
       integer tileS
       integer NO_BOXES_XY_loc
+      integer method
 
 !
 !  Assigning the STATE variables from the t array
@@ -887,7 +888,7 @@
         ENd IF
         IF (SourceTermD3STATE) THEN
 !
-!         Now the time stepping operations 
+!         Now the time stepping operations
 !         Right now we do Euler forward algorithm
 !         It is probably needed to subdivide further the time interval
 !         or to use a better integration method
@@ -903,8 +904,6 @@
           Print *, "        Case ifdef EXPLICIT_SINK"
 # endif
 #endif
-
-
           tileS = tile - first_tile(ng) + 1
           NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
           DO j=1,NO_D3_BOX_STATES
