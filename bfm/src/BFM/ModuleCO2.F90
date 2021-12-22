@@ -212,8 +212,14 @@
     endif
 #else
 #endif
+    Print *, 'ModuleCO2 : AtmCO2=', AtmCO2%fnow
     ! Rough approximation: pCO2 is assumed equal to the mixing ratio of CO2
-    if (.not. calcAtmpCO2) EPCO2air = AtmCO2%fnow
+    if (.not. calcAtmpCO2) THEN
+      Print *, 'size(EPCO2air=', size(EPCO2air)
+      Print *, 'allocated(AtmCO2%fnow)=', allocated(AtmCO2%fnow)
+      Print *, 'size(AtmCO2%fnow=', size(AtmCO2%fnow)
+      EPCO2air = AtmCO2%fnow
+    end if
 
     ! COMPUTATION OF pCO2
     ! Sea Level Pressure

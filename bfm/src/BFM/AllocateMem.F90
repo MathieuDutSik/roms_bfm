@@ -103,6 +103,8 @@
    D3DIAGNOS = ZERO
 
 
+   Print *, 'Allocation of D2DIAGNOS, NO_D2_BOX_DIAGNOSS=', NO_D2_BOX_DIAGNOSS
+   Print *, 'Allocation of D2DIAGNOS, NO_BOXES_XY=', NO_BOXES_XY
    allocate(D2DIAGNOS(1:NO_D2_BOX_DIAGNOSS,1:NO_BOXES_XY),stat=status)
    if (status /= 0) call error_msg_prn(ALLOC,"AllocateMem", "D2DIAGNOS")
    D2DIAGNOS = ZERO
@@ -339,7 +341,7 @@ eiPPY=ZERO
 ELiPPY => D3DIAGNOS(ppELiPPY(iiP1): ppELiPPY(iiP4),:)
 ELiPPY=ZERO
 
-
+Print *, 'ppEPCO2air=', ppEPCO2air
 EPCO2air => D2DIAGNOS(ppEPCO2air,:); EPCO2air=ZERO
 CO2airflux => D2DIAGNOS(ppCO2airflux,:); CO2airflux=ZERO
 Area2d => D2DIAGNOS(ppArea2d,:); Area2d=ZERO

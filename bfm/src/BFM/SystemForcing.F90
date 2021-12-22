@@ -67,6 +67,8 @@
 ! !PUBLIC DATA MEMBERS:
 #ifndef BFM_ROMS
    public FieldInit, FieldRead, FieldClose
+#else
+   public FieldAllocate
 #endif
 !
 ! !REVISION HISTORY:
@@ -78,6 +80,11 @@
    contains
 !-------------------------------------------------------------------------!
 !BOC
+   subroutine FieldAllocate(FData)
+   implicit none
+   type(ForcingField), intent(INOUT)  :: FData
+   allocate (FData%fbef(NO_BOXES_XY), FData%fnow(NO_BOXES_XY), FData%faft(NO_BOXES_XY))
+   end subroutine
 #ifndef BFM_ROMS
 
    subroutine FieldInit(FName, FData)

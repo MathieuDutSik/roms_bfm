@@ -125,14 +125,17 @@ subroutine analytical_forcing
    if (AtmCO2%init == 0) then
       ! increase of initial CO2 concentration in the air by CO2inc [%]
       AtmCO2%fnow = AtmCO20*(ONE + (CO2inc / 100_RLEN) / 365._RLEN * dtime)
+      Print *, 'analytical_forcing : AtmCO2=', AtmCO2%fnow
    else
       call FieldRead(AtmCO2)
    endif
 !  Update sea level pressure
    if ( allocated(AtmSLP%fnow)) CALL FieldRead(AtmSLP)
+   Print *, 'analytical_forcing : AtmSLP=', AtmSLP%fnow
 
 !  Update Air Dew Point temperature
    if ( allocated(AtmTDP%fnow)) CALL FieldRead(AtmTDP)
+   Print *, 'analytical_forcing : AtmTDP=', AtmTDP%fnow
 #endif
 #ifdef DEBUG
    LEVEL2 'ETW=',ETW(:)

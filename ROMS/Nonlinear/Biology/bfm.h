@@ -566,8 +566,17 @@
 !
 !
       SUBROUTINE FULL_INIT_OF_BFM_MODEL
+#ifdef INCLUDE_PELCO2
+      use mem_CO2, only: AtmCO20, AtmCO2, AtmSLP, AtmTDP
+      use SystemForcing, only : FieldAllocate
+#endif
       implicit none
       CALL COMPUTE_NO_BOXES_XY_Z_ALL
+#ifdef INCLUDE_PELCO2
+      CALL FieldAllocate(AtmCO2)
+      CALL FieldAllocate(AtmSLP)
+      CALL FieldAllocate(AtmTDP)
+#endif
       CALL Allocate_GRID_ARRAY
       CALL INIT_BFM_MODEL
       CALL INIT_BFM_SYSTEM_VARIABLE
