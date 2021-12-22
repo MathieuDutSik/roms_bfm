@@ -97,7 +97,7 @@
       USE mod_parallel
       USE api_bfm
       USE envforcing, only : botdep_c, botdep_n, botdep_p,              &
-     &    botdep_si, daylength
+     &    botdep_si, daylength, density
       USE mod_forces
 #ifdef INCLUDE_PELCO2
       use mem_CO2, only: AtmCO20, AtmCO2, AtmSLP, AtmTDP
@@ -192,6 +192,7 @@
          ESI(idx) = ONE
 #endif
       END DO
+      ERHO(:) = density(ETW(:),ESW(:),Depth(:)/2.0_RLEN)
       END SUBROUTINE
 !
 !-----------------------------------------------------------------------
@@ -217,8 +218,8 @@
          DO k=1,NO_BOXES_Z
             iZ = k
             idx = iZ + NO_BOXES_Z * (iNode-1)
-!            Depth(idx) = OCEAN(ng) % zeta(i,j,eTimeIdx) - GRID(ng) % z_r(i,j,k)
-            Depth(idx) = 5.0
+            Depth(idx) = OCEAN(ng) % zeta(i,j,eTimeIdx) - GRID(ng) % z_r(i,j,k)
+!            Depth(idx) = 5.0
          END DO
       END DO
       END SUBROUTINE

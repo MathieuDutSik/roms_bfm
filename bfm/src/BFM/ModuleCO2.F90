@@ -212,7 +212,6 @@
     endif
 #else
 #endif
-    Print *, 'ModuleCO2 : AtmCO2=', AtmCO2%fnow
     ! Rough approximation: pCO2 is assumed equal to the mixing ratio of CO2
     if (.not. calcAtmpCO2) THEN
       Print *, 'size(EPCO2air=', size(EPCO2air)

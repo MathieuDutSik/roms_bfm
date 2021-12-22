@@ -74,8 +74,10 @@
      ! convert DIC and alkalinity from model units to diagnostic output
      ! mg C/m3 --> umol/kg
      ! mmol eq/m3 --> umol/kg
-     DIC(BoxNumber) = O3c(BoxNumber)/MW_C/ERHO(BoxNumber)*1000.0_RLEN
-     ALK(BoxNumber) = O3h(BoxNumber)/ERHO(BoxNumber)*1000.0_RLEN
+      DIC(BoxNumber) = O3c(BoxNumber)/MW_C/ERHO(BoxNumber)*1000.0_RLEN
+!      Print *, 'BoxNumber=', BoxNumber, ' O3c=', O3c(BoxNumber)
+!      Print *, 'MW_C=', MW_C, ' ERHO=', ERHO(BoxNumber)
+      ALK(BoxNumber) = O3h(BoxNumber)/ERHO(BoxNumber)*1000.0_RLEN
       error= CalcCO2System(MethodCalcCO2,ESW(BoxNumber),                &
      &    ETW(BoxNumber),ERHO(BoxNumber),                               &
      &    N1p(BoxNumber),N5s(BoxNumber),ALK(BoxNumber),                 &
@@ -84,18 +86,18 @@
      &    pCO2_out=pCO2(BoxNumber),                                     &
      &    omegacal=OCalc(BoxNumber),omegarag=OArag(BoxNumber))
 #ifdef DEBUG
-     write(LOGUNIT,*) "in PelCO2:"
-     write(LOGUNIT,'(A,'' ='',f12.6)') 'ERHO',ERHO(BoxNumber)
-     write(LOGUNIT,'(A,'' ='',f12.6)') 'ESW',ESW(BoxNumber)
-     write(LOGUNIT,'(A,'' ='',f12.6)') 'N1p',N1p(BoxNumber)
-     write(LOGUNIT,'(A,'' ='',f12.6)') 'N5s',N5s(BoxNumber)
-     write(LOGUNIT,'(A,'' ='',f12.6)') 'DIC',DIC(BoxNumber)
-     write(LOGUNIT,'(A,'' ='',f12.6)') 'ALK',ALK(BoxNumber)
-     write(LOGUNIT,'(A,'' ='',f12.6)') 'OCalc',OCalc(BoxNumber)
-     write(LOGUNIT,'(A,'' ='',f12.6)') 'OArag',OArag(BoxNumber)
-     write(LOGUNIT,'(''layer:'',I4,'' pH='',f12.6)') BoxNumber,pH(BoxNumber)
+      write(LOGUNIT,*) "in PelCO2:"
+      write(LOGUNIT,'(A,'' ='',f12.6)') 'ERHO',ERHO(BoxNumber)
+      write(LOGUNIT,'(A,'' ='',f12.6)') 'ESW',ESW(BoxNumber)
+      write(LOGUNIT,'(A,'' ='',f12.6)') 'N1p',N1p(BoxNumber)
+      write(LOGUNIT,'(A,'' ='',f12.6)') 'N5s',N5s(BoxNumber)
+      write(LOGUNIT,'(A,'' ='',f12.6)') 'DIC',DIC(BoxNumber)
+      write(LOGUNIT,'(A,'' ='',f12.6)') 'ALK',ALK(BoxNumber)
+      write(LOGUNIT,'(A,'' ='',f12.6)') 'OCalc',OCalc(BoxNumber)
+      write(LOGUNIT,'(A,'' ='',f12.6)') 'OArag',OArag(BoxNumber)
+      write(LOGUNIT,'(''layer:'',I4,'' pH='',f12.6)') BoxNumber,pH(BoxNumber)
 #endif
-     if ( error > 0 ) then
+      if ( error > 0 ) then
             write(LOGUNIT,*)" Ph outside range"
             write(LOGUNIT,'(A,'' ='',f12.6)') 'ERHO',ERHO(BoxNumber)
             write(LOGUNIT,'(A,'' ='',f12.6)') 'ETW',ETW(BoxNumber)
@@ -109,7 +111,7 @@
             write(LOGUNIT,'(A,'' ='',f12.6)') 'ALK',O3h(BoxNumber)
             write(LOGUNIT,'(''layer:'',I4,'' pH='',f12.6)') BoxNumber,pH(BoxNumber)
             call BFM_ERROR("PelCO2Dynamics","pH outside range 2-11")
-     endif
+      endif
   end do
 
   ! Rough approximation: pCO2 is assumed equal to the mixing ratio of CO2
