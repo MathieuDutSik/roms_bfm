@@ -152,7 +152,6 @@
          ! srflx is in degC m^{-2} so we need to convert to the W m^{-2}
          ! See the bulk_flux code.
          wlight = FORCES(ng) % srflx(i,j) * Hscale
-         Print *, 'idx=', idx, ' wlight=', wlight
          sumWlight = sumWlight + wlight
          IF (ChlAttenFlag .eq. 1) THEN
            DO k=1,N(ng)
@@ -209,9 +208,11 @@
       END DO
       ERHO(:) = density(ETW(:),ESW(:),Depth(:)/2.0_RLEN)
       avgTemp = sumTemp / NO_BOXES
-      Print *, 'sumTemp=', sumTemp, 'avgTemp=', avgTemp
       avgWlight = sumWlight / NO_BOXES_XY
+#ifdef BFM_DEBUG
+      Print *, 'sumTemp=', sumTemp, 'avgTemp=', avgTemp
       Print *, 'avgWlight=', avgWlight
+#endif
       END SUBROUTINE
 !
 !-----------------------------------------------------------------------
@@ -269,8 +270,8 @@
 
       tileS = tile - first_tile(ng) + 1
       NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
-      Print *, 'NO_BOXES=', NO_BOXES, ' RLEN=', RLEN
-      Print *, 'Before correct_flux_output idx_ruptc=', idx_ruptc
+!      Print *, 'NO_BOXES=', NO_BOXES, ' RLEN=', RLEN
+!      Print *, 'Before correct_flux_output idx_ruptc=', idx_ruptc
       CALL correct_flux_output(1,idx_ruptc,1,NO_BOXES,ARR)
       sumABS(:) = 0
       maxABS(:) = 0
@@ -288,12 +289,14 @@
             minABS(k) = MIN(minABS(k), val)
          END DO
       END DO
+#ifdef BFM_DEBUG
       Print *, 'Statistics for RUPTC'
       DO k=1,NO_BOXES_Z
         eavg = sumABS(k) / NO_BOXES_XY_loc
         Print *, 'k=',k,'avg/max/min=', eavg,maxABS(k),minABS(k)
       END DO
       Print *, 'Before correct_flux_output idx_ruztc=', idx_ruztc
+#endif
       CALL correct_flux_output(1,idx_ruztc,1,NO_BOXES,ARR)
       DO iNode=1,NO_BOXES_XY_loc
          i = ListArrayWet(ng) % TheArr(tileS) % ListI(iNode)
@@ -342,7 +345,7 @@
       REAL(r8) eVal
 !      Print *, 'CP_T_D3 : stPelStateS=', stPelStateS, ' stPelStateE=', stPelStateE
 !      Print *, 'first_tile=', first_tile(ng)
-      Print *, 'stPelStateS=', stPelStateS, ' stPelStateE=', stPelStateE
+!      Print *, 'stPelStateS=', stPelStateS, ' stPelStateE=', stPelStateE
       tileS = tile - first_tile(ng) + 1
       NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
       DO iNode=1,NO_BOXES_XY_loc
@@ -384,7 +387,7 @@
       integer iNode, i, j, k, iZ, idx
       integer iVar, itrc, ibio, NO_BOXES_XY_loc, tileS
       REAL(r8) eVal
-      Print *, 'stPelStateS=', stPelStateS, ' stPelStateE=', stPelStateE
+!      Print *, 'stPelStateS=', stPelStateS, ' stPelStateE=', stPelStateE
       tileS = tile - first_tile(ng) + 1
       NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
       DO iNode=1,NO_BOXES_XY_loc
@@ -932,10 +935,10 @@
       IF (PosMultiplier == MULTIPLIER(ng)) THEN
         PosMultiplier = 0
         CALL SET_BOT_SURFINDICES(ng, tile)
+#ifdef BFM_DEBUG
         CALL PRINT_BFM_STATE_KEYS(ng, tile)
+#endif
 
-!        Print *, 'Printing D3STATE before Source term integration'
-!        CALL PRINT_BFM_STATE_KEYS(ng, tile)
         CALL SET_BFM_DEPTH(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, nstp)
         IF (AdvectionD3STATE) THEN
           CALL COPY_T_to_D3STATE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, nstp, t)
