@@ -97,14 +97,13 @@
      D3STATEOBC = ZERO
 #endif
 
-   Print *, 'Allocation of D3DIAGNOS'
    allocate(D3DIAGNOS(1:NO_D3_BOX_DIAGNOSS,1:NO_BOXES),stat=status)
    if (status /= 0) call error_msg_prn(ALLOC,"AllocateMem", "D3DIAGNOS")
    D3DIAGNOS = ZERO
 
 
-   Print *, 'Allocation of D2DIAGNOS, NO_D2_BOX_DIAGNOSS=', NO_D2_BOX_DIAGNOSS
-   Print *, 'Allocation of D2DIAGNOS, NO_BOXES_XY=', NO_BOXES_XY
+!   Print *, 'Allocation of D2DIAGNOS, NO_D2_BOX_DIAGNOSS=', NO_D2_BOX_DIAGNOSS
+!   Print *, 'Allocation of D2DIAGNOS, NO_BOXES_XY=', NO_BOXES_XY
    allocate(D2DIAGNOS(1:NO_D2_BOX_DIAGNOSS,1:NO_BOXES_XY),stat=status)
    if (status /= 0) call error_msg_prn(ALLOC,"AllocateMem", "D2DIAGNOS")
    D2DIAGNOS = ZERO

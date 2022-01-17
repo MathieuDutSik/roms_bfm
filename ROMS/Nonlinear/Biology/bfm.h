@@ -118,27 +118,42 @@
       REAL(r8) eTemp, eSalt, gamma, RH
       REAL(r8) wlight
       REAL(r8) ux, uy
+      REAL(r8) sumTemp, avgTemp
+      REAL(r8) sumWlight, avgWlight
+      REAL(r8) Hscale
       integer k
 # include "set_bounds.h"
       b_dew=18.678_r8
       c_dew=157.14_r8
       tileS = tile - first_tile(ng) + 1
+      sumTemp = 0
+      sumWlight = 0
+      Hscale = rho0 * Cp
       DO idx=1,NO_BOXES_XY
          i = ListArrayWet(ng) % TheArr(tileS) % ListI(idx)
          j = ListArrayWet(ng) % TheArr(tileS) % ListJ(idx)
          lat = GRID(ng) % latp(i,j)
          ! The sun
-         SUNQ(idx) = daylength(REAL(Rclock % yday, r8), lat)
+         DO k=1,N(ng)
+            idxB = N(ng) * (idx - 1) + k
+            SUNQ(idx) = daylength(REAL(Rclock % yday, r8), lat)
+         END DO
          ! The temperature and salinity
-         eTemp = OCEAN(ng) % t(i, j, N(ng), nrhs(ng), itemp)
-         eSalt = OCEAN(ng) % t(i, j, N(ng), nrhs(ng), isalt)
-         IF (eSalt .lt. 1.0_r8) THEN
-            Print *, 'salt at zero for i/j=', i, j
-         END IF
-         ETW(idx) = eTemp
-         ESW(idx) = eSalt
+         DO k=1,N(ng)
+            idxB = N(ng) * (idx - 1) + k
+            eTemp = OCEAN(ng) % t(i, j, k, nrhs(ng), itemp)
+            eSalt = OCEAN(ng) % t(i, j, k, nrhs(ng), isalt)
+            ETW(idxB) = eTemp
+            ESW(idxB) = eSalt
+            sumTemp = sumTemp + ETW(idxB)
+         END DO
          ! The irradiance
-         wlight = FORCES(ng) % srflx(i,j)
+         ! wlight in the BFM is in W m^{-2}
+         ! srflx is in degC m^{-2} so we need to convert to the W m^{-2}
+         ! See the bulk_flux code.
+         wlight = FORCES(ng) % srflx(i,j) * Hscale
+         Print *, 'idx=', idx, ' wlight=', wlight
+         sumWlight = sumWlight + wlight
          IF (ChlAttenFlag .eq. 1) THEN
            DO k=1,N(ng)
              idxB = N(ng) * (idx - 1) + k
@@ -193,6 +208,10 @@
 #endif
       END DO
       ERHO(:) = density(ETW(:),ESW(:),Depth(:)/2.0_RLEN)
+      avgTemp = sumTemp / NO_BOXES
+      Print *, 'sumTemp=', sumTemp, 'avgTemp=', avgTemp
+      avgWlight = sumWlight / NO_BOXES_XY
+      Print *, 'avgWlight=', avgWlight
       END SUBROUTINE
 !
 !-----------------------------------------------------------------------
@@ -385,8 +404,7 @@
       END DO
       END SUBROUTINE
 
-
-      SUBROUTINE PRINT_AVERAGE_D3STATE(ng, tile)
+      SUBROUTINE PRINT_BFM_STATE_KEYS(ng, tile)
       USE mod_param
       USE mod_biology
       USE mod_ncparam
@@ -406,7 +424,7 @@
       DO iVar=stPelStateS, stPelStateE
         itrc = iVar - stPelStateS + 1
         ibio = idbio(itrc)
-        Print *, 'iVar=', iVar, ' itrc=', itrc, ' ibio=', ibio
+!        Print *, 'iVar=', iVar, ' itrc=', itrc, ' ibio=', ibio
       END DO
       Print *, 'size(D3STATE,1:2)=', size(D3STATE,1), size(D3STATE,2)
       Print *, 'Computing the average NO_BOXES_XY/Z=', NO_BOXES_XY, NO_BOXES_Z
@@ -435,7 +453,7 @@
          END DO
       END DO
       TotalNb = NO_BOXES_Z * NO_BOXES_XY
-      Print *, 'TotalNb=', TotalNb
+      Print *, 'PRINT_BFM_STATE_KEYS : TotalNb=', TotalNb
       DO i=1,siz
         eAvg = ArrSum(i) / TotalNb
         eMin = ArrMin(i)
@@ -443,8 +461,18 @@
         Print *, 'i=', i, ' min/max/avg=', eMin, eMax, eAvg
       END DO
       deallocate(ArrSum, ArrMin, ArrMax)
-      Print *, "siz=", siz, " NO_D3_BOX_STATES=", NO_D3_BOX_STATES
+      Print *, 'The D3DIAGNOS variables'
       allocate(F(TotalNb))
+      DO j=1,NO_D3_BOX_DIAGNOSS
+         DO i=1,TotalNb
+            F(i) = D3DIAGNOS(j,i)
+         END DO
+         eminval = minval(F)
+         emaxval = maxval(F)
+         eavgval = sum(F) / TotalNb
+         Print *, 'j=', j, ' min/max/avg=', eminval, emaxval, eavgval
+      END DO
+
       DO j=1,NO_D3_BOX_STATES
          DO i=1,TotalNb
             F(i) = D3STATE(j,i)
@@ -719,6 +747,7 @@
       integer, intent(in) :: ng, tile
 # include "tile.h"
       CALL INIT_BFM_SYSTEM_VARIABLE_LOCAL_tile(LBi, UBi, LBj, UBj, N(ng), NT(ng), ng, tile, OCEAN(ng) % t)
+      CALL SET_BFM_FIELDS_FROM_ROMS(ng, tile)
       END SUBROUTINE
 
       SUBROUTINE INIT_BFM_SYSTEM_VARIABLE_LOCAL_tile(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, t)
@@ -745,7 +774,7 @@
       Print *, 'UBk=', UBk, ' UBt=', UBt
       !
       Print *, 'Printing average of D3STATE'
-      CALL PRINT_AVERAGE_D3STATE(ng, tile)
+      CALL PRINT_BFM_STATE_KEYS(ng, tile)
       Print *, 'CopyInitialToD3STATE=', CopyInitialToD3STATE
       Print *, 'CopyD3STATEtoInitial=', CopyD3STATEtoInitial
       IF (CopyD3STATEtoInitial) THEN
@@ -766,7 +795,6 @@
         CALL COPY_T_to_D3STATE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, 1, t)
       END IF
       Print *, 'End of INIT_BFM_SYSTEM_VARIABLE_local'
-      CALL PRINT_AVERAGE_D3STATE(ng, tile)
       END SUBROUTINE
 
       SUBROUTINE PRINT_CRITICAL(pos)
@@ -904,9 +932,10 @@
       IF (PosMultiplier == MULTIPLIER(ng)) THEN
         PosMultiplier = 0
         CALL SET_BOT_SURFINDICES(ng, tile)
+        CALL PRINT_BFM_STATE_KEYS(ng, tile)
 
 !        Print *, 'Printing D3STATE before Source term integration'
-!        CALL PRINT_AVERAGE_D3STATE(ng, tile)
+!        CALL PRINT_BFM_STATE_KEYS(ng, tile)
         CALL SET_BFM_DEPTH(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, nstp)
         IF (AdvectionD3STATE) THEN
           CALL COPY_T_to_D3STATE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, nstp, t)

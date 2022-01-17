@@ -1236,6 +1236,7 @@ end subroutine init_netcdf_rst_bfm
 !
 ! !USES:
    use mem, only: D3STATE,D3DIAGNOS,D3FLUX_FUNC
+   use mem, only: NO_D3_BOX_STATES, NO_D3_BOX_DIAGNOSS
    use mem, only: D2DIAGNOS
 #if defined INCLUDE_SEAICE
    use mem, only: D2STATE_ICE,D2DIAGNOS_ICE,D2DIAGNOS_ICE,D2FLUX_FUNC_ICE
@@ -1251,6 +1252,7 @@ end subroutine init_netcdf_rst_bfm
    integer                   :: iret
    integer                   :: k,n,idx_tmp
    real(RLEN)                :: temp_time
+   real(RLEN) eavg
 !
 ! !REVISION HISTORY:
 !  Original author(s): Hans Burchard & Karsten Bolding
@@ -1265,6 +1267,16 @@ end subroutine init_netcdf_rst_bfm
 #endif
 ! increase the time record number
    recnum = recnum + 1
+   Print *, 'Passing by save_bfm NO_BOXES=', NO_BOXES
+   DO k=1,NO_D3_BOX_STATES
+     eavg = sum(D3STATE(k,:)) / NO_BOXES
+     Print *, 'k=', k, ' D3STATE eavg=', eavg
+   END DO
+   DO k=1,NO_D3_BOX_DIAGNOSS
+     eavg = sum(D3DIAGNOS(k,:)) / NO_BOXES
+     Print *, 'k=', k, ' D3DIAGNOS eavg=', eavg
+   END DO
+
 
 !  Storing the time - both the coordinate and later a time string.
    select case (ncdf_time_unit)

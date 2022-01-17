@@ -96,6 +96,7 @@ subroutine analytical_forcing
       wlight=instLight(wlight,SUNQ(1),dfrac)
     case default ! light constant during the day
    end select
+   Print *, 'Setting ETW in analytical_forcing'
    ETW(:) = temperature(dyear,dfrac)
    ESW(:) = salinity(dyear,dfrac)
    ! compute density at the middle of the layer
