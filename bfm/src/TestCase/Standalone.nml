@@ -16,7 +16,7 @@
     indepth      =  5.0
     latitude     =  45.0
     longitude    =  13.5
-    maxdelt      =  8640.0
+    maxdelt      =  100.0
     mindelt      =  1.0
     method       =  1
 /
@@ -29,19 +29,19 @@
 !               	1- MaxN only - fake start time used.
 !               	2- start and stop - MaxN calculated.
 !               	3- start and MaxN - stop calculated.
-!               	4- simdays - fake start time used 
+!               	4- simdays - fake start time used
 !			   and MaxN calculated.
 !MaxN		integer	do loop from n=1,MaxN
 !start		string	Initial time: YYYY/MM/DD HH:MM:SS
 !stop		string	Final   time: YYYY/MM/DD HH:MM:SS
 !-------------------------------------------------------------------------!
-&time_nml    
-    timefmt  =  2                      
-    MaxN     =  144                    
-    simdays  =  5760                   
-    start    =  '2000-01-01 00:00:00'  
-    stop     =  '2010-01-01 00:00:00'  
-/            
+&time_nml
+    timefmt  =  2
+    MaxN     =  144
+    simdays  =  5760
+    start    =  '2000-01-01 00:00:00'
+    stop     =  '2010-01-01 00:00:00'
+/
 
 
 
@@ -70,22 +70,22 @@
 !data_file	   char	   Filename for external data
 !
 !-------------------------------------------------------------------------!
-&forcings_nml          
-    forcing_method     =  1        
-    ltype              =  4        
-    lw                 =  20.0     
-    ls                 =  300.0    
-    sw                 =  37.0     
-    ss                 =  34.0     
-    tw                 =  7.0      
-    ts                 =  28.0     
-    tde                =  1.0      
-    ww                 =  20.0     
-    ws                 =  10.0     
-    forcing_file       =  ''       
-    use_external_data  =  .false.  
-    data_file          =  ''       
-/                      
+&forcings_nml
+    forcing_method     =  1
+    ltype              =  4
+    lw                 =  20.0
+    ls                 =  300.0
+    sw                 =  37.0
+    ss                 =  34.0
+    tw                 =  7.0
+    ts                 =  28.0
+    tde                =  1.0
+    ww                 =  20.0
+    ws                 =  10.0
+    forcing_file       =  ''
+    use_external_data  =  .false.
+    data_file          =  ''
+/
 
 
 

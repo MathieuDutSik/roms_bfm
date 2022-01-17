@@ -81,17 +81,18 @@ subroutine correct_flux_output(mode, nr0,zlev,nlev,out)
 #else
   real(RLEN),dimension(NO_BOXES)   :: hulp
 #endif
+  REAL(RLEN) eavg, emax, emin
   nr=nr0
-  Print *, 'nr0=', nr0, ' RLEN=', RLEN, ' nlev=', nlev
+  Print *, 'Begin correct_flux_output : nr0=', nr0, ' RLEN=', RLEN, ' nlev=', nlev
   Print *, 'size(out)=', size(out)
   Print *, 'size(D3FLUX_FUNC)=', size(D3FLUX_FUNC,1), size(D3FLUX_FUNC,2)
-  DO idx_i=1,NO_D3_BOX_FLUX
-      Print *, 'idx_i=', idx_i, ' sum(D3FLUX_FUNC(idx_i,:))=',          &
-     &   sum(abs(D3FLUX_FUNC(idx_i, :)))
-  END DO
-  Print *, 'sum(abs(D3FLUX_FUNC))=', sum(abs(D3FLUX_FUNC))
+!  DO idx_i=1,NO_D3_BOX_FLUX
+!      Print *, 'idx_i=', idx_i, ' sum(D3FLUX_FUNC(idx_i,:))=',          &
+!     &   sum(abs(D3FLUX_FUNC(idx_i, :)))
+!  END DO
+!  Print *, 'sum(abs(D3FLUX_FUNC))=', sum(abs(D3FLUX_FUNC))
   out(:) = D3FLUX_FUNC(nr0,:)
-  Print *, '1 : max(out)=', maxval(out)
+  Print *, '1 : max(out)=', maxval(out), ' nlev=', nlev
   do idx_i=stPelStateS, stPelStateE
        origin      = idx_i
        destination = idx_i
@@ -118,5 +119,9 @@ subroutine correct_flux_output(mode, nr0,zlev,nlev,out)
         end do
      end if
   end do
-  Print *, '2 : max(out)=', maxval(out)
+  eavg = sum(out(:)) / nlev
+  emax = maxval(out)
+  emin = minval(out)
+  Print *, 'avg/max/min=', eavg, emax, emin
+
 end subroutine correct_flux_output

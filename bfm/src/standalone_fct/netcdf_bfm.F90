@@ -1299,6 +1299,7 @@ end subroutine init_netcdf_rst_bfm
          !-- Store snapshot of pelagic fluxes
          if ( n >= stPelFluxS .AND. n <= stPelFluxE ) then
             idx_tmp=n-stPelFluxS+1
+            Print *, 'netcdf_bfm idx_tmp=', idx_tmp
             call correct_flux_output(1,idx_tmp,1,NO_BOXES,c1dim)
             iret = store_data(ncid_bfm,var_ids(n),OCET_SHAPE,NO_BOXES,garray=c1dim)
          endif

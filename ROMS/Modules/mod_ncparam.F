@@ -2247,7 +2247,7 @@
           Iinfo(1,varid,ng)=r2dvar
         END DO
         TheId = idTvar(i)
-        Print *, 'TheId=', TheId
+!        Print *, 'TheId=', TheId
         WRITE (Vname(1,varid),'(a,a)')                                  &
      &        TRIM(ADJUSTL(Vname(1,idTvar(i)))), '_sflux'
         WRITE (Vname(2,varid),'(a,a)')                                  &

@@ -243,12 +243,19 @@
       REAL(8) sumABS_ruPTc
       integer :: idx_ruptc = 1
       integer :: idx_ruztc = 2
+      REAL(RLEN) val, eavg
+      REAL(RLEN) :: sumABS(NO_BOXES_Z)
+      REAL(RLEN) :: maxABS(NO_BOXES_Z)
+      REAL(RLEN) :: minABS(NO_BOXES_Z)
 
       tileS = tile - first_tile(ng) + 1
       NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
       Print *, 'NO_BOXES=', NO_BOXES, ' RLEN=', RLEN
+      Print *, 'Before correct_flux_output idx_ruptc=', idx_ruptc
       CALL correct_flux_output(1,idx_ruptc,1,NO_BOXES,ARR)
-      sumABS_ruPTc = 0
+      sumABS(:) = 0
+      maxABS(:) = 0
+      minABS(:) = 100000
       DO iNode=1,NO_BOXES_XY_loc
          i = ListArrayWet(ng) % TheArr(tileS) % ListI(iNode)
          j = ListArrayWet(ng) % TheArr(tileS) % ListJ(iNode)
@@ -256,10 +263,18 @@
             iZ = k
             idx = iZ + NO_BOXES_Z * (iNode-1)
             OCEAN(ng) % ROMS_ruPTC(i,j,k) = ARR(idx)
-            sumABS_ruPTc = sumABS_ruPTc + ABS(ARR(idx))
+            val = ABS(ARR(idx))
+            sumABS(k) = sumABS(k) + val
+            maxABS(k) = MAX(maxABS(k), val)
+            minABS(k) = MIN(minABS(k), val)
          END DO
       END DO
-      Print *, 'sumABS_ruPTc=', sumABS_ruPTc
+      Print *, 'Statistics for RUPTC'
+      DO k=1,NO_BOXES_Z
+        eavg = sumABS(k) / NO_BOXES_XY_loc
+        Print *, 'k=',k,'avg/max/min=', eavg,maxABS(k),minABS(k)
+      END DO
+      Print *, 'Before correct_flux_output idx_ruztc=', idx_ruztc
       CALL correct_flux_output(1,idx_ruztc,1,NO_BOXES,ARR)
       DO iNode=1,NO_BOXES_XY_loc
          i = ListArrayWet(ng) % TheArr(tileS) % ListI(iNode)
@@ -350,7 +365,7 @@
       integer iNode, i, j, k, iZ, idx
       integer iVar, itrc, ibio, NO_BOXES_XY_loc, tileS
       REAL(r8) eVal
-!      Print *, 'CP_D3_T : stPelStateS=', stPelStateS, ' stPelStateE=', stPelStateE
+      Print *, 'stPelStateS=', stPelStateS, ' stPelStateE=', stPelStateE
       tileS = tile - first_tile(ng) + 1
       NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
       DO iNode=1,NO_BOXES_XY_loc
