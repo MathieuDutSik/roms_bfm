@@ -28,9 +28,9 @@
       character(len=25)      :: datestring   ! calendar date string for NetCDF
       character(len=25)      :: date0        ! calendar date of run start
       character(len=25)      :: dateEnd      ! calendar date of run end
-      real(RLEN)             :: time0        ! Julian day start of run 
+      real(RLEN)             :: time0        ! Julian day start of run
       real(RLEN)             :: timeEnd      ! Julian day end of run
-      integer                :: step0        ! Initial step # 
+      integer                :: step0        ! Initial step #
       integer                :: stepnow      ! Actual step #
       integer                :: stepEnd      ! Actual step #
       integer                :: timestep     ! Delta t
@@ -188,7 +188,7 @@
 
    simtime = timestep*(MaxN-MinN+1)
 
-   ! Set bfmtime 
+   ! Set bfmtime
    jday = real(jul0,RLEN)
    call calendar_date(jday,yy,mm,dd,hh,nn)
    write(bfmtime%datestring,'(i4.4,a1,i2.2,a1,i2.2,1x,I2.2,a1,I2.2)') yy,'-',mm,'-',dd,hh,':',nn
@@ -586,9 +586,9 @@
         outfreq = timesec
         write(outdeltalab,'(i12,a1)') outfreq, 's'
      endif
-     
+
      ! Remove leading spaces
-     outdeltalab = ADJUSTL( outdeltalab ) 
+     outdeltalab = ADJUSTL( outdeltalab )
 
      return
  end function outdeltalab

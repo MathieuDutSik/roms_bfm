@@ -429,8 +429,8 @@
         ibio = idbio(itrc)
 !        Print *, 'iVar=', iVar, ' itrc=', itrc, ' ibio=', ibio
       END DO
-      Print *, 'size(D3STATE,1:2)=', size(D3STATE,1), size(D3STATE,2)
-      Print *, 'Computing the average NO_BOXES_XY/Z=', NO_BOXES_XY, NO_BOXES_Z
+!      Print *, 'size(D3STATE,1:2)=', size(D3STATE,1), size(D3STATE,2)
+!      Print *, 'Computing the average NO_BOXES_XY/Z=', NO_BOXES_XY, NO_BOXES_Z
       siz = stPelStateE + 1 - stPelStateS
       Allocate(ArrSum(siz), ArrMin(siz), ArrMax(siz))
       DO i=1,siz
@@ -456,7 +456,7 @@
          END DO
       END DO
       TotalNb = NO_BOXES_Z * NO_BOXES_XY
-      Print *, 'PRINT_BFM_STATE_KEYS : TotalNb=', TotalNb
+      Print *, 'PRINT_BFM_STATE_KEYS : The D3STATE variables'
       DO i=1,siz
         eAvg = ArrSum(i) / TotalNb
         eMin = ArrMin(i)
@@ -464,7 +464,7 @@
         Print *, 'i=', i, ' min/max/avg=', eMin, eMax, eAvg
       END DO
       deallocate(ArrSum, ArrMin, ArrMax)
-      Print *, 'The D3DIAGNOS variables'
+      Print *, 'PRINT_BFM_STATE_KEYS : The D3DIAGNOS variables'
       allocate(F(TotalNb))
       DO j=1,NO_D3_BOX_DIAGNOSS
          DO i=1,TotalNb
@@ -778,7 +778,6 @@
       Print *, 'UBk=', UBk, ' UBt=', UBt
       !
       Print *, 'Printing average of D3STATE'
-      CALL PRINT_BFM_STATE_KEYS(ng, tile)
       Print *, 'CopyInitialToD3STATE=', CopyInitialToD3STATE
       Print *, 'CopyD3STATEtoInitial=', CopyD3STATEtoInitial
       IF (CopyD3STATEtoInitial) THEN
@@ -798,6 +797,7 @@
         Print *, 'copying T to D3STATE'
         CALL COPY_T_to_D3STATE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, 1, t)
       END IF
+      CALL PRINT_BFM_STATE_KEYS(ng, tile)
       Print *, 'End of INIT_BFM_SYSTEM_VARIABLE_local'
       END SUBROUTINE
 

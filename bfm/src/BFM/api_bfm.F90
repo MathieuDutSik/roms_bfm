@@ -544,7 +544,7 @@ contains
         LEVEL2 '(Required filename ',trim(in_rst_fname),')'
    end select
 
-#ifndef BFM_STANDALONE
+#if !defined BFM_STANDALONE && !defined BFM_ROMS
    LEVEL1 ' '
    LEVEL2 'EXPERIMENT TIME SETTINGS :'
    LEVEL2 ' Start Date (yyyymmdd)  : ', trim(bfmtime%date0)
