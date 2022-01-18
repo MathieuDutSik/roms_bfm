@@ -1,13 +1,13 @@
 #include "cppdefs_bfm.h"
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-! MODEL  BFM - Biogeochemical Flux Model 
+! MODEL  BFM - Biogeochemical Flux Model
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 !BOP
 !
 ! !ROUTINE: Param
 !
 ! DESCRIPTION
-!   List of global model parameters 
+!   List of global model parameters
 !   (global variables that can be changed during the model initialization
 !
 ! !INTERFACE
@@ -20,7 +20,7 @@
   USE constants
   USE mem
 
-!  
+!
 !
 ! !AUTHORS
 !   Piet Ruardij and Marcello Vichi
@@ -29,7 +29,7 @@
 !   --------
 !
 ! COPYING
-!   
+!
 !   Copyright (C) 2015 BFM System Team (bfm_st@lists.cmcc.it)
 !   Copyright (C) 2006 P. Ruardij, M. Vichi
 !   (rua@nioz.nl, vichi@bo.ingv.it)
@@ -88,12 +88,12 @@
   !                                           phytoplankton
   ! check_fixed_quota             numeric Check whether zooplankton have fixed quota
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  logical   :: CalcPelagicFlag=.TRUE.  
+  logical   :: CalcPelagicFlag=.TRUE.
   integer   :: CalcBenthicFlag=0      ! Switch for Benthic system
   logical   :: CalcSeaiceFlag=.TRUE.  ! Switch for Seaice system
 
-  logical   :: CalcTransportFlag=.FALSE.  
-  logical   :: CalcConservationFlag=.TRUE.  
+  logical   :: CalcTransportFlag=.FALSE.
+  logical   :: CalcConservationFlag=.TRUE.
   logical   :: CalcPelChemistry=.TRUE.
   logical   :: AssignPelBenFluxesInBFMFlag=.TRUE.
   logical   :: AssignAirPelFluxesInBFMFlag=.TRUE.
@@ -101,19 +101,19 @@
   integer   :: check_fixed_quota=0
 
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  ! Global Parameters : used throughout the model and not related 
+  ! Global Parameters : used throughout the model and not related
   !                     to a specific component
   ! NAME          UNIT          DESCRIPTION
   ! p_small      [-]           Smallest numeric value (the model "zero")
   ! slp0         [mbar]        Reference sea level pressure
-  ! p_pe_R1c     [-]           Fractional content of C in cytoplasm 
+  ! p_pe_R1c     [-]           Fractional content of C in cytoplasm
   ! p_pe_R1n     [-]           Fractional content of N in cytoplasm
   ! p_pe_R1p     [-]           Fractional content of P in cytoplasm
   ! p_qro        [mmolHS-/     Stoichiometric coefficient for
   !               mmolO2]      anaerobic reactions
-  ! p_qon_dentri [mmolO2/      Stoichiometric coefficient for 
-  !               mmolN]       denitrification 
-  ! p_qon_nitri  [mmolO2/      Stoichiometric coefficient for 
+  ! p_qon_dentri [mmolO2/      Stoichiometric coefficient for
+  !               mmolN]       denitrification
+  ! p_qon_nitri  [mmolO2/      Stoichiometric coefficient for
   !               mmolN]       nitrification (3/2)
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -146,14 +146,14 @@
   ! p_poro        [-]           Sediment porosity
   ! p_p_ae        [-]           Adsorption coefficient
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-  ! 0d-parameters 
-  integer      :: p_sedlevels=20 
+  ! 0d-parameters
+  integer      :: p_sedlevels=20
       real(RLEN)   ::                                                   &
      & p_sedsigma=2.0_RLEN,                                             &
      & p_d_tot=0.30_RLEN ,                                              &
      & p_poro0=0.4
   ! 1d-parameters
-  real(RLEN),public,dimension(:),allocatable   ::  p_p_ae, p_poro      
+  real(RLEN),public,dimension(:),allocatable   ::  p_p_ae, p_poro
 #ifdef INCLUDE_BEN
       integer   :: calc_init_bennut_states
       real(RLEN)   ::                                                   &
@@ -178,7 +178,7 @@
   ! SHARED PUBLIC FUNCTIONS (must be explicited below "contains")
 
   public InitParam
-  
+
   contains
 
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -216,8 +216,8 @@
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
    LEVEL1 "#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
    LEVEL1 "#  Reading BFM parameters .."
-      open(NMLUNIT,file='BFM_General.nml',status='old',                 &
-     & action='read',err=100)
+   eFile = TRIM(BFM_Prefix_NML) // 'BFM_General.nml'
+   open(NMLUNIT,file=eFile,status='old',action='read',err=100)
    read(NMLUNIT,nml=Param_parameters,err=101)
 #ifdef INCLUDE_BEN
    read(NMLUNIT,nml=Param_parameters_ben,err=102)
@@ -226,8 +226,8 @@
    read(NMLUNIT,nml=Param_parameters_ice,err=103)
 #endif
    close(NMLUNIT)
-   if (bfm_lwp) then 
-    write(LOGUNIT,*) "#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"      
+   if (bfm_lwp) then
+    write(LOGUNIT,*) "#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
     write(LOGUNIT,*) "#  Reading Param parameters.. "
     write(LOGUNIT,*) "#  Namelist is:"
     write(LOGUNIT,nml=Param_parameters)

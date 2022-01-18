@@ -1,5 +1,5 @@
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-! MODEL  BFM - Biogeochemical Flux Model 
+! MODEL  BFM - Biogeochemical Flux Model
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 !BOP
 !
@@ -8,7 +8,7 @@
 ! DESCRIPTION
 !   !
 
-!   This file is generated directly from OpenSesame model code, using a code 
+!   This file is generated directly from OpenSesame model code, using a code
 !   generator which transposes from the sesame meta language into F90.
 !   F90 code generator written by P. Ruardij.
 !   structure of the code based on ideas of M. Vichi.
@@ -20,7 +20,7 @@
 
   use global_mem
 
-!  
+!
 !
 ! !AUTHORS
 !   Piet Ruardij
@@ -33,9 +33,9 @@
 !
 !
 ! COPYING
-!   
+!
 !   Copyright (C) 2015 BFM System Team (bfm_st@lists.cmcc.it)
-!   Copyright (C) 2006 P. Ruardij, the mfstep group, the ERSEM team 
+!   Copyright (C) 2006 P. Ruardij, the mfstep group, the ERSEM team
 !   (rua@nioz.nl, vichi@bo.ingv.it)
 !
 !   This program is free software; you can redistribute it and/or modify
@@ -65,8 +65,8 @@
   !  All parameter were copied from the .p-file:
   ! NAME           UNIT      DESCRIPTION
   ! p_rR6m         [m/d]   detritus sinking rate
-  ! KSINK_rPPY      [m]    prescribe sinking rate for phytoplankton below this 
-  !                        depth threshold to p_rR6m value. Use 0.0 to disable. 
+  ! KSINK_rPPY      [m]    prescribe sinking rate for phytoplankton below this
+  !                        depth threshold to p_rR6m value. Use 0.0 to disable.
   ! AggregateSink  logic   use aggregation = true to enhance the sink rate
   !                        and bypass the prescribed sinking
   ! depth_factor    [m]    depth factor for aggregation method
@@ -97,11 +97,12 @@
 
 write(LOGUNIT,*) "#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
    write(LOGUNIT,*) "#  Reading PelGlobal parameters.."
-open(NMLUNIT,file='Pelagic_Environment.nml',status='old',action='read',err=100)
-    read(NMLUNIT,nml=PelGlobal_parameters,err=101)
-    close(NMLUNIT)
-    write(LOGUNIT,*) "#  Namelist is:"
-    write(LOGUNIT,nml=PelGlobal_parameters)
+   eFile = TRIM(BFM_Prefix_NML) // 'Pelagic_Environment.nml'
+   open(NMLUNIT,file=eFile,status='old',action='read',err=100)
+   read(NMLUNIT,nml=PelGlobal_parameters,err=101)
+   close(NMLUNIT)
+   write(LOGUNIT,*) "#  Namelist is:"
+   write(LOGUNIT,nml=PelGlobal_parameters)
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   !END compute
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -116,5 +117,5 @@ open(NMLUNIT,file='Pelagic_Environment.nml',status='old',action='read',err=100)
   end module mem_PelGlobal
 !BOP
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-! MODEL  BFM - Biogeochemical Flux Model 
+! MODEL  BFM - Biogeochemical Flux Model
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-

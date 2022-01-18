@@ -1,5 +1,5 @@
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-! MODEL  BFM - Biogeochemical Flux Model 
+! MODEL  BFM - Biogeochemical Flux Model
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 !BOP
 !
@@ -10,7 +10,7 @@
 !
 !
 
-!   This file is generated directly from OpenSesame model code, using a code 
+!   This file is generated directly from OpenSesame model code, using a code
 !   generator which transposes from the sesame meta language into F90.
 !   F90 code generator written by P. Ruardij.
 !   structure of the code based on ideas of M. Vichi.
@@ -24,7 +24,7 @@
   use mem,  ONLY: iiMesoZooPlankton, &
                   iiPhytoPlankton, iiMicroZooplankton
 
-!  
+!
 !
 ! !AUTHORS
 !   N. Broekhuizen and A.D. Bryant, ERSEM group
@@ -35,9 +35,9 @@
 !   !
 !
 ! COPYING
-!   
+!
 !   Copyright (C) 2015 BFM System Team (bfm_st@lists.cmcc.it)
-!   Copyright (C) 2006 P. Ruardij, the mfstep group, the ERSEM team 
+!   Copyright (C) 2006 P. Ruardij, the mfstep group, the ERSEM team
 !   (rua@nioz.nl, vichi@bo.ingv.it)
 !
 !   This program is free software; you can redistribute it and/or modify
@@ -120,7 +120,8 @@
   write(LOGUNIT,*) "#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
   write(LOGUNIT,*) "#  Reading MesoZoo parameters.."
   Print *, 'Before reading Pelagic_Ecology_1 iiMesoZooPlankton=', iiMesoZooPlankton
-  open(NMLUNIT,file='Pelagic_Ecology_1.nml',status='old',action='read',err=100)
+  eFile = TRIM(BFM_Prefix_NML) // 'Pelagic_Ecology_1.nml'
+  open(NMLUNIT,file=eFile,status='old',action='read',err=100)
   read(NMLUNIT,nml=MesoZoo_parameters,err=101)
   close(NMLUNIT)
   Print *, ' After reading Pelagic_Ecology_1'
@@ -141,5 +142,5 @@
   end module mem_MesoZoo
 !EOC
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-! MODEL  BFM - Biogeochemical Flux Model 
+! MODEL  BFM - Biogeochemical Flux Model
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-

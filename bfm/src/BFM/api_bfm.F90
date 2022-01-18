@@ -7,8 +7,8 @@
 ! !INTERFACE:
    module api_bfm
 !
-! !DESCRIPTION: 
-! API for the BFM. 
+! !DESCRIPTION:
+! API for the BFM.
 ! Storage of variables and diagnostics
 ! To be used in all the coupled applications except
 ! GOTM, where it actually originated from.
@@ -18,6 +18,7 @@
 !
 ! !USE:
    use global_mem, only:RLEN,ZERO,bfm_lwp,LOGUNIT
+   use global_mem, only: BFM_Prefix_NML, eFile
    use mem,        only:NO_D3_BOX_STATES
    implicit none
 
@@ -43,7 +44,7 @@
 
    !---------------------------------------------
    ! parameters for massive parallel computation
-   ! the following are the default values if the 
+   ! the following are the default values if the
    ! macro BFM_PARALLEL is not defined
    !---------------------------------------------
    logical                            :: parallel = .FALSE.
@@ -111,7 +112,7 @@
    integer,public                            :: stPelRivE=0
 
    integer,public                            :: stPelStart=0
-   integer,public                            :: stPelEnd=0    
+   integer,public                            :: stPelEnd=0
 
 #if defined INCLUDE_SEAICE
    integer,public                            :: stIceStateS=0
@@ -123,7 +124,7 @@
    integer,public                            :: stIceFlux2dE=0
 
    integer,public                            :: stIceStart=0
-   integer,public                            :: stIceEnd=0    
+   integer,public                            :: stIceEnd=0
 
 #endif
 
@@ -137,7 +138,7 @@
    integer,public                            :: stBenFlux2dE=0
 
    integer,public                            :: stBenStart=0
-   integer,public                            :: stBenEnd=0    
+   integer,public                            :: stBenEnd=0
 
 #endif
 
@@ -335,13 +336,13 @@ contains
    use mem, only: NO_D2_BOX_STATES_ICE,  &
                   NO_D2_BOX_DIAGNOSS_ICE, &
                   NO_D2_BOX_FLUX_ICE, &
-                  NO_STATES_ICE, NO_BOXES_ICE, NO_BOXES_Z_ICE 
+                  NO_STATES_ICE, NO_BOXES_ICE, NO_BOXES_Z_ICE
 #endif
 #if defined INCLUDE_BEN
    use mem, only: NO_D2_BOX_STATES_BEN,  &
                   NO_D2_BOX_DIAGNOSS_BEN, &
                   NO_D2_BOX_FLUX_BEN, &
-                  NO_STATES_BEN, NO_BOXES_BEN, NO_BOXES_Z_BEN 
+                  NO_STATES_BEN, NO_BOXES_BEN, NO_BOXES_Z_BEN
 #endif
 
    use global_mem, only: LOGUNIT
@@ -397,7 +398,8 @@ contains
    !---------------------------------------------
    !  Open and read the namelist
    !---------------------------------------------
-   open(namlst,file='BFM_General.nml',action='read',status='old',err=99)
+   eFile = TRIM(BFM_Prefix_NML) // 'BFM_General.nml'
+   open(namlst,file=eFile,action='read',status='old',err=99)
    read(namlst,nml=bfm_nml,err=98)
    close(namlst)
 
@@ -406,20 +408,20 @@ contains
    LEVEL2 "BFM is running in Parallel"
    parallel = .TRUE.
    ! variable parallel_rank must have been assigned previously
-   ! in the coupling with the ocean model 
+   ! in the coupling with the ocean model
    ! check if logs have to be produced for each process
-   ! and provide a different log file name 
+   ! and provide a different log file name
    LOGUNIT = 1069 + parallel_rank
    write(str,'(I4.4)') parallel_rank
     if (parallel_log) then
        if (parallel_rank == 0) then
           bfm_lwp = .TRUE.
           logfname = 'bfm.log'
-       else 
+       else
           bfm_lwp = .FALSE.
           logfname = '/dev/null'
        end if
-    else 
+    else
        ! logs are produced for every process
        bfm_lwp = .TRUE.
        logfname = 'bfm_'//str//'.log'
@@ -551,7 +553,7 @@ contains
    LEVEL2 ' Final step             : ', bfmtime%stepEnd
    LEVEL2 ' Timestep (seconds)     : ', bfmtime%timestep
 #endif
-   
+
    !WRITE(LOGUNIT,'(1a)') 'NetCDF date  Start Date  End Date  Julianday0 &
    !                      & JuliandayEnd   step0  stepnow  stepEnd  timestep'
    !WRITE(LOGUNIT,'(a10,4x,a8,3x,a8,2x,f10.1,2x,f10.1,1x,i9,i9,i9,i9)') bfmtime
@@ -579,7 +581,7 @@ contains
        LEVEL3 " - Data deflation active with compression level (0-9) : ",nc_defllev
      else
        LEVEL3 " - Data deflation is not active."
-     endif 
+     endif
    else
      LEVEL3 ' '
      LEVEL3 "Output/Restart files generated without NetCDF data compression."
@@ -664,21 +666,21 @@ contains
    use time
    use global_mem, only: RLEN,LOGUNIT
    use constants,  only: SEC_PER_DAY
- 
+
    implicit none
    integer,intent(IN)     :: outdelta
    integer,intent(OUT)    :: savedelta
    real(RLEN),intent(OUT) :: timedelta
-   real(RLEN)             :: julian1, julian2  
+   real(RLEN)             :: julian1, julian2
    integer                :: yyyy,mm,dd,hh,nn,tmptime
 
    if ( bfmtime%stepnow .eq. bfmtime%stepEnd ) return
    !
    ! if outdelta is finite use it as default output stepping
-   if ( outdelta .ge. 0 ) then 
+   if ( outdelta .ge. 0 ) then
       tmptime = outdelta
       savedelta = savedelta + outdelta
-   endif 
+   endif
    !
    ! if outdelta is negative dinamically set the output to end of the month
    if ( outdelta .lt. 0 ) then
@@ -686,28 +688,28 @@ contains
      &    * bfmtime%timestep / SEC_PER_DAY)
       call calendar_date(julian1,yyyy,mm,dd,hh,nn)
       call julian_day(yyyy,mm,eomdays(yyyy,mm),24,0,julian2)
-       
+
       tmptime = int( julian2 - julian1 ) * int(SEC_PER_DAY)             &
      &    / bfmtime%timestep
       savedelta = savedelta + int( julian2 - julian1 ) *                &
      &    int(SEC_PER_DAY) / bfmtime%timestep
 
       write(LOGUNIT,*)
-      write(LOGUNIT,*) 'update_save_delta : Output will be saved for the real monthly value at step ', savedelta 
-      write(LOGUNIT,*) 
+      write(LOGUNIT,*) 'update_save_delta : Output will be saved for the real monthly value at step ', savedelta
+      write(LOGUNIT,*)
    endif
    !
    ! check if output is after the end of simulation and adjust the value
    if ( bfmtime%stepEnd .lt. savedelta .and. .NOT. unpad_out ) then
-      tmptime = bfmtime%stepEnd - ( savedelta - tmptime )  
-      savedelta = bfmtime%stepEnd  
+      tmptime = bfmtime%stepEnd - ( savedelta - tmptime )
+      savedelta = bfmtime%stepEnd
       write(LOGUNIT,*) 'update_save_delta : Last output saving is beyond the end of the simulation.'
       write(LOGUNIT,*) 'update_save_delta : Output saved at the end of the experiment at ', savedelta
       write(LOGUNIT,*)
    endif
-   ! set timestep for time output 
+   ! set timestep for time output
    timedelta = real(savedelta,RLEN)
-   if (ave_ctl) timedelta = real(savedelta,RLEN) - (real(tmptime,RLEN) / 2.0) 
+   if (ave_ctl) timedelta = real(savedelta,RLEN) - (real(tmptime,RLEN) / 2.0)
 
    end subroutine  update_save_delta
 !EOC
@@ -716,7 +718,7 @@ contains
 !-----------------------------------------------------------------------
 !BOP
 !
-! !IROUTINE: 
+! !IROUTINE:
 !
 ! !INTERFACE:
    function find(vector,nt)

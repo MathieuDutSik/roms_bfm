@@ -1,5 +1,5 @@
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-! MODEL  BFM - Biogeochemical Flux Model 
+! MODEL  BFM - Biogeochemical Flux Model
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 !BOP
 !
@@ -17,18 +17,18 @@
   MODULE global_mem
 !
 
-!  
+!
 !
 ! !AUTHORS
-!   P. Ruardij (NIOZ)/ M. Vichi (INGV) 
+!   P. Ruardij (NIOZ)/ M. Vichi (INGV)
 !
 ! !REVISION_HISTORY
 !   ---
 !
 ! COPYING
-!   
+!
 !   Copyright (C) 2015 BFM System Team (bfm_st@lists.cmcc.it)
-!   Copyright (C) 2006 P. Ruardij, M. Vichi 
+!   Copyright (C) 2006 P. Ruardij, M. Vichi
 !   (rua@nioz.nl, vichi@bo.ingv.it)
 !
 !   This program is free software; you can redistribute it and/or modify
@@ -82,6 +82,8 @@
   integer,    parameter ::NML_OPEN=11
   integer,    parameter ::NML_READ=12
   integer,    parameter ::DIM_MISMATCH=13
+  character(len=200) :: BFM_Prefix_NML = ''
+  character(len=250) eFile
   contains
 
   subroutine error_msg_prn(code,infile,what)
@@ -112,10 +114,10 @@
     Print *, 'infile=', infile
     stop "BFM error (see logfile)"
   end subroutine error_msg_prn
-  
+
   end module global_mem
-  
+
 !EOC
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-! MODEL  BFM - Biogeochemical Flux Model 
+! MODEL  BFM - Biogeochemical Flux Model
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-

@@ -1,5 +1,5 @@
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-! MODEL  BFM - Biogeochemical Flux Model 
+! MODEL  BFM - Biogeochemical Flux Model
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 !BOP
 !
@@ -16,14 +16,14 @@
   use global_mem
   use mem,  ONLY: iiMicroZooPlankton, iiPelBacteria, &
                   iiMesoZooPlankton, iiPhytoPlankton
-!  
+!
 !
 ! !AUTHORS
 !   Original: Hanneke Baretta-Bekker and Job Baretta
 !   Additional parameterizations: P. Ruardij and M. Vichi
 !
 ! COPYING
-!   
+!
 !   Copyright (C) 2015 BFM System Team (bfm_st@lists.cmcc.it)
 !   Copyright (C) 2006 P. Ruardij and M. Vichi
 !   (rua@nioz.nl, vichi@bo.ingv.it)
@@ -62,20 +62,20 @@
   ! p_sd         [1/d]           Temperature independent mortality rate
   ! p_pu         [-]             Assimilation efficiency
   ! p_pu_ea      [-]             Fraction of activity excretion
-  ! p_chro       [mmolO2/m3]     Half-saturation oxygen concentration 
+  ! p_chro       [mmolO2/m3]     Half-saturation oxygen concentration
   ! p_chuc       [mgC/m3]        Half-saturation Food concentration for Type II
   ! p_minfood    [mgC/m3]        Half-saturation food concentration for
   !                              preference factor
   ! p_qncMIZ     [mmolN/mgC]     Maximum quotum P:C
   ! p_qpcMIZ     [mmolN/mgC]     Maximum quotum N:C
-  ! p_paPBA(z,b) [-]             Availability of pelagic Bacteria group b 
+  ! p_paPBA(z,b) [-]             Availability of pelagic Bacteria group b
   !                              to Zooplankton group z
   ! p_paPPY(z,p) [-]             Availability of PhytoPlankton group p
   !                              to Zooplankton group z
-  ! p_paMIZ(z,m) [-]             Availability of MicroZooplankton group m 
+  ! p_paMIZ(z,m) [-]             Availability of MicroZooplankton group m
   !                              to Zooplankton group z
   !-------------------------------------------------------------------------!
-  real(RLEN)  :: p_q10(iiMicroZooPlankton)  
+  real(RLEN)  :: p_q10(iiMicroZooPlankton)
   real(RLEN)  :: p_srs(iiMicroZooPlankton)
   real(RLEN)  :: p_sum(iiMicroZooPlankton)
   real(RLEN)  :: p_sdo(iiMicroZooPlankton)
@@ -112,7 +112,8 @@
 
   write(LOGUNIT,*) "#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
   write(LOGUNIT,*) "#  Reading MicroZoo parameters.."
-  open(NMLUNIT,file='Pelagic_Ecology.nml',status='old',action='read',err=100)
+  eFile = TRIM(BFM_Prefix_NML) // 'Pelagic_Ecology.nml'
+  open(NMLUNIT,file=eFile,status='old',action='read',err=100)
   read(NMLUNIT,nml=MicroZoo_parameters,err=101)
   close(NMLUNIT)
   write(LOGUNIT,*) "#  Namelist is:"
@@ -131,5 +132,5 @@
   end module mem_MicroZoo
 !EOP
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-! MODEL  BFM - Biogeochemical Flux Model 
+! MODEL  BFM - Biogeochemical Flux Model
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-

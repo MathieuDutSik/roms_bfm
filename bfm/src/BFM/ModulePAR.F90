@@ -21,7 +21,7 @@
   use global_mem
   use mem,  ONLY: iiPhytoPlankton, NO_BOXES
 
-!  
+!
 !
 ! !AUTHORS
 !
@@ -30,7 +30,7 @@
 !   !
 !
 ! COPYING
-!   
+!
 !   Copyright (C) 2015 BFM System Team (bfm_st@lists.cmcc.it)
 !
 !   This program is free software; you can redistribute it and/or modify
@@ -68,15 +68,15 @@
   !                                       3 = Average Light in the cell
   ! Light attenuation parameters
   !  ChlAttenFlag                 numeric Choose the type of Chl attenuation
-  !                                       1 = Broadband linear 
-  !                                       2 = 3-band tabulated 
+  !                                       1 = Broadband linear
+  !                                       2 = 3-band tabulated
   !  p_PAR        [-]           Fraction of Photosynthetically Available Radiation
   !  p_eps0       [1/m]         Background extinction coefficient
   !  p_epsESS     [m2/g]        Specific attenuation coefficient of
   !                             suspended sediments
   !  p_epsR6      [m2/mgC]      Specific attenuation coefficient of particulate
   !                             detritus
-  !                       
+  !
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   integer  :: LightPeriodFlag=1
   integer  :: LightLocationFlag=3
@@ -86,9 +86,9 @@
       p_epsIR=0.35_RLEN,     &
       p_epsESS=0.04e-3_RLEN, &
       p_epsR6=0.1e-3_RLEN
-  integer  :: ChlAttenFlag=1      
+  integer  :: ChlAttenFlag=1
   ! shared variables
-  real(RLEN), dimension(3,61) :: xepsRGB  ! Tabulated attenuation coefficients 
+  real(RLEN), dimension(3,61) :: xepsRGB  ! Tabulated attenuation coefficients
                                           ! for RGB parameterization(Lengaigne)
   real(RLEN)                  :: p_PARRGB ! portion of PAR for RGB
   ! arrays for the 3-band parameterization
@@ -120,15 +120,16 @@
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     write(LOGUNIT,*) "#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
     write(LOGUNIT,*) "#  Reading PAR parameters.."
-    open(NMLUNIT,file='Pelagic_Environment.nml',status='old',action='read',err=100)
+    eFile = TRIM(BFM_Prefix_NML) // 'Pelagic_Environment.nml'
+    open(NMLUNIT,file=eFile,status='old',action='read',err=100)
     read(NMLUNIT,nml=PAR_parameters,err=101)
     close(NMLUNIT)
     write(LOGUNIT,*) "#  Namelist is:"
     write(LOGUNIT,nml=PAR_parameters)
     write(LOGUNIT,*) "#  PAR specifications:"
     write(LOGUNIT,*) "#  Chl Attenuation Flag p_ChlAttenFlag =",ChlAttenFlag
-    select case (ChlAttenFlag) 
-      case (2) 
+    select case (ChlAttenFlag)
+      case (2)
          write(LOGUNIT,*) "#   Use 3 bands tabulated RGB (Lengaigne et al, 2007)"
          ! Initialize the tabulated values and 3-band arrays
          call ChlAttenuation(xepsRGB)
@@ -145,7 +146,7 @@
          allocate(EIRR(NO_BOXES),stat=AllocStatus)
          if (AllocStatus  /= 0) stop "error allocating EIRR"
          p_PARRGB = p_PAR/3._RLEN ! the visible part is divided equally in 3 bands
-      case default 
+      case default
          write(LOGUNIT,*) "#   Linear Chl-Specific attenuation coefficient"
     end select
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

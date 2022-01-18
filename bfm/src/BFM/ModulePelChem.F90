@@ -1,5 +1,5 @@
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-! MODEL  BFM - Biogeochemical Flux Model 
+! MODEL  BFM - Biogeochemical Flux Model
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 !BOP
 !
@@ -18,7 +18,7 @@
 !
 ! !USES:
   use global_mem
-!  
+!
 !
 ! !AUTHORS
 !   Original version by P. Ruardij and M. Vichi
@@ -28,7 +28,7 @@
 ! !REVISION_HISTORY
 !
 ! COPYING
-!   
+!
 !   Copyright (C) 2015 BFM System Team (bfm_st@lists.cmcc.it)
 !   Copyright (C) 2006 P. Ruardij, M. Vichi
 !   (rua@nioz.nl, vichi@bo.ingv.it)
@@ -67,7 +67,7 @@
   !                              nitrification and reoxidation
   ! p_rOS       [1/d]            Specific reoxidation rate of reduction
   !                              equivalents
-  ! p_sN3O4n    [1/d]            Specific denitrification rate                                           
+  ! p_sN3O4n    [1/d]            Specific denitrification rate
   ! p_clN6r     [mmolHS/m3]      Half-saturation concentration of
   !                              reduction equivalents for denitrification
   ! p_rPAo      [mmolO2/m3/d]    Reference anoxic mineralization rate
@@ -124,7 +124,8 @@
 
   write(LOGUNIT,*) "#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
   write(LOGUNIT,*) "#  Reading PelChem parameters.."
-  open(NMLUNIT,file='Pelagic_Environment.nml',status='old',action='read',err=100)
+  eFile = TRIM(BFM_Prefix_NML) // 'Pelagic_Environment.nml'
+  open(NMLUNIT,file=eFile,status='old',action='read',err=100)
   read(NMLUNIT,nml=PelChem_parameters,err=101)
 #ifdef INCLUDE_PELFE
   read(NMLUNIT,nml=PelChem_parameters_iron,err=102)
@@ -151,5 +152,5 @@
   end module mem_PelChem
 !EOC
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-! MODEL  BFM - Biogeochemical Flux Model 
+! MODEL  BFM - Biogeochemical Flux Model
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-

@@ -1,5 +1,5 @@
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-! MODEL  BFM - Biogeochemical Flux Model 
+! MODEL  BFM - Biogeochemical Flux Model
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 !BOP
 !
@@ -17,18 +17,18 @@
   use global_mem
   use mem,  ONLY: iiPhytoPlankton
   use bfm_error_msg
-!  
+!
 !
 ! !AUTHORS
 !   ERSEMII version by J.W. Baretta, H. Baretta-Bekker and W. Ebenhoeh
-!   Additional parametrizations by P. Ruardij and M. Vichi 
-!   Dynamical allocation by G. Mattia 
+!   Additional parametrizations by P. Ruardij and M. Vichi
+!   Dynamical allocation by G. Mattia
 !
 ! !REVISION_HISTORY
 !   !
 !
 ! COPYING
-!   
+!
 !   Copyright (C) 2015 BFM System Team (bfm_st@lists.cmcc.it)
 !   Copyright (C) 2006 P. Ruardij and M. Vichi
 !   (rua@nioz.nl, vichi@bo.ingv.it)!
@@ -75,7 +75,7 @@
   !                             2. Activity DOC is released as R2c (Vichi et al., 2004)
   !                                (there is no nutrient-stress excretion)
   !                             3. All DOC is released as R2c (Polimene et al., 2006)
-  !                             
+  !
   real(RLEN)  :: p_q10(iiPhytoPlankton)
   real(RLEN)  :: p_temp(iiPhytoPlankton)=ZERO
   real(RLEN)  :: p_sum(iiPhytoPlankton)
@@ -100,12 +100,12 @@
   !                   ---- N limitation control ----
   !  p_qun       [m3/mgC/d]     Membrane affinity for N
   !  p_lN4       [mmolN/m3]     Half saturation constant for NH4 uptake preference over NO3
-  !  p_qnlc      [mmolN/mgC]    Minimum quotum Si:C 
+  !  p_qnlc      [mmolN/mgC]    Minimum quotum Si:C
   !  p_qncPPY    [mmolN/mgC]    Reference quotum Si:C
   !  p_xqn       [-]            Multiplication factor for luxury storage
   !                   ---- P limitation control ----
   !  p_qup       [m3/mgC/d]     Membrane affinity for P
-  !  p_qplc      [mmolP/mgC]    Minimum quotum Si:C 
+  !  p_qplc      [mmolP/mgC]    Minimum quotum Si:C
   !  p_qpcPPY      [mmolP/mgC]    Reference quotum Si:C
   !  p_xqp       [-]            Multiplication factor for luxury storage
   !                   ---- Si limitation control ----
@@ -115,13 +115,13 @@
   !  p_chPs      [mmolSi/m3]    Half saturation conc. for dissolved Si limitation
   !  p_Contois   [>=0]          If >0, use Contois formulation
   !  p_qus       [m3/mgC/d]     Membrane affinity for Si
-  !  p_qslc      [mmolSi/mgC]   Minimum quotum Si:C 
+  !  p_qslc      [mmolSi/mgC]   Minimum quotum Si:C
   !  p_qscPPY      [mmolSi/mgC]   Reference quotum Si:C
   !                   ---- nutrient stressed sinking ----
   !  p_esNI      [-]            Nutrient stress threshold for sinking
   !  p_res       [m/d]          Maximum Sinking velocity (m/d)
   logical     :: p_netgrowth(iiPhytoPlankton)=.FALSE.
-  integer     :: p_limnut(iiPhytoPlankton) 
+  integer     :: p_limnut(iiPhytoPlankton)
   real(RLEN)  :: p_qun(iiPhytoPlankton)
   real(RLEN)  :: p_lN4(iiPhytoPlankton)
   real(RLEN)  :: p_qnlc(iiPhytoPlankton)
@@ -131,7 +131,7 @@
   real(RLEN)  :: p_qplc(iiPhytoPlankton)
   real(RLEN)  :: p_qpcPPY(iiPhytoPlankton)
   real(RLEN)  :: p_xqp(iiPhytoPlankton)
-  integer     :: p_switchSi(iiPhytoPlankton) 
+  integer     :: p_switchSi(iiPhytoPlankton)
   real(RLEN)  :: p_chPs(iiPhytoPlankton)
   real(RLEN)  :: p_Contois(iiPhytoplankton)
   real(RLEN)  :: p_qus(iiPhytoPlankton)
@@ -142,14 +142,14 @@
   !
   !              --------- Chlorophyll parameters -----------
   !  p_switchChl [1-4]          Switch for Chla-a synthesis
-  !  p_sdchl     [1/d]          Specific turnover rate for Chla 
+  !  p_sdchl     [1/d]          Specific turnover rate for Chla
   !  p_alpha_chl [mgC s m2/     Initial slope of the P-E curve
-  !               mgChl/uE] 
-  !  p_qlcPPY    [mgChla/mgC]   Reference quotum Chla:C 
+  !               mgChl/uE]
+  !  p_qlcPPY    [mgChla/mgC]   Reference quotum Chla:C
   !  p_epsChla   [m2/mgChla]    Chla-specific extinction coefficient
   !  p_tochl_relt  [1/d]        Relaxation rate towards maximum Chla:C
   !  p_EpEk_or   [-]            Optimal value of E_PAR/E_K
-  integer     :: p_switchChl(iiPhytoPlankton) 
+  integer     :: p_switchChl(iiPhytoPlankton)
   real(RLEN)  :: p_sdchl(iiPhytoPlankton)
   real(RLEN)  :: p_alpha_chl(iiPhytoPlankton)
   real(RLEN)  :: p_qlcPPY(iiPhytoPlankton)
@@ -185,7 +185,7 @@
   !  p_quf       [m3/mgC/d]     Membrane affinity for Fe
   !  p_qflc      [umolFe/mgC]   Minimum quotum Fe:C derived from 3 umol Fe/mol C
   !                             Sunda & Huntsman (1997), Nature, 390, p 389-392
-  !  p_qfcPPY      [umolFe/mgC]   Reference quotum Fe:C 
+  !  p_qfcPPY      [umolFe/mgC]   Reference quotum Fe:C
   !  p_xqf       [-]            Multiplication factor for luxury storage
   real(RLEN)  :: p_quf(iiPhytoPlankton)
   real(RLEN)  :: p_qflc(iiPhytoPlankton)
@@ -227,7 +227,8 @@
 
   write(LOGUNIT,*) "#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
   write(LOGUNIT,*) "#  Reading Phyto parameters.."
-  open(NMLUNIT,file='Pelagic_Ecology.nml',status='old',action='read',err=100)
+  eFile = TRIM(BFM_Prefix_NML) // 'Pelagic_Ecology.nml'
+  open(NMLUNIT,file=eFile,status='old',action='read',err=100)
   read(NMLUNIT,nml=Phyto_parameters,err=101)
 #ifdef INCLUDE_PELFE
   read(NMLUNIT,nml=Phyto_parameters_iron,err=101)
@@ -284,5 +285,5 @@
   end module mem_Phyto
 !EOC
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-! MODEL  BFM - Biogeochemical Flux Model 
+! MODEL  BFM - Biogeochemical Flux Model
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-

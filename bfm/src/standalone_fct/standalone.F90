@@ -175,10 +175,11 @@
    endtim      = 360.0
    method      = 1
 
-   open(namlst,file='Standalone.nml',status='old',action='read',err=100)
+   eFile = TRIM(BFM_Prefix_NML) // 'Standalone.nml'
+   open(namlst,file=eFile,status='old',action='read',err=100)
    read(namlst,nml=standalone_nml,err=101)
    close(namlst)
-   open(namlst,file='Standalone.nml',status='old',action='read',err=100)
+   open(namlst,file=eFile,status='old',action='read',err=100)
    read(namlst,nml=time_nml,err=103)
    close(namlst)
 
@@ -195,7 +196,7 @@
 #  ifdef INCLUDE_BENPROFILES
    ! Dirty method to cheat the standalone model
    NO_BOXES_Z_BEN  = nboxes
-   NO_BOXES_BEN = NO_BOXES_XY 
+   NO_BOXES_BEN = NO_BOXES_XY
 #  else
    NO_BOXES_Z_BEN  = 1
    NO_BOXES_BEN = NO_BOXES_XY * NO_BOXES_Z_BEN
@@ -211,7 +212,7 @@
    LEVEL2 'Number of Boxes:',nboxes
    Print *, 'nboxes=', nboxes
    LEVEL2 'Box Depth:',indepth
-   ! set where surface and bottom boxes are 
+   ! set where surface and bottom boxes are
    ! (actually all boxes in standalone mode)
    allocate(SRFindices(NO_BOXES_XY))
    allocate(BOTindices(NO_BOXES_XY))
@@ -294,7 +295,7 @@
    ! Assign depth
    !---------------------------------------------
    Depth = indepth
-   ! assume area is 1m^2 (make a parameter in the future for 
+   ! assume area is 1m^2 (make a parameter in the future for
    ! mesocosm simulations)
    Area = ONE
    Area2d = ONE
@@ -462,7 +463,7 @@ real(RLEN) :: localtime
             call integrationEfw
       end select
       !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-      ! update internal bfm time 
+      ! update internal bfm time
       !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
       bfmtime%stepnow = ntime
       !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

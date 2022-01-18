@@ -1,12 +1,12 @@
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-! MODEL  BFM - Biogeochemical Flux Model 
+! MODEL  BFM - Biogeochemical Flux Model
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 !BOP
 !
 ! !ROUTINE: PelBac
 !
 ! DESCRIPTION
-!   Module containing the parameters for bacterioplankton and the 
+!   Module containing the parameters for bacterioplankton and the
 !   initialization and consistency check
 !
 ! !INTERFACE
@@ -15,20 +15,20 @@
 ! !USES:
   use global_mem
   use mem,  ONLY: iiPelBacteria
-!  
+!
 !
 ! !AUTHORS
 !   First ERSEM version by J.W. Baretta and H. Baretta-Bekker
-!   Additional parametrizations by P. Ruardij and M. Vichi 
+!   Additional parametrizations by P. Ruardij and M. Vichi
 !   (Vichi et al., 2004; Vichi et al., 2007)
 !   L. Polimene, I. Allen and M. Zavatarelli (Polimene et al., 2006)
-!   Dynamical allocation by G. Mattia 
+!   Dynamical allocation by G. Mattia
 !
 ! !REVISION_HISTORY
 !   !
 !
 ! COPYING
-!   
+!
 !   Copyright (C) 2015 BFM System Team (bfm_st@lists.cmcc.it)
 !   Copyright (C) 2006 P. Ruardij and M. Vichi
 !   (rua@nioz.nl, vichi@bo.ingv.it)
@@ -79,12 +79,12 @@
   ! p_pu_ra     [-]              Activity respiration fraction
   ! p_pu_ra_o   [-]              Additional respiration fraction at low O2 conc
   ! p_srs       [1/d]            Specific rest respiration
-  ! p_qncPBA    [mmolN/mgC]      Optimal N/C ratio 
-  ! p_qpcPBA    [mmolP/mgC]      Optimal P/C ratio 
-  ! p_qlnc      [mmolN/mgC]      Minimal N/C ratio 
-  ! p_qlpc      [mmolP/mgC]      Minimal P/C ratio 
-  ! p_qun       [mmolN/mgC/day]  Membrane affinity for N 
-  ! p_qup       [mmolP/mgC/day]  Membrane affinity for N 
+  ! p_qncPBA    [mmolN/mgC]      Optimal N/C ratio
+  ! p_qpcPBA    [mmolP/mgC]      Optimal P/C ratio
+  ! p_qlnc      [mmolN/mgC]      Minimal N/C ratio
+  ! p_qlpc      [mmolP/mgC]      Minimal P/C ratio
+  ! p_qun       [mmolN/mgC/day]  Membrane affinity for N
+  ! p_qup       [mmolP/mgC/day]  Membrane affinity for N
   ! p_chn       [mmolN/m3]       Half saturation ammonium conc. for uptake
   ! p_chp       [mmolP/m3]       Half saturation phosphate conc. for uptake
   ! p_ruen      [1/d]            Relaxation timescale for N uptake/remin.
@@ -144,7 +144,8 @@
   !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   write(LOGUNIT,*) "#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
   write(LOGUNIT,*) "#  Reading PelBac parameters.."
-  open(NMLUNIT,file='Pelagic_Ecology.nml',status='old',action='read',err=100)
+  eFile = TRIM(BFM_Prefix_NML) // 'Pelagic_Ecology.nml'
+  open(NMLUNIT,file=eFile,status='old',action='read',err=100)
   read(NMLUNIT,nml=PelBacteria_parameters,err=101)
   close(NMLUNIT)
 
@@ -193,5 +194,5 @@
   end module mem_PelBac
 !BOP
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-! MODEL  BFM - Biogeochemical Flux Model 
+! MODEL  BFM - Biogeochemical Flux Model
 !-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
