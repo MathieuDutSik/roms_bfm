@@ -72,7 +72,7 @@
        botdep_p    = 0.0
        botdep_si   = 0.0
        eFile = TRIM(BFM_Prefix_NML) // 'Standalone.nml'
-       open(namlst,file=eFile,status='old',action='read',    &
+       open(namlst,file=TRIM(eFile),status='old',action='read',         &
      &      err=100)
        read(namlst,nml=forcings_nml,err=102)
        close(namlst)
@@ -82,7 +82,7 @@
        LEVEL2 'Reading forcing data from:'
        LEVEL3 trim(forcing_file)
        eFile = TRIM(BFM_Prefix_NML) // TRIM(forcing_file)
-       open(unit_forcing,file=eFile,action='read',               &
+       open(unit_forcing,file=TRIM(eFile),action='read',                &
      &      status='old',err=106)
     case (3) ! interactive air-sea fluxes
       !call init_air_sea(data_file,latitude, longitude)
@@ -92,7 +92,7 @@
        LEVEL2 'Reading sea-ice forcing data from:'
        LEVEL3 trim(seaice_file)
        eFile = TRIM(BFM_Prefix_NML) // TRIM(seaice_file)
-       open(unit_seaice,file=eFile,action='read',                 &
+       open(unit_seaice,file=TRIM(eFile),action='read',                 &
      &    status='old',err=108)
     else
        LEVEL2 'Skipping sea-ice forcing data'
@@ -103,14 +103,15 @@
        LEVEL2 'Reading external data from:'
        LEVEL3 trim(data_file)
        eFile = TRIM(BFM_Prefix_NML) // TRIM(data_file)
-       open(unit_data,file=eFile,action='read',status='old',err=107)
+       open(unit_data,file=TRIM(eFile),action='read',                   &
+     &   status='old',err=107)
     end if
     ! Read event data (if activated)
     if (use_event_data) then
        LEVEL2 'Reading event data from:'
        LEVEL3 trim(event_file)
        eFile = TRIM(BFM_Prefix_NML) // TRIM(event_file)
-       open(unit_event,file=eFile,action='read',                   &
+       open(unit_event,file=TRIM(eFile),action='read',                  &
      &  status='old',err=109)
     end if
 

@@ -176,10 +176,10 @@
    method      = 1
 
    eFile = TRIM(BFM_Prefix_NML) // 'Standalone.nml'
-   open(namlst,file=eFile,status='old',action='read',err=100)
+   open(namlst,file=TRIM(eFile),status='old',action='read',err=100)
    read(namlst,nml=standalone_nml,err=101)
    close(namlst)
-   open(namlst,file=eFile,status='old',action='read',err=100)
+   open(namlst,file=TRIM(eFile),status='old',action='read',err=100)
    read(namlst,nml=time_nml,err=103)
    close(namlst)
 

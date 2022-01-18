@@ -145,7 +145,7 @@
   write(LOGUNIT,*) "#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
   write(LOGUNIT,*) "#  Reading PelBac parameters.."
   eFile = TRIM(BFM_Prefix_NML) // 'Pelagic_Ecology.nml'
-  open(NMLUNIT,file=eFile,status='old',action='read',err=100)
+  open(NMLUNIT,file=TRIM(eFile),status='old',action='read',err=100)
   read(NMLUNIT,nml=PelBacteria_parameters,err=101)
   close(NMLUNIT)
 

@@ -399,7 +399,8 @@ contains
    !  Open and read the namelist
    !---------------------------------------------
    eFile = TRIM(BFM_Prefix_NML) // 'BFM_General.nml'
-   open(namlst,file=eFile,action='read',status='old',err=99)
+   Print *, 'BFM_General : eFile=', eFile
+   open(namlst,file=TRIM(eFile),action='read',status='old',err=99)
    read(namlst,nml=bfm_nml,err=98)
    close(namlst)
 

@@ -125,7 +125,7 @@
   write(LOGUNIT,*) "#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
   write(LOGUNIT,*) "#  Reading PelChem parameters.."
   eFile = TRIM(BFM_Prefix_NML) // 'Pelagic_Environment.nml'
-  open(NMLUNIT,file=eFile,status='old',action='read',err=100)
+  open(NMLUNIT,file=TRIM(eFile),status='old',action='read',err=100)
   read(NMLUNIT,nml=PelChem_parameters,err=101)
 #ifdef INCLUDE_PELFE
   read(NMLUNIT,nml=PelChem_parameters_iron,err=102)

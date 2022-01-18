@@ -113,7 +113,7 @@
   write(LOGUNIT,*) "#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
   write(LOGUNIT,*) "#  Reading MicroZoo parameters.."
   eFile = TRIM(BFM_Prefix_NML) // 'Pelagic_Ecology.nml'
-  open(NMLUNIT,file=eFile,status='old',action='read',err=100)
+  open(NMLUNIT,file=TRIM(eFile),status='old',action='read',err=100)
   read(NMLUNIT,nml=MicroZoo_parameters,err=101)
   close(NMLUNIT)
   write(LOGUNIT,*) "#  Namelist is:"

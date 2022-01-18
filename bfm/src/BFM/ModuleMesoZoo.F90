@@ -121,7 +121,7 @@
   write(LOGUNIT,*) "#  Reading MesoZoo parameters.."
   Print *, 'Before reading Pelagic_Ecology_1 iiMesoZooPlankton=', iiMesoZooPlankton
   eFile = TRIM(BFM_Prefix_NML) // 'Pelagic_Ecology_1.nml'
-  open(NMLUNIT,file=eFile,status='old',action='read',err=100)
+  open(NMLUNIT,file=TRIM(eFile),status='old',action='read',err=100)
   read(NMLUNIT,nml=MesoZoo_parameters,err=101)
   close(NMLUNIT)
   Print *, ' After reading Pelagic_Ecology_1'

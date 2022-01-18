@@ -169,7 +169,7 @@
     LEVEL1 ' '
     LEVEL2 'Namelist content:'
     eFile = TRIM(BFM_Prefix_NML) // 'Carbonate_Dynamics.nml'
-    open(NMLUNIT,file=eFile,status='old',action='read',err=100)
+    open(NMLUNIT,file=TRIM(eFile),status='old',action='read',err=100)
     read(NMLUNIT,nml=CO2_parameters,err=101)
     close(NMLUNIT)
     write(LOGUNIT,nml=CO2_parameters)

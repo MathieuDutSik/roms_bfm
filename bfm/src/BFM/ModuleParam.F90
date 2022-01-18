@@ -217,7 +217,7 @@
    LEVEL1 "#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
    LEVEL1 "#  Reading BFM parameters .."
    eFile = TRIM(BFM_Prefix_NML) // 'BFM_General.nml'
-   open(NMLUNIT,file=eFile,status='old',action='read',err=100)
+   open(NMLUNIT,file=TRIM(eFile),status='old',action='read',err=100)
    read(NMLUNIT,nml=Param_parameters,err=101)
 #ifdef INCLUDE_BEN
    read(NMLUNIT,nml=Param_parameters_ben,err=102)

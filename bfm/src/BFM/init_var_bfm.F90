@@ -407,7 +407,9 @@ END MODULE init_var_bfm_local
    ! Open and read the namelist
    !---------------------------------------------
    icontrol=0
-   open(namlst,file=bfm_init_fname,action='read',status='old',err=100)
+   Print *, 'bfm_init_fname=', bfm_init_fname
+   eFile = TRIM(BFM_Prefix_NML) // bfm_init_fname
+   open(namlst,file=TRIM(eFile),action='read',status='old',err=100)
    var_save=""
    ave_save=""
    var_ave=.false.
@@ -426,7 +428,7 @@ END MODULE init_var_bfm_local
    end if
 
    icontrol=0
-   open(namlst,file=bfm_init_fname,action='read',status='old',err=102)
+   open(namlst,file=TRIM(eFile),action='read',status='old',err=102)
    read(namlst,nml=bfm_init_nml,err=103)
    close(namlst)
    icontrol=1
