@@ -534,7 +534,8 @@
       NAMELIST /SETTING_BFM_COUPL/ delt_bfm, AnalyticalInitD3STATE,     &
      &   CopyInitialToD3STATE, CopyD3STATEtoInitial,                    &
      &   SourceTermD3STATE, AdvectionD3STATE
-      OPEN(file_id, FILE="bfm_input.nml")
+      eFile = TRIM(BFM_Prefix_NML) // 'bfm_input.nml'
+      OPEN(file_id, FILE = eFile)
       READ(file_id, NML = SETTING_BFM_COUPL)
       CLOSE(file_id)
       DO ng=1,Ngrids

@@ -18,6 +18,7 @@
       USE mod_biology
       USE mod_ncparam
       USE mod_scalars
+      USE global_mem, only : BFM_Prefix_NML
 !
       implicit none
 !
@@ -32,7 +33,7 @@
       integer :: iTrcStr, iTrcEnd
       integer :: i, ifield, igrid, itracer, itrc, ng, nline, status
 
-      integer :: decode_line, load_i, load_l, load_lbc, load_r
+      integer :: decode_line, load_i, load_l, load_lbc, load_r, load_s1d
 
       logical, dimension(NBT,Ngrids) :: Ltrc
 
@@ -43,17 +44,24 @@
       character (len=40 ) :: KeyWord
       character (len=256) :: line
       character (len=256), dimension(200) :: Cval
+      character (len=256) label
+      character (len=256) read_bfm_nml
+      TYPE(T_IO) BFM_NML(1), SingTyp
+      integer NfilesRead
+      integer Cdim
 !
 !-----------------------------------------------------------------------
 !  Initialize.
 !-----------------------------------------------------------------------
 !
       Print *, "Beginning of read_BioPar for ROMS_BFM"
-      igrid=1                            ! nested grid counter
-      itracer=0                          ! LBC tracer counter
-      iTrcStr=1                          ! first LBC tracer to process
-      iTrcEnd=NBT                        ! last  LBC tracer to process
-      nline=0                            ! LBC multi-line counter
+      igrid = 1                          ! nested grid counter
+      NfilesRead = 1
+      itracer = 0                        ! LBC tracer counter
+      iTrcStr = 1                        ! first LBC tracer to process
+      iTrcEnd = NBT                      ! last  LBC tracer to process
+      nline = 0                          ! LBC multi-line counter
+      Cdim = SIZE(Cval,1)
 !
 !-----------------------------------------------------------------------
 !  Read in red tide (Stock et al., 2005; He et al., 2008) model
@@ -68,6 +76,14 @@
         status=decode_line(line, KeyWord, Nval, Cval, Rval)
         IF (status.gt.0) THEN
           SELECT CASE (TRIM(KeyWord))
+            CASE ('BFM_Prefix_NML')
+              label='BFM prefix NML of input files'
+              Npts=load_s1d(Nval, Cval, Cdim, line, label, igrid,       &
+     &                      NfilesRead, BFM_NML)
+              SingTyp = BFM_NML(1)
+              read_bfm_nml = SingTyp % name
+              BFM_Prefix_NML = read_bfm_nml
+              Print *, 'BFM_Prefix_NML=', BFM_Prefix_NML
             CASE ('TNU2')
               Npts=load_r(Nval, Rval, NBT*Ngrids, Rbio)
               DO ng=1,Ngrids
@@ -143,7 +159,6 @@
                 END DO
               END DO
             CASE ('Hout(idTvar)')
-              Print *, 'NBT=', NBT
               Npts=load_l(Nval, Cval, NBT*Ngrids, Ltrc)
               DO ng=1,Ngrids
                 DO itrc=1,NBT
