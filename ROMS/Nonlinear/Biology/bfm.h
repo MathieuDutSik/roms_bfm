@@ -1,7 +1,7 @@
 !
 ! Geometrical stuff
 !
-      SUBROUTINE COMPUTE_SPHERICAL_DISTANCE(lon1,lon2, lat1,lat2, dist)
+      SUBROUTINE SPHERICAL_COORDINATE_DISTANCE(lon1,lon2, lat1,lat2, dist)
       USE mod_kinds
       IMPLICIT NONE
       REAL(r8), intent(in) :: lon1, lon2, lat1, lat2
