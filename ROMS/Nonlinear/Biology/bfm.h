@@ -1,3 +1,73 @@
+!
+! Geometrical stuff
+!
+      SUBROUTINE COMPUTE_SPHERICAL_DISTANCE(lon1,lon2, lat1,lat2, dist)
+      USE mod_kinds
+      IMPLICIT NONE
+      REAL(r8), intent(in) :: lon1, lon2, lat1, lat2
+      REAL(r8), intent(out) :: dist
+      !
+      REAL(r8) :: lon1_r, lon2_r, lat1_r, lat2_r
+      REAL(r8) :: X1, Y1, Z1, X2, Y2, Z2
+      REAL(r8) :: COEFF, scalprod
+      COEFF = 3.14159_r8 / 180.0_r8
+      lon1_r = lon1 * COEFF
+      lon2_r = lon2 * COEFF
+      lat1_r = lat1 * COEFF
+      lat2_r = lat2 * COEFF
+      X1 = COS(lon1_r) * COS(lat1_r)
+      Y1 = SIN(lon1_r) * COS(lat1_r)
+      Z1 = SIN(lat1_r)
+      X2 = COS(lon2_r) * COS(lat2_r)
+      Y2 = SIN(lon2_r) * COS(lat2_r)
+      Z2 = SIN(lat2_r)
+      scalprod = X1 * X2 + Y1 * Y2 + Z1 * Z2;
+      if (scalprod .GE. 1) THEN
+        dist = 0;
+      ELSE
+        dist = ACOS(scalprod)
+      END IF
+      END SUBROUTINE
+!
+      SUBROUTINE COMPUTE_SPHERICAL_AREA(lon1, lon2, lon3,               &
+     &     lat1, lat2, lat3, area)
+      USE mod_kinds
+      IMPLICIT NONE
+      REAL(r8), intent(in) :: LON1, LON2, LON3, LAT1, LAT2, LAT3
+      REAL(r8), intent(out) :: AREA
+      REAL(r8) :: DistA, DistB, DistC, DistS
+      REAL(r8) :: eTan1, eTan2, eTan3, eTan4
+      REAL(r8) :: eProd, sqrtProd
+      CALL SPHERICAL_COORDINATE_DISTANCE(LON1, LON2, LAT1, LAT2, DistA)
+      CALL SPHERICAL_COORDINATE_DISTANCE(LON1, LON3, LAT1, LAT3, DistB)
+      CALL SPHERICAL_COORDINATE_DISTANCE(LON2, LON3, LAT2, LAT3, DistC)
+      DistS=(DistA + DistB + DistC)/2.0_r8
+      eTan1=tan(DistS/2.0_r8)
+      eTan2=tan((DistS - DistA)/2.0_r8)
+      eTan3=tan((DistS - DistB)/2.0_r8)
+      eTan4=tan((DistS - DistC)/2.0_r8)
+      eProd=eTan1*eTan2*eTan3*eTan4
+      sqrtProd=SQRT(eProd)
+      AREA=4.0_r8*ATAN(sqrtProd)
+      END SUBROUTINE
+!
+!
+!
+      SUBROUTINE GetTime_for_daylength(ng, yday)
+      USE mod_kinds
+      USE mod_scalars, only : tdays
+      IMPLICIT NONE
+      INTEGER, intent(in) :: ng
+      REAL(r8), intent(out) :: yday
+      REAL(r8) tday_2017_01_01
+      ! 1968-05-23 is by convention 0
+      ! 2017-01-01 is thus 17755
+      tday_2017_01_01 = 17755
+      yday = tdays(ng) - tday_2017_01_01
+      END SUBROUTINE
+!
+! Now the model part.
+!
       SUBROUTINE biology (ng,tile)
 !
 !svn $Id: hypoxia_srm.h 864 2017-08-10 04:11:10Z arango $
@@ -67,7 +137,7 @@
 
       RETURN
       END SUBROUTINE biology
-!
+
       subroutine envforcing_bfm(ng, tile, step)
       use global_mem, only: RLEN
       use envforcing
@@ -92,7 +162,7 @@
       USE mod_param
       USE mod_biology
       USE mod_ocean
-      USE mod_scalars
+      USE mod_scalars, only : Cp, itemp, isalt, rho0
       USE mod_stepping
       USE mod_parallel
       USE api_bfm
@@ -102,10 +172,13 @@
 #ifdef INCLUDE_PELCO2
       use mem_CO2, only: AtmCO20, AtmCO2, AtmSLP, AtmTDP
 #endif
-      USE mem
+      USE mem, only : Volume, SUNQ,                                     &
+     &     jbotR6c, jbotR6n, jbotR6p, jbotR6s,                          &
+     &     Area, Area2d, ETW, EIR, ESS, EWIND, ESW,                     &
+     &      EICE, NO_BOXES_XY, xEPS, ERHO, Depth
       use mem_PAR,    only: ChlAttenFlag, P_PARRGB, P_PAR,              &
-     &                      R_EPS, B_EPS, G_EPS,                        &
-     &                      EIRR, EIRB, EIRG
+     &     R_EPS, B_EPS, G_EPS,                                         &
+     &     EIRR, EIRB, EIRG
       use constants,  only: E2W
       IMPLICIT NONE
       integer, intent(in) :: ng, tile
@@ -118,25 +191,56 @@
       REAL(r8) eTemp, eSalt, gamma, RH
       REAL(r8) wlight
       REAL(r8) ux, uy
-      REAL(r8) sumTemp, avgTemp
       REAL(r8) sumWlight, avgWlight
       REAL(r8) Hscale
+      REAL(r8) eHz, eVolume
+      REAL(r8) area1, area2, TotArea
+      REAL(r8) lon1, lon2, lon3, lon4, lat1, lat2, lat3, lat4
+      REAL(r8) :: Rearth = 6371000
+      REAL(r8) yday
       integer k
 # include "set_bounds.h"
+      Print *, 'SET_BFM_FIELD_FROM_ROMS, ChlAttenFlag=', ChlAttenFlag
       b_dew=18.678_r8
       c_dew=157.14_r8
       tileS = tile - first_tile(ng) + 1
-      sumTemp = 0
       sumWlight = 0
       Hscale = rho0 * Cp
+      CALL GetTime_for_daylength(ng, yday)
       DO idx=1,NO_BOXES_XY
          i = ListArrayWet(ng) % TheArr(tileS) % ListI(idx)
          j = ListArrayWet(ng) % TheArr(tileS) % ListJ(idx)
-         lat = GRID(ng) % latp(i,j)
+         lat = GRID(ng) % latr(i,j)
          ! The sun
          DO k=1,N(ng)
             idxB = N(ng) * (idx - 1) + k
-            SUNQ(idx) = daylength(REAL(Rclock % yday, r8), lat)
+            SUNQ(idx) = daylength(yday, lat)
+         END DO
+         ! Now computing the area
+         lat1 = GRID(ng) % latp(i,j)
+         lat2 = GRID(ng) % latp(i+1,j)
+         lat3 = GRID(ng) % latp(i+1,j+1)
+         lat4 = GRID(ng) % latp(i,j+1)
+         lon1 = GRID(ng) % lonp(i,j)
+         lon2 = GRID(ng) % lonp(i+1,j)
+         lon3 = GRID(ng) % lonp(i+1,j+1)
+         lon4 = GRID(ng) % lonp(i,j+1)
+         CALL COMPUTE_SPHERICAL_AREA(lon1,lon2,lon3,                    &
+     &        lat1, lat2, lat3, area1)
+         CALL COMPUTE_SPHERICAL_AREA(lon4,lon2,lon3,                    &
+     &        lat4, lat2, lat3, area2)
+         TotArea = Rearth * Rearth * (area1 + area2)
+         Area2d(idx) = TotArea
+         DO k=1,N(ng)
+            idxB = N(ng) * (idx - 1) + k
+            Area(idxB) = TotArea
+         END DO
+         ! Now computing the volume
+         DO k=1,N(ng)
+            eHz = GRID(ng) % Hz(i,j,k)
+            idxB = N(ng) * (idx - 1) + k
+            eVolume = eHz * TotArea
+            Volume(idxB) = eVolume
          END DO
          ! The temperature and salinity
          DO k=1,N(ng)
@@ -145,7 +249,6 @@
             eSalt = OCEAN(ng) % t(i, j, k, nrhs(ng), isalt)
             ETW(idxB) = eTemp
             ESW(idxB) = eSalt
-            sumTemp = sumTemp + ETW(idxB)
          END DO
          ! The irradiance
          ! wlight in the BFM is in W m^{-2}
@@ -205,12 +308,15 @@
          EHB(idx) = ONE
          ESI(idx) = ONE
 #endif
+         ! Sediment, set it to zero
+         DO k=1,N(ng)
+            idxB = N(ng) * (idx - 1) + k
+            ESS(idxB) = 0
+         END DO
       END DO
       ERHO(:) = density(ETW(:),ESW(:),Depth(:)/2.0_RLEN)
-      avgTemp = sumTemp / NO_BOXES
       avgWlight = sumWlight / NO_BOXES_XY
 #ifdef BFM_DEBUG
-      Print *, 'sumTemp=', sumTemp, 'avgTemp=', avgTemp
       Print *, 'avgWlight=', avgWlight
 #endif
       END SUBROUTINE
@@ -230,6 +336,7 @@
       integer, intent(in) :: LBi, UBi, LBj, UBj, UBk, UBt
       integer, intent(in) :: ng, tile, eTimeIdx
       integer tileS, i, j, k, iZ, idx, iNode, NO_BOXES_XY_loc
+      real(RLEN) z1, z2
       tileS = tile - first_tile(ng) + 1
       NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
       DO iNode=1,NO_BOXES_XY_loc
@@ -238,8 +345,9 @@
          DO k=1,NO_BOXES_Z
             iZ = k
             idx = iZ + NO_BOXES_Z * (iNode-1)
-            Depth(idx) = OCEAN(ng) % zeta(i,j,eTimeIdx) - GRID(ng) % z_r(i,j,k)
-!            Depth(idx) = 5.0
+            z1 = OCEAN(ng) % zeta(i,j,eTimeIdx)
+            z2 = GRID(ng) % z_r(i,j,k)
+            Depth(idx) = z1 - z2
          END DO
       END DO
       END SUBROUTINE

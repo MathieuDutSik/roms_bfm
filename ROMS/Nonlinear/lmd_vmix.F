@@ -346,7 +346,7 @@
 ! Sum contributions due to internal wave breaking, shear instability
 ! and convective diffusivity due to shear instability.
 !
-            Akv(i,j,k)=lmd_iwm+lmd_nu0m*nu_sx
+            Akv(i,j,k)=lmd_iwm + lmd_nu0m*nu_sx
             Akt(i,j,k,itemp)=lmd_iws+lmd_nu0s*nu_sx
 # ifdef SALINITY
             Akt(i,j,k,isalt)=Akt(i,j,k,itemp)

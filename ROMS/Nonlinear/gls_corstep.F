@@ -1024,7 +1024,7 @@
 !
             ql=sqrt2*0.5_r8*(Ls_lmt*SQRT(tke(i,j,k,nnew))+              &
      &                       Lscale(i,j,k)*SQRT(tke(i,j,k,nstp)))
-            Akv(i,j,k)=Akv_bak(ng)+Sm*ql
+            Akv(i,j,k)=Akv_bak(ng) + Sm * ql
             DO itrc=1,NAT
               Akt(i,j,k,itrc)=Akt_bak(itrc,ng)+Sh*ql
             END DO
