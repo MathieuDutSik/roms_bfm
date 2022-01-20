@@ -64,8 +64,8 @@ endif
 ifdef USE_MPI
 #         CPPFLAGS += -DMPI -DBFM_DEBUG
 #         CPPFLAGS += -DMPI -DEXPLICIT_SINK
-#         CPPFLAGS += -DMPI -DINCLUDE_PELCO2 -DINCLUDE_DIAG -DBFM_ROMS
-         CPPFLAGS += -DMPI -DINCLUDE_PELCO2 -DINCLUDE_DIAG -DBFM_ROMS -DBFM_DEBUG
+         CPPFLAGS += -DMPI -DINCLUDE_PELCO2 -DINCLUDE_DIAG -DBFM_ROMS
+#         CPPFLAGS += -DMPI -DINCLUDE_PELCO2 -DINCLUDE_DIAG -DBFM_ROMS -DBFM_DEBUG
  ifdef USE_MPIF90
                FC := mpif90
  else
@@ -84,7 +84,7 @@ ifdef USE_DEBUG
 else
 #           FFLAGS += -O3 -ffast-math -g -fallow-argument-mismatch -fsignaling-nans -fcheck=all -fbacktrace
 #           FFLAGS += -O3 -ffast-math -g -fallow-argument-mismatch
-           FFLAGS += -O3 -ffast-math -g -fallow-argument-mismatch -fsignaling-nans -fsanitize=float-divide-by-zero -fcheck=all -fbacktrace
+           FFLAGS += -O3 -g -fallow-argument-mismatch -fsignaling-nans -fsanitize=float-divide-by-zero -fcheck=all -fbacktrace
 #           FFLAGS += -O3 -ffast-math -g -fcheck=all -fbacktrace
 #           FFLAGS += -O3 -ffast-math
 endif

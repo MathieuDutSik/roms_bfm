@@ -430,6 +430,57 @@
       END DO
       END SUBROUTINE
 !-----------------------------------------------------------------------
+      SUBROUTINE PRINT_T_KEYS(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, t)
+      USE mod_param
+      USE mod_grid
+      USE mod_biology
+      USE mod_ncparam
+      USE mod_scalars
+      USE mod_parallel
+      USE mod_ocean
+      USE mem
+      USE api_bfm
+      IMPLICIT NONE
+      integer, intent(in) :: LBi, UBi, LBj, UBj, UBk, UBt
+      integer, intent(in) :: ng, tile
+#ifdef ASSUMED_SHAPE
+      real(r8), intent(in) :: t(LBi:,LBj:,:,:,:)
+#else
+      real(r8), intent(in) :: t(LBi:UBi,LBj:UBj,UBk,3,UBt)
+#endif
+      REAL(r8), allocatable :: F(:)
+      REAL(r8) emaxval, eminval, eavgval, eVal
+      integer iVar, itrc, ibio, pos, iNode, i, j, k, idx
+      integer NO_BOXES_XY_loc, tileS
+      Print *, 'PRINT_T_KEYS ng=', ng, ' tile=', tile
+      tileS = tile - first_tile(ng) + 1
+      NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
+      Npt = NO_BOXES_XY_loc * NO_BOXES_Z
+      allocate(F(Npt))
+      DO iVar=stPelStateS, stPelStateE
+         itrc = iVar - stPelStateS + 1
+         ibio = idbio(itrc)
+         DO pos=1,3
+            idx = 0
+            DO iNode=1,NO_BOXES_XY_loc
+               i = ListArrayWet(ng) % TheArr(tileS) % ListI(iNode)
+               j = ListArrayWet(ng) % TheArr(tileS) % ListJ(iNode)
+               DO k=1,NO_BOXES_Z
+                  eVal = t(i, j, k, pos, ibio)
+                  idx = idx + 1
+                  F(idx) = eVal
+               END DO
+            END DO
+            emaxval = maxval(F)
+            eminval = minval(F)
+            eavgval = sum(F) / Npt
+            Print *, 'iVar/pos=', iVar, pos, 'avg/min/max=',            &
+     &      eavgval, eminval, emaxval
+         END DO
+      END DO
+      deallocate(F)
+      END SUBROUTINE
+!-----------------------------------------------------------------------
       SUBROUTINE COPY_T_to_D3STATE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, eTimeIdx, t)
       USE mod_param
       USE mod_grid
@@ -884,12 +935,15 @@
       Print *, 'LBi=', LBi, ' UBi=', UBi
       Print *, 'LBj=', LBj, ' UBj=', UBj
       Print *, 'UBk=', UBk, ' UBt=', UBt
+      Print *, 'ng=', ng, ' tile=', tile
       !
+      Print *, 'Printing average of T'
+      CALL PRINT_T_KEYS(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, t)
       Print *, 'Printing average of D3STATE'
       Print *, 'CopyInitialToD3STATE=', CopyInitialToD3STATE
       Print *, 'CopyD3STATEtoInitial=', CopyD3STATEtoInitial
       IF (CopyD3STATEtoInitial) THEN
-        Print *, 'copying D3STATE to T'
+        Print *, 'Copying D3STATE to T'
 
 !        Print *, 'Printing T avg in INIT_BFM_SYSTEM_VARIABLE, Before'
 !        CALL Print_t_average(ng, tile, 1)
@@ -902,7 +956,7 @@
 !        CALL Print_t_average(ng, tile, 2)
       END IF
       IF (CopyInitialToD3STATE) THEN
-        Print *, 'copying T to D3STATE'
+        Print *, 'Copying T to D3STATE'
         CALL COPY_T_to_D3STATE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, 1, t)
       END IF
       CALL PRINT_BFM_STATE_KEYS(ng, tile)
