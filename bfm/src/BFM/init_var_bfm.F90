@@ -25,7 +25,7 @@ MODULE init_var_bfm_local
      real(RLEN),intent(in),optional                 :: nc,pc,lc,sc,hc
      real(RLEN),dimension(:),intent(inout),optional :: n,p,l,s,h
      real(RLEN)   :: nc_ratio,pc_ratio,lc_ratio,sc_ratio,hc_ratio
-     
+
          nc_ratio = nc_ratio_default
          if (present(nc)) then
            if (nc>ZERO) nc_ratio = nc
@@ -229,15 +229,15 @@ END MODULE init_var_bfm_local
 
    use mem_Param, ONLY: AssignPelBenFluxesInBFMFlag
    use string_functions, ONLY: getseq_number,empty
-   
+
 #if defined INCLUDE_BEN && defined INCLUDE_BENPROFILES
    use mem_Param, ONLY: p_d_tot, p_sedlevels,p_sedsigma
-#endif 
+#endif
 #ifdef INCLUDE_SEAICE
    use mem_SeaiceAlgae
    use mem_SeaiceBac
    use mem_SeaiceZoo
-#endif 
+#endif
 
    IMPLICIT NONE
 !
@@ -396,8 +396,8 @@ END MODULE init_var_bfm_local
 #endif
 
    !---------------------------------------------
-   ! Initialize the structured array that 
-   ! defines if a variable is initialized with 
+   ! Initialize the structured array that
+   ! defines if a variable is initialized with
    ! data. The namelist values override the
    ! assignment
    !---------------------------------------------
@@ -745,7 +745,7 @@ END MODULE init_var_bfm_local
    do j = 1, iiMicroZooPlankton
      if (.NOT.CalcMicroZooPlankton(j)) then
        do i = 1,iiLastElement
-         if ( ppMicroZooPlankton(j,i) /= 0 ) then 
+         if ( ppMicroZooPlankton(j,i) /= 0 ) then
            IF (InitD3STATE) THEN
              D3STATE(ppMicroZooPlankton(j,i),:) = p_small
            END IF
@@ -761,7 +761,7 @@ END MODULE init_var_bfm_local
    do j = 1, iiPelDetritus
      if (.NOT.CalcPelDetritus(j)) then
        do i = 1,iiLastElement
-         if ( ppPelDetritus(j,i) /= 0 ) then 
+         if ( ppPelDetritus(j,i) /= 0 ) then
            IF (InitD3STATE) THEN
              D3STATE(ppPelDetritus(j,i),:) = p_small
            END IF
@@ -777,7 +777,7 @@ END MODULE init_var_bfm_local
    do j = 1, iiInorganic
      if (.NOT.CalcInorganic(j)) then
        do i = 1,iiLastElement
-         if ( ppInorganic(j,i) /= 0 ) then 
+         if ( ppInorganic(j,i) /= 0 ) then
            IF (InitD3STATE) THEN
              D3STATE(ppInorganic(j,i),:) = p_small
            END IF
@@ -842,7 +842,7 @@ END MODULE init_var_bfm_local
 
 #ifdef INCLUDE_BENPROFILES
       !---------------------------------------------
-      ! initialize the vertical grid for benthic 
+      ! initialize the vertical grid for benthic
       ! nutrient profiles
       !---------------------------------------------
       LEVEL2 'Initialize the vertical grid for benthic profile diagnostics'
