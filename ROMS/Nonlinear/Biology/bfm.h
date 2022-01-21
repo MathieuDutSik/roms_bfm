@@ -153,7 +153,7 @@
       call external_seaice
 #endif
       if (init_forcing_vars) init_forcing_vars=.false.
-      end subroutine envforcing_bfm
+      END SUBROUTINE
 !-----------------------------------------------------------------------
 ! Use Magnus formula from https://en.wikipedia.org/wiki/Dew_point
 ! in order to get the dew point temperature.
@@ -198,9 +198,10 @@
       REAL(r8) lon1, lon2, lon3, lon4, lat1, lat2, lat3, lat4
       REAL(r8) :: Rearth = 6371000
       REAL(r8) yday
+      REAL(r8) z1, z2
       integer k
 # include "set_bounds.h"
-      Print *, 'SET_BFM_FIELD_FROM_ROMS, ChlAttenFlag=', ChlAttenFlag
+      Print *, 'SET_BFM_FIELDS_FROM_ROMS, ChlAttenFlag=', ChlAttenFlag
       b_dew=18.678_r8
       c_dew=157.14_r8
       tileS = tile - first_tile(ng) + 1
@@ -241,6 +242,13 @@
             idxB = N(ng) * (idx - 1) + k
             eVolume = eHz * TotArea
             Volume(idxB) = eVolume
+         END DO
+         ! Setting up the depths
+         DO k=1,N(ng)
+            idxB = N(ng) * (idx-1) + k
+            z1 = OCEAN(ng) % zeta(i,j,nrhs(ng))
+            z2 = GRID(ng) % z_r(i,j,k)
+            Depth(idxB) = z1 - z2
          END DO
          ! The temperature and salinity
          DO k=1,N(ng)
@@ -319,37 +327,6 @@
 #ifdef BFM_DEBUG
       Print *, 'avgWlight=', avgWlight
 #endif
-      END SUBROUTINE
-!
-!-----------------------------------------------------------------------
-      SUBROUTINE SET_BFM_DEPTH(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, eTimeIdx)
-      USE mod_param
-      USE mod_grid
-      USE mod_biology
-      USE mod_ncparam
-      USE mod_scalars
-      USE mod_parallel
-      USE mod_ocean
-      USE mem
-      USE api_bfm
-      IMPLICIT NONE
-      integer, intent(in) :: LBi, UBi, LBj, UBj, UBk, UBt
-      integer, intent(in) :: ng, tile, eTimeIdx
-      integer tileS, i, j, k, iZ, idx, iNode, NO_BOXES_XY_loc
-      real(RLEN) z1, z2
-      tileS = tile - first_tile(ng) + 1
-      NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
-      DO iNode=1,NO_BOXES_XY_loc
-         i = ListArrayWet(ng) % TheArr(tileS) % ListI(iNode)
-         j = ListArrayWet(ng) % TheArr(tileS) % ListJ(iNode)
-         DO k=1,NO_BOXES_Z
-            iZ = k
-            idx = iZ + NO_BOXES_Z * (iNode-1)
-            z1 = OCEAN(ng) % zeta(i,j,eTimeIdx)
-            z2 = GRID(ng) % z_r(i,j,k)
-            Depth(idx) = z1 - z2
-         END DO
-      END DO
       END SUBROUTINE
 !
 !-----------------------------------------------------------------------
@@ -1202,8 +1179,6 @@
 #ifdef BFM_DEBUG
         CALL PRINT_BFM_STATE_KEYS(ng, tile)
 #endif
-
-        CALL SET_BFM_DEPTH(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, nstp)
         IF (AdvectionD3STATE) THEN
           CALL COPY_T_to_D3STATE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, nstp, t)
         ENd IF
@@ -1247,6 +1222,9 @@
         CALL READ_BFM_DIAGNOSTICS(LBi, UBi, LBj, UBj, UBk, UBt,         &
      &         ng, tile)
         IF (SourceTermD3STATE) THEN
+!
+!  Now set up the D3SOURCE and D3SINK to zero.
+!
           CALL ResetFluxes
         END IF
 !       Need to put code for the diagnostics. We do not put yet the dlux. Maybe never.
