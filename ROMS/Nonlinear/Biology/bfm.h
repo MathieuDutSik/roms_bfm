@@ -1220,13 +1220,25 @@
             END IF
           END DO
         END IF
+        IF (AdvectionD3STATE) THEN
+!
+!       Doing the time step increase. Here, we follow directly the
+!       schemes of redtide, fennel, npzd_*, nemuro.
+!       We do not need to copy to nstp in that case.
+!
+           CALL INCREASE_T_NNEW(LBi, UBi, LBj, UBj, UBk, UBt,           &
+     &         ng, tile, nnew, t)
+        ELSE
 !
 !       Now copying back the field values
 !       This is needed even if in absence of advection because we use this for
 !       for outputting results.
 !
-        CALL COPY_D3STATE_to_T(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, nstp, t)
-        CALL READ_BFM_DIAGNOSTICS(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile)
+           CALL COPY_D3STATE_to_T(LBi, UBi, LBj, UBj, UBk, UBt,         &
+     &         ng, tile, nstp, t)
+        END IF
+        CALL READ_BFM_DIAGNOSTICS(LBi, UBi, LBj, UBj, UBk, UBt,         &
+     &         ng, tile)
         IF (SourceTermD3STATE) THEN
           CALL ResetFluxes
         END IF
