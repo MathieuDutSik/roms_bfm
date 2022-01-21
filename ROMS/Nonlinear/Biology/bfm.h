@@ -138,13 +138,10 @@
       RETURN
       END SUBROUTINE biology
 
-      subroutine envforcing_bfm(ng, tile, step)
+      subroutine BFM_ComputeSourceTerms
       use global_mem, only: RLEN
       use envforcing
       IMPLICIT NONE
-      integer, intent(in)  :: ng, tile
-      integer, intent(inout)  :: step
-      call SET_BFM_FIELDS_FROM_ROMS(ng, tile)
       ! Assign external data
       call external_data
       ! Assign external event data
@@ -152,7 +149,8 @@
 #ifdef INCLUDE_SEAICE
       call external_seaice
 #endif
-      if (init_forcing_vars) init_forcing_vars=.false.
+      call CalcVerticalExtinction( ) !     Compute extinction coefficient
+      call EcologyDynamics      !     Compute reaction terms
       END SUBROUTINE
 !-----------------------------------------------------------------------
 ! Use Magnus formula from https://en.wikipedia.org/wiki/Dew_point
@@ -1120,12 +1118,6 @@
       integer iNode, i, j, k, idx, ibio
       integer iVar, iZ
       integer step
-      integer ic, jc, kc
-      integer icFound, jcFound, kcFound
-      real(r8) eminval, emaxval, eavgval
-      real(r8) themax
-      integer tileS
-      integer NO_BOXES_XY_loc
       integer method
 !
 ! We have two entries, nstp and nnew for the timing.
@@ -1176,6 +1168,8 @@
       IF (PosMultiplier == MULTIPLIER(ng)) THEN
         PosMultiplier = 0
         CALL SET_BOT_SURFINDICES(ng, tile)
+        call SET_BFM_FIELDS_FROM_ROMS(ng, tile)
+
 #ifdef BFM_DEBUG
         CALL PRINT_BFM_STATE_KEYS(ng, tile)
 #endif
@@ -1190,9 +1184,7 @@
 !         or to use a better integration method
 !
           step = -1 ! not used
-          call envforcing_bfm(ng, tile, step)
-          call CalcVerticalExtinction( ) !     Compute extinction coefficient
-          call EcologyDynamics           !     Compute reaction terms
+          CALL BFM_ComputeSourceTerms
 #ifdef BFM_DEBUG
 # ifndef EXPLICIT_SINK
           Print *, "        Case ifndef EXPLICIT_SINK"
