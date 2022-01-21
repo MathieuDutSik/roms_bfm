@@ -162,7 +162,7 @@
 !-------------------------------------------------------------------------!
 &bfm_save_nml
     var_save   =  ''
-    ave_save   =  'ruPTc'
+    ave_save   =  'ETW'  'O2o'  'Z6n'  'Z6p'  'B1n'  'B1p'  'O3c'  'O3h'  'O4n'  'N6r'  'DIC'  'EIR'  'xEPS'  'Chla'  'N1p'  'N3n'  'N4n'  'N5s'  'B1c'  'P1c'  'P2c'  'P3c'  'P4c'  'P1l'  'P2l'  'P3l'  'P4l'  'P1n'  'P2n'  'P3n'  'P4n'  'P1p'  'P2p'  'P3p'  'P4p'  'Z3c'  'Z3n'  'Z3p'  'Z4c'  'Z4n'  'Z4p'  'Z5c'  'Z5n'  'Z5p'  'Z6c'  'R1c'  'R2c'  'R6c'  'R1n'  'R6n'  'R1p'  'R6p'  'P1s'  'R6s'  'eiPPY(iiP1)'  'eiPPY(iiP2)'  'eiPPY(iiP3)'  'eiPPY(iiP4)'  'sunPPY(iiP1)'  'sunPPY(iiP2)'  'sunPPY(iiP3)'  'sunPPY(iiP4)'  'ruPTc'  'ruZTc'
 /
 
 

@@ -864,6 +864,7 @@
 !  Read in nonlinear tracer type variables.
 !
         DO itrc=1,NT(ng)
+          Print *, 'get_state itrc=', itrc
           IF (get_var(idTvar(itrc))) THEN
             foundit=find_string(var_name, n_var,                        &
      &                          TRIM(Vname(1,idTvar(itrc))), varid)

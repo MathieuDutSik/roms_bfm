@@ -451,8 +451,9 @@
       REAL(r8), allocatable :: F(:)
       REAL(r8) emaxval, eminval, eavgval, eVal
       integer iVar, itrc, ibio, pos, iNode, i, j, k, idx
-      integer NO_BOXES_XY_loc, tileS
+      integer NO_BOXES_XY_loc, tileS, posmax
       Print *, 'PRINT_T_KEYS ng=', ng, ' tile=', tile
+      posmax = 1
       tileS = tile - first_tile(ng) + 1
       NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
       Npt = NO_BOXES_XY_loc * NO_BOXES_Z
@@ -460,7 +461,7 @@
       DO iVar=stPelStateS, stPelStateE
          itrc = iVar - stPelStateS + 1
          ibio = idbio(itrc)
-         DO pos=1,3
+         DO pos=1,posmax
             idx = 0
             DO iNode=1,NO_BOXES_XY_loc
                i = ListArrayWet(ng) % TheArr(tileS) % ListI(iNode)
@@ -527,6 +528,60 @@
       END DO
       END SUBROUTINE
 
+      SUBROUTINE INCREASE_T_NNEW(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, nnew, t)
+      USE mod_param
+      USE mod_grid
+      USE mod_biology
+      USE mod_ncparam
+      USE mod_scalars
+      USE mod_parallel
+      USE mem
+      USE api_bfm
+      IMPLICIT NONE
+      integer, intent(in) :: LBi, UBi, LBj, UBj, UBk, UBt
+      integer, intent(in) :: ng, tile, nnew
+#ifdef ASSUMED_SHAPE
+      real(r8), intent(inout) :: t(LBi:,LBj:,:,:,:)
+#else
+      real(r8), intent(inout) :: t(LBi:UBi,LBj:UBj,UBk,3,UBt)
+#endif
+      integer tileS, NO_BOXES_XY_loc, iNode, i, j, k
+      integer iZ, idx, itrc, ibio, iVar
+      real(r8) cff
+      tileS = tile - first_tile(ng) + 1
+      NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
+      DO iNode=1,NO_BOXES_XY_loc
+         i = ListArrayWet(ng) % TheArr(tileS) % ListI(iNode)
+         j = ListArrayWet(ng) % TheArr(tileS) % ListJ(iNode)
+         DO k=1,NO_BOXES_Z
+            iZ = k
+            idx = iZ + NO_BOXES_Z * (iNode-1)
+            DO iVar=stPelStateS, stPelStateE
+               itrc = iVar - stPelStateS + 1
+               ibio = idbio(itrc)
+               IF (D3STATETYPE(itrc).ge.0) THEN
+                  cff = 0
+#ifndef EXPLICIT_SINK
+                  cff = D3SOURCE(itrc,iNode)
+#else
+                  DO u=1,NO_D3_BOX_STATES
+                     cff = cff + D3SOURCE(itrc,u,iNode) -                 &
+     &    D3SINK(itrc,u,iNode)
+                  END DO
+#endif
+                  t(i,j,k,nnew,ibio) = t(i,j,k,nnew,ibio) +               &
+     &    cff * delt_bfm * GRID(ng) % Hz(i,j,k)
+               END IF
+            END DO
+         END DO
+      END DO
+
+
+
+
+
+      END SUBROUTINE
+!
       SUBROUTINE COPY_D3STATE_to_T(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, eTimeIdx, t)
       USE mod_param
       USE mod_biology
@@ -1073,18 +1128,42 @@
       integer tileS
       integer NO_BOXES_XY_loc
       integer method
+!
+! We have two entries, nstp and nnew for the timing.
+! How to reconcile both.
+! If we use only nstp, then we are overwritten after by the nnew.
+! on the other hand, said increase must be correct.
+!
+! We face two different extremes
+! ---- Update only nstp. But then we face te problem of nnew overwritting
+!   the nstp and so not significant growth occurring.
+! ---- Put the updated value in the nnew. But then it explodes.
+! ---- Do the increase on both nstp and nnew.
+!
+! The field values on nnew and nstp are not the same.
+!
+! What are other doing? The model like fennel.h is doing something like
+! ---First Bio = Bio_old
+! ---Then doing some work on Bio
+! ---Then put the contribution to the nnew with something like
+!        cff=Bio(i,k,ibio)-Bio_old(i,k,ibio)
+!        t(i,j,k,nnew,ibio)=t(i,j,k,nnew,ibio)+cff*Hz(i,j,k)
+!
+! ecosim works on Bio / Bio_old / Bio_new
+! nemuro is like fennel (Bio / Bio_old)
+! npzd_Franks is also the same
+! npzd_Powell is also the same
+! npzd_iron is also the same
+! oyster_float is float base, not tracer based
+! red_tide is also like that.
+!
+
+
 
 !
 !  Assigning the STATE variables from the t array
 !  ! We need to determine if the diagnostics need to be recomputed.
 !
-!      Print *, ' size(D3STATE,1) = ', size(D3STATE,1)
-!      Print *, ' size(D3STATE,2) = ', size(D3STATE,2)
-!      Print *, ' size(t,1)=', size(t,1)
-!      Print *, ' size(t,2)=', size(t,2)
-!      Print *, ' size(t,3)=', size(t,3)
-!      Print *, ' size(t,4)=', size(t,4)
-!      Print *, ' size(t,5)=', size(t,5)
 
 !      Print *, 'Printing T average in biology_tile'
 !      CALL Print_t_average(ng, tile, nstp)
@@ -1127,69 +1206,18 @@
           tileS = tile - first_tile(ng) + 1
           NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
           DO j=1,NO_D3_BOX_STATES
-#ifdef BFM_DEBUG
-            eminval = minval(D3STATE(j,:))
-            emaxval = maxval(D3STATE(j,:))
-            eavgval = sum(D3STATE(j,:)) / (NO_BOXES_XY * NO_BOXES_Z)
-            Print *, 'Before : j=', j, ' min/max/avg=', eminval, emaxval, eavgval
-            IF (j .eq. 1) THEN
-               DO iNode=1,NO_BOXES_XY_loc
-                  ic = ListArrayWet(ng) % TheArr(tileS) % ListI(iNode)
-                  jc = ListArrayWet(ng) % TheArr(tileS) % ListJ(iNode)
-                  DO kc=1,NO_BOXES_Z
-                     iZ = kc
-                     idx = iZ + NO_BOXES_Z * (iNode-1)
-                     eVal = D3STATE(j, idx)
-                     IF (D3STATE(j, idx) .lt. 1.0_r8) THEN
-!                        Print *, 'ic/jc/kc=', ic, jc, kc
-                     END IF
-                  END DO
-               END DO
-            END IF
-#endif
             IF (D3STATETYPE(j).ge.0) THEN
+              DO i=1,NO_BOXES
 #ifndef EXPLICIT_SINK
-              DO i=1,NO_BOXES
                 D3STATE(j,i) = D3STATE(j,i) + delt_bfm * D3SOURCE(j,i)
-              END DO
 #else
-              DO i=1,NO_BOXES
                  DO k=1,NO_D3_BOX_STATES
                     D3STATE(j,i) = D3STATE(j,i) +                         &
      &                   delt_bfm * (D3SOURCE(j,k,i) - D3SINK(j,k,i))
                  END DO
+#endif
               END DO
-#endif
             END IF
-#ifdef BFM_DEBUG
-            eminval = minval(D3STATE(j,:))
-            emaxval = maxval(D3STATE(j,:))
-            eavgval = sum(D3STATE(j,:)) / (NO_BOXES_XY * NO_BOXES_Z)
-            themax = -1000000000
-            icFound = -1
-            jcFound = -1
-            kcFound = -1
-            DO iNode=1,NO_BOXES_XY_loc
-               ic = ListArrayWet(ng) % TheArr(tileS) % ListI(iNode)
-               jc = ListArrayWet(ng) % TheArr(tileS) % ListJ(iNode)
-               DO kc=1,NO_BOXES_Z
-                  iZ = kc
-                  idx = iZ + NO_BOXES_Z * (iNode-1)
-                  eVal = D3STATE(j, idx)
-                  if (eVal .gt. themax) THEN
-                     themax = eVal
-                     icFound = ic
-                     jcFound = jc
-                     kcFound = kc
-                  END IF
-               END DO
-            END DO
-
-            Print *, 'After : j=', j, ' min/max/avg=', eminval, emaxval, eavgval
-            PRint *, 'max at ic/jc/zeta/z_r=', ic, jc,                  &
-             OCEAN(ng) % zeta(icFound,jcFound,nstp),                    &
-             GRID(ng) % z_r(icFound,jcFound,kcFound)
-#endif
           END DO
         END IF
 !

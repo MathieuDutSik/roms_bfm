@@ -83,8 +83,8 @@ ifdef USE_DEBUG
            FFLAGS += -g -fbounds-check
 else
 #           FFLAGS += -O3 -ffast-math -g -fallow-argument-mismatch -fsignaling-nans -fcheck=all -fbacktrace
-#           FFLAGS += -O3 -ffast-math -g -fallow-argument-mismatch
-           FFLAGS += -O3 -g -fallow-argument-mismatch -fsignaling-nans -fsanitize=float-divide-by-zero -fcheck=all -fbacktrace
+           FFLAGS += -O3 -ffast-math -g -fallow-argument-mismatch
+#           FFLAGS += -O3 -g -fallow-argument-mismatch -fsignaling-nans -fsanitize=float-divide-by-zero -fcheck=all -fbacktrace
 #           FFLAGS += -O3 -ffast-math -g -fcheck=all -fbacktrace
 #           FFLAGS += -O3 -ffast-math
 endif
