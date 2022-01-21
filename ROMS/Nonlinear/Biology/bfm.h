@@ -1115,10 +1115,6 @@
       real(r8), intent(inout) :: t(LBi:UBi,LBj:UBj,UBk,3,UBt)
 #endif
       real(r8) eVal
-      integer iNode, i, j, k, idx, ibio
-      integer iVar, iZ
-      integer step
-      integer method
 !
 ! We have two entries, nstp and nnew for the timing.
 ! How to reconcile both.
@@ -1183,7 +1179,6 @@
 !         It is probably needed to subdivide further the time interval
 !         or to use a better integration method
 !
-          step = -1 ! not used
           CALL BFM_ComputeSourceTerms
 #ifdef BFM_DEBUG
 # ifndef EXPLICIT_SINK
