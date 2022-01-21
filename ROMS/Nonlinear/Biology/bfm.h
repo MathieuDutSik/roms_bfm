@@ -575,11 +575,33 @@
             END DO
          END DO
       END DO
-
-
-
-
-
+      END SUBROUTINE
+!
+      SUBROUTINE BFM_STATE_UPDATE(ng, tile)
+      USE mod_parallel
+      USE mod_biology
+      USE mem
+      USE api_bfm
+      IMPLICIT NONE
+      integer, intent(in) :: ng, tile
+      integer tileS, i, j, k
+      integer NO_BOXES_XY_loc
+      tileS = tile - first_tile(ng) + 1
+      NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
+      DO j=1,NO_D3_BOX_STATES
+         IF (D3STATETYPE(j).ge.0) THEN
+            DO i=1,NO_BOXES
+#ifndef EXPLICIT_SINK
+               D3STATE(j,i) = D3STATE(j,i) + delt_bfm * D3SOURCE(j,i)
+#else
+               DO k=1,NO_D3_BOX_STATES
+                  D3STATE(j,i) = D3STATE(j,i) +                         &
+     &                 delt_bfm * (D3SOURCE(j,k,i) - D3SINK(j,k,i))
+               END DO
+#endif
+            END DO
+         END IF
+      END DO
       END SUBROUTINE
 !
       SUBROUTINE COPY_D3STATE_to_T(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, eTimeIdx, t)
@@ -1203,22 +1225,7 @@
           Print *, "        Case ifdef EXPLICIT_SINK"
 # endif
 #endif
-          tileS = tile - first_tile(ng) + 1
-          NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
-          DO j=1,NO_D3_BOX_STATES
-            IF (D3STATETYPE(j).ge.0) THEN
-              DO i=1,NO_BOXES
-#ifndef EXPLICIT_SINK
-                D3STATE(j,i) = D3STATE(j,i) + delt_bfm * D3SOURCE(j,i)
-#else
-                 DO k=1,NO_D3_BOX_STATES
-                    D3STATE(j,i) = D3STATE(j,i) +                         &
-     &                   delt_bfm * (D3SOURCE(j,k,i) - D3SINK(j,k,i))
-                 END DO
-#endif
-              END DO
-            END IF
-          END DO
+          CALL BFM_STATE_UPDATE(ng, tile)
         END IF
         IF (AdvectionD3STATE) THEN
 !
