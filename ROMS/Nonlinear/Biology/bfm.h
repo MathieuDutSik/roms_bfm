@@ -341,7 +341,7 @@
       IMPLICIT NONE
       integer, intent(in) :: LBi, UBi, LBj, UBj, UBk, UBt
       integer, intent(in) :: ng, tile
-      integer tileS, i, j, k, iZ, idx, iNode, NO_BOXES_XY_loc
+      integer tileS, i, j, k, idx, iNode, NO_BOXES_XY_loc
       real(RLEN) ARR(NO_BOXES)
       REAL(8) sumABS_ruPTc
       integer :: idx_ruptc = 1
@@ -363,8 +363,7 @@
          i = ListArrayWet(ng) % TheArr(tileS) % ListI(iNode)
          j = ListArrayWet(ng) % TheArr(tileS) % ListJ(iNode)
          DO k=1,NO_BOXES_Z
-            iZ = k
-            idx = iZ + NO_BOXES_Z * (iNode-1)
+            idx = k + NO_BOXES_Z * (iNode-1)
             OCEAN(ng) % ROMS_ruPTC(i,j,k) = ARR(idx)
             val = ABS(ARR(idx))
             sumABS(k) = sumABS(k) + val
@@ -385,8 +384,7 @@
          i = ListArrayWet(ng) % TheArr(tileS) % ListI(iNode)
          j = ListArrayWet(ng) % TheArr(tileS) % ListJ(iNode)
          DO k=1,NO_BOXES_Z
-            iZ = k
-            idx = iZ + NO_BOXES_Z * (iNode-1)
+            idx = k + NO_BOXES_Z * (iNode-1)
             OCEAN(ng) % ROMS_ruZTC(i,j,k) = ARR(idx)
          END DO
       END DO
@@ -395,8 +393,7 @@
          i = ListArrayWet(ng) % TheArr(tileS) % ListI(iNode)
          j = ListArrayWet(ng) % TheArr(tileS) % ListJ(iNode)
          DO k=1,NO_BOXES_Z
-            iZ = k
-            idx = iZ + NO_BOXES_Z * (iNode-1)
+            idx = k + NO_BOXES_Z * (iNode-1)
             OCEAN(ng) % ROMS_EIR(i,j,k) = EIR(idx)
             OCEAN(ng) % ROMS_DIC(i,j,k) = DIC(idx)
             OCEAN(ng) % ROMS_Chlo(i,j,k)  = Chla(idx)
@@ -475,7 +472,7 @@
 #else
       real(r8), intent(inout) :: t(LBi:UBi,LBj:UBj,UBk,3,UBt)
 #endif
-      integer iNode, i, j, k, iZ, idx
+      integer iNode, i, j, k, idx
       integer iVar, itrc, ibio, NO_BOXES_XY_loc, tileS
       REAL(r8) eVal
 !      Print *, 'CP_T_D3 : stPelStateS=', stPelStateS, ' stPelStateE=', stPelStateE
@@ -487,8 +484,7 @@
          i = ListArrayWet(ng) % TheArr(tileS) % ListI(iNode)
          j = ListArrayWet(ng) % TheArr(tileS) % ListJ(iNode)
          DO k=1,NO_BOXES_Z
-            iZ = k
-            idx = iZ + NO_BOXES_Z * (iNode-1)
+            idx = k + NO_BOXES_Z * (iNode-1)
 !            Print *, '1: iZ=', iZ, ' iNode=', iNode, ' k=', k, ' idx=', idx
             DO iVar=stPelStateS, stPelStateE
                itrc = iVar - stPelStateS + 1
@@ -521,7 +517,7 @@
       real(r8), intent(inout) :: t(LBi:UBi,LBj:UBj,UBk,3,UBt)
 #endif
       integer tileS, NO_BOXES_XY_loc, iNode, i, j, k
-      integer iZ, idx, itrc, ibio, iVar
+      integer idx, itrc, ibio, iVar
       real(r8) cff
       tileS = tile - first_tile(ng) + 1
       NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
@@ -529,23 +525,22 @@
          i = ListArrayWet(ng) % TheArr(tileS) % ListI(iNode)
          j = ListArrayWet(ng) % TheArr(tileS) % ListJ(iNode)
          DO k=1,NO_BOXES_Z
-            iZ = k
-            idx = iZ + NO_BOXES_Z * (iNode-1)
+            idx = k + NO_BOXES_Z * (iNode-1)
             DO iVar=stPelStateS, stPelStateE
                itrc = iVar - stPelStateS + 1
                ibio = idbio(itrc)
                IF (D3STATETYPE(itrc).ge.0) THEN
-                  cff = 0
 #ifndef EXPLICIT_SINK
-                  cff = D3SOURCE(itrc,iNode)
+                  cff = D3SOURCE(itrc,idx)
 #else
+                  cff = 0
                   DO u=1,NO_D3_BOX_STATES
-                     cff = cff + D3SOURCE(itrc,u,iNode) -                 &
-     &    D3SINK(itrc,u,iNode)
+                     cff = cff + D3SOURCE(itrc,u,idx)                   &
+     &                         - D3SINK(itrc,u,idx)
                   END DO
 #endif
-                  t(i,j,k,nnew,ibio) = t(i,j,k,nnew,ibio) +               &
-     &    cff * delt_bfm * GRID(ng) % Hz(i,j,k)
+                  t(i,j,k,nnew,ibio) = t(i,j,k,nnew,ibio) +             &
+     &               cff * delt_bfm * GRID(ng) % Hz(i,j,k)
                END IF
             END DO
          END DO
@@ -595,7 +590,7 @@
 #else
       real(r8), intent(inout) :: t(LBi:UBi,LBj:UBj,UBk,3,UBt)
 #endif
-      integer iNode, i, j, k, iZ, idx
+      integer iNode, i, j, k, idx
       integer iVar, itrc, ibio, NO_BOXES_XY_loc, tileS
       REAL(r8) eVal
 !      Print *, 'stPelStateS=', stPelStateS, ' stPelStateE=', stPelStateE
@@ -605,8 +600,7 @@
          i = ListArrayWet(ng) % TheArr(tileS) % ListI(iNode)
          j = ListArrayWet(ng) % TheArr(tileS) % ListJ(iNode)
          DO k=1,NO_BOXES_Z
-            iZ = k
-            idx = iZ + NO_BOXES_Z * (iNode-1)
+            idx = k + NO_BOXES_Z * (iNode-1)
 !            Print *, '2: iZ=', iZ, ' iNode=', iNode, ' k=', k, ' idx=', idx
             DO iVar=stPelStateS, stPelStateE
                itrc = iVar - stPelStateS + 1
@@ -627,7 +621,7 @@
       USE api_bfm
       IMPLICIT NONE
       integer, intent(in) :: ng, tile
-      integer iNode, i, j, k, iZ, idx
+      integer iNode, i, j, k, idx
       integer iVar, itrc, ibio, siz, TotalNb
       REAL(r8), allocatable :: ArrSum(:), ArrMin(:), ArrMax(:)
       REAL(r8) eVal, eAvg, eMin, eMax
@@ -651,8 +645,7 @@
       END DO
       DO iNode=1,NO_BOXES_XY
          DO k=1,NO_BOXES_Z
-            iZ = k
-            idx = iZ + NO_BOXES_Z * (iNode-1)
+            idx = k + NO_BOXES_Z * (iNode-1)
             DO iVar=stPelStateS, stPelStateE
                itrc = iVar - stPelStateS + 1
                eVal = D3STATE(itrc, idx)
@@ -1170,38 +1163,38 @@
         CALL PRINT_BFM_STATE_KEYS(ng, tile)
 #endif
         IF (AdvectionD3STATE) THEN
-          CALL COPY_T_to_D3STATE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, nstp, t)
+           CALL COPY_T_to_D3STATE(LBi, UBi, LBj, UBj, UBk, UBt, ng, tile, nstp, t)
         ENd IF
         IF (SourceTermD3STATE) THEN
 !
-!         Now the time stepping operations
-!         Right now we do Euler forward algorithm
-!         It is probably needed to subdivide further the time interval
-!         or to use a better integration method
+!          Now the time stepping operations
+!          Right now we do Euler forward algorithm
+!          It is probably needed to subdivide further the time interval
+!          or to use a better integration method
 !
-          CALL BFM_ComputeSourceTerms
+           CALL BFM_ComputeSourceTerms
 #ifdef BFM_DEBUG
 # ifndef EXPLICIT_SINK
-          Print *, "        Case ifndef EXPLICIT_SINK"
+           Print *, "        Case ifndef EXPLICIT_SINK"
 # else
-          Print *, "        Case ifdef EXPLICIT_SINK"
+           Print *, "        Case ifdef EXPLICIT_SINK"
 # endif
 #endif
-          CALL BFM_STATE_UPDATE(ng, tile)
+           CALL BFM_STATE_UPDATE(ng, tile)
         END IF
         IF (AdvectionD3STATE) THEN
 !
-!       Doing the time step increase. Here, we follow directly the
-!       schemes of redtide, fennel, npzd_*, nemuro.
-!       We do not need to copy to nstp in that case.
+!          Doing the time step increase. Here, we follow directly the
+!          schemes of redtide, fennel, npzd_*, nemuro.
+!          We do not need to copy to nstp in that case.
 !
            CALL INCREASE_T_NNEW(LBi, UBi, LBj, UBj, UBk, UBt,           &
      &         ng, tile, nnew, t)
         ELSE
 !
-!       Now copying back the field values
-!       This is needed even if in absence of advection because we use this for
-!       for outputting results.
+!          Now copying back the field values
+!          This is needed even if in absence of advection because we use this for
+!          for outputting results.
 !
            CALL COPY_D3STATE_to_T(LBi, UBi, LBj, UBj, UBk, UBt,         &
      &         ng, tile, nstp, t)
