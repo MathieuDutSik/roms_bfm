@@ -117,7 +117,7 @@
    if (present(ylength)) then
       cycle = ylength
    else
-      cycle = 360.0_RLEN
+      cycle = 365.0_RLEN
    end if
    declination = -0.406*cos(2.*PI*int(time)/cycle)
    daylength = acos(-tan(declination)*tan(latitude*RFACTOR))/PI*24.
