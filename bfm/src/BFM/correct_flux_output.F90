@@ -84,9 +84,9 @@ subroutine correct_flux_output(mode, nr0,zlev,nlev,out)
   REAL(RLEN) eavg, emax, emin
   nr=nr0
 #ifdef BFM_DEBUG
-  Print *, 'Begin correct_flux_output : nr0=', nr0, ' RLEN=', RLEN, ' nlev=', nlev
-  Print *, 'size(out)=', size(out)
-  Print *, 'size(D3FLUX_FUNC)=', size(D3FLUX_FUNC,1), size(D3FLUX_FUNC,2)
+      Print *, 'Begin correct_flux_output : nr0=', nr0, ' RLEN=', RLEN, ' nlev=', nlev
+      Print *, 'size(out)=', size(out)
+      Print *, 'size(D3FLUX_FUNC)=', size(D3FLUX_FUNC,1), size(D3FLUX_FUNC,2)
 !  DO idx_i=1,NO_D3_BOX_FLUX
 !      Print *, 'idx_i=', idx_i, ' sum(D3FLUX_FUNC(idx_i,:))=',          &
 !     &   sum(abs(D3FLUX_FUNC(idx_i, :)))
@@ -98,30 +98,36 @@ subroutine correct_flux_output(mode, nr0,zlev,nlev,out)
   Print *, '1 : max(out)=', maxval(out), ' nlev=', nlev
 #endif
   do idx_i=stPelStateS, stPelStateE
-       origin      = idx_i
-       destination = idx_i
+   origin      = idx_i
+   destination = idx_i
 !       Print *, 'allocated(D3FLUX_MATRIX(origin,destination)%p)=', allocated(D3FLUX_MATRIX(origin,destination)%p)
-       if( allocated( D3FLUX_MATRIX(origin,destination)%p ) ) then
-        do idx_j=1, SIZE(D3FLUX_MATRIX(origin,destination)%p)
-    if( ABS(D3FLUX_MATRIX(origin,destination)%p(idx_j)) .eq. nr0 ) then
-       if( D3FLUX_MATRIX(origin,destination)%dir(idx_j) == 0  ) then ! "A->B" => (out flow) => flux < ZERO => D3SINK
-            out(BOTindices) = out(BOTindices) -                         &
+   if( allocated( D3FLUX_MATRIX(origin,destination)%p ) ) then
+    do idx_j=1, SIZE(D3FLUX_MATRIX(origin,destination)%p)
+     if( ABS(D3FLUX_MATRIX(origin,destination)%p(idx_j)) .eq. nr0 ) then
+      if( D3FLUX_MATRIX(origin,destination)%dir(idx_j) == 0  ) then ! "A->B" => (out flow) => flux < ZERO => D3SINK
+#ifdef BFM_DEBUG
+       Print *, 'out correction, case 1'
+#endif
+       out(BOTindices) = out(BOTindices) -                              &
      &    SIGN( 1, D3FLUX_MATRIX(origin,destination)%p(idx_j) ) *       &
      &     max(ZERO, PELBOTTOM(origin,:)) / Depth(BOTindices)
-           out(SRFindices) = out(SRFindices) -                          &
+       out(SRFindices) = out(SRFindices) -                              &
      &    SIGN( 1, D3FLUX_MATRIX(origin,destination)%p(idx_j) ) *       &
      &     max(ZERO, PELSURFACE(origin,:)) / Depth(SRFindices)
-       else ! "A<-B" => (in flow) => flux > ZERO => D3SOURCE
-            out(BOTindices) = out(BOTindices) +                         &
+      else ! "A<-B" => (in flow) => flux > ZERO => D3SOURCE
+#ifdef BFM_DEBUG
+       Print *, 'out correction, case 2'
+#endif
+       out(BOTindices) = out(BOTindices) +                              &
      &    SIGN( 1, D3FLUX_MATRIX(origin,destination)%p(idx_j) ) *       &
      &     min(ZERO, PELBOTTOM(origin,:)) / Depth(BOTindices)
-            out(SRFindices) = out(SRFindices) +                         &
+       out(SRFindices) = out(SRFindices) +                              &
      &    SIGN( 1, D3FLUX_MATRIX(origin,destination)%p(idx_j) ) *       &
      &     min(ZERO, PELSURFACE(origin,:)) / Depth(SRFindices)
-              endif
-           end if
-        end do
+      endif
      end if
+    end do
+   end if
   end do
 #ifdef BFM_DEBUG
   eavg = sum(out(:)) / nlev

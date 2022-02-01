@@ -355,6 +355,11 @@
       NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
 !      Print *, 'NO_BOXES=', NO_BOXES, ' RLEN=', RLEN
 !      Print *, 'Before correct_flux_output idx_ruptc=', idx_ruptc
+      Print *, 'NO_BOXES=', NO_BOXES
+      Print *, 'NO_BOXES_XY=', NO_BOXES_XY
+      Print *, 'NO_BOXES_Z=', NO_BOXES_Z
+
+
       CALL correct_flux_output(1,idx_ruptc,1,NO_BOXES,ARR)
       sumABS(:) = 0
       maxABS(:) = 0
@@ -786,9 +791,9 @@
         END DO
       END DO NEST_LAYER
       NO_BOXES_Y  = 1
-      NO_BOXES_Z = NO_BOXES_Z_max
+      NO_BOXES_Z  = NO_BOXES_Z_max
       NO_BOXES_XY = NO_BOXES_XY_max
-      NO_BOXES_X = NO_BOXES_XY
+      NO_BOXES_X  = NO_BOXES_XY
       NO_BOXES    = NO_BOXES_XY * NO_BOXES_Z
       NO_STATES   = NO_D3_BOX_STATES * NO_BOXES + NO_BOXES_XY
       !
