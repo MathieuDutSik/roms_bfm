@@ -20,7 +20,7 @@
 ! ** Action  :   prgb(3,61) tabulated R-G-B attenuation coef.
 !
 ! Reference  : Lengaigne et al. 2007, Clim. Dyn., V28, 5, 503-516.
-!   
+!
 !
 ! !INTERFACE
   SUBROUTINE ChlAttenuation( prgb )
@@ -50,9 +50,9 @@
 ! !REVISION_HISTORY
 !
 ! COPYING
-!   
+!
 !   Copyright (C) 2015 BFM System Team (bfm_st@lists.cmcc.it)
-!   Copyright (C) 2004-2014 NEMO System Team 
+!   Copyright (C) 2004-2014 NEMO System Team
 !
 !   This program is free software; you can redistribute it and/or modify
 !   it under the terms of the GNU General Public License as published by
@@ -73,14 +73,17 @@
   INTEGER  ::   jc     ! dummy loop indice
   INTEGER  ::   irgb   ! temporary integer
   REAL(RLEN) ::   zchl   ! temporary scalar
-  REAL(RLEN), DIMENSION(4,61) :: zrgb   ! tabulated attenuation coefficient 
+  REAL(RLEN), DIMENSION(4,61) :: zrgb   ! tabulated attenuation coefficient
   REAL(RLEN)                  :: r_si2  ! maximum attenuation depth
+
+#ifdef BFM_DEBUG
+      Print *, 'Passing via ChlAttenuation'
+#endif
 
   !!----------------------------------------------------------------------
   !
-     write(LOGUNIT,*) '#'
-     write(LOGUNIT,*) '# ChlAttenuation : Initialisation of the optical look-up table'
-     write(LOGUNIT,*) '#'
+      write(LOGUNIT,*) '#'
+      write(LOGUNIT,*) '# ChlAttenuation : Initialisation of the optical look-up table'
   !
   !  Chlorophyll        !     Blue attenuation     !     Green attenuation    !     Red attenuation      !
       zrgb(1, 1) =  0.010   ;   zrgb(2, 1) = 0.01618   ;   zrgb(3, 1) = 0.07464   ;   zrgb(4, 1) = 0.37807

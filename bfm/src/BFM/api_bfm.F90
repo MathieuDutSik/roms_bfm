@@ -687,13 +687,13 @@ contains
    if ( outdelta .lt. 0 ) then
       julian1 = bfmtime%time0 + ( (bfmtime%stepnow - bfmtime%step0)     &
      &    * bfmtime%timestep / SEC_PER_DAY)
+
       call calendar_date(julian1,yyyy,mm,dd,hh,nn)
       call julian_day(yyyy,mm,eomdays(yyyy,mm),24,0,julian2)
-
+      Print *, 'julian1=', julian1, ' julian2=', julian2
       tmptime = int( julian2 - julian1 ) * int(SEC_PER_DAY)             &
      &    / bfmtime%timestep
-      savedelta = savedelta + int( julian2 - julian1 ) *                &
-     &    int(SEC_PER_DAY) / bfmtime%timestep
+      savedelta = savedelta + tmptime
 
       write(LOGUNIT,*)
       write(LOGUNIT,*) 'update_save_delta : Output will be saved for the real monthly value at step ', savedelta

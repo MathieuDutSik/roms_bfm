@@ -201,8 +201,6 @@
    bfmtime%stepEnd  = MaxN
    call calendar_date(bfmtime%timeEnd,yy,mm,dd,hh,nn)
    write(bfmtime%dateEnd,'(i4.4,i2.2,i2.2)') yy,mm,dd
-
-   return
    end subroutine init_time
 !EOC
 !-----------------------------------------------------------------------
@@ -262,7 +260,6 @@
    res = julian - real(jday)
    hh = floor(res * 24)
    nn = floor( ((res * 24) - real(hh,RLEN)) * 60)
-   return
    end subroutine calendar_date
 !EOC
 
@@ -323,8 +320,6 @@
       jh = jh - 24
    endif
    julian  = real(jday,RLEN) +  real(jh,RLEN)/24 + real(jn,RLEN)/ ( 24 * 60)
-
-   return
    end subroutine julian_day
 !EOC
 
@@ -362,8 +357,6 @@
    fsecs = n*timestep + secs0
    julianday    = jul0 + nsecs/86400
    secondsofday = mod(nsecs,86400)
-
-   return
    end subroutine update_time
 !EOC
 
@@ -405,8 +398,6 @@
    call julian_day(yy,mm,dd,0,0,jday)
    jul = int(jday)
    secs = 3600*hh + 60*min + ss
-
-   return
    end subroutine read_time_string
 !EOC
 
@@ -451,8 +442,6 @@
 
    write(timestr,'(i4.4,a1,i2.2,a1,i2.2,1x,i2.2,a1,i2.2,a1,i2.2)')  &
                         yy,'-',mm,'-',dd,hh,':',min,':',ss
-
-   return
    end subroutine write_time_string
 !EOC
 
@@ -528,11 +517,11 @@
 
 !-------------------------------------------------------------------------!
 !-------------------------------------------------------------------------!
- integer function eomdays(Year, Month)
+      integer function eomdays(Year, Month)
  ! Adapted from Lin Jensen, 1998
-     implicit none
-     integer :: Month, Year
-     SELECT CASE (Month)                       !!Find number of days in a Month
+      implicit none
+      integer :: Month, Year
+      SELECT CASE (Month)                       !!Find number of days in a Month
        CASE (:0, 13:)
                Stop "eomdays: Invalid month!!"
        CASE (1, 3, 5, 7:8, 10, 12)
@@ -542,24 +531,22 @@
                IF (MOD(Year,4) == 0) eomdays = 29  !!Leap year
        CASE DEFAULT                                    !!September, April, June & November
                eomdays = 30              !! Thirty days hath ...^
-     END SELECT
-     return
- end function eomdays
+      END SELECT
+      end function eomdays
 !-------------------------------------------------------------------------!
 !-------------------------------------------------------------------------!
- integer function yeardays(Year)
-     implicit none
-     integer :: im, Year
-     yeardays = 0
-     do im = 1 , 12
-        yeardays = yeardays + FLOAT(eomdays(Year, im))
-     enddo
-     if (yeardays == 0 .OR. yeardays > 366) stop ' yeardays out of bounds!'
-     return
- end function yeardays
+      integer function yeardays(Year)
+      implicit none
+      integer :: im, Year
+      yeardays = 0
+      do im = 1 , 12
+         yeardays = yeardays + FLOAT(eomdays(Year, im))
+      enddo
+      if (yeardays == 0 .OR. yeardays > 366) stop ' yeardays out of bounds'
+      end function yeardays
 !-------------------------------------------------------------------------!
 !-------------------------------------------------------------------------!
- character(len=PATH_MAX) function outdeltalab(outdelta)
+     character(len=PATH_MAX) function outdeltalab(outdelta)
      implicit none
      integer :: outdelta, timesec, outfreq , thisrdt
 
@@ -589,9 +576,7 @@
 
      ! Remove leading spaces
      outdeltalab = ADJUSTL( outdeltalab )
-
-     return
- end function outdeltalab
+      end function outdeltalab
 !-----------------------------------------------------------------------
 !-----------------------------------------------------------------------
 

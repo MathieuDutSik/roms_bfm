@@ -190,6 +190,7 @@
       REAL(r8) wlight
       REAL(r8) ux, uy
       REAL(r8) sumWlight, avgWlight
+      REAL(r8) sumSUNQ, avgSUNQ
       REAL(r8) Hscale
       REAL(r8) eHz, eVolume
       REAL(r8) area1, area2, TotArea
@@ -204,6 +205,7 @@
       c_dew=157.14_r8
       tileS = tile - first_tile(ng) + 1
       sumWlight = 0
+      sumSUNQ = 0
       Hscale = rho0 * Cp
       CALL GetTime_for_daylength(ng, yday)
       DO idx=1,NO_BOXES_XY
@@ -214,6 +216,7 @@
          DO k=1,N(ng)
             idxB = N(ng) * (idx - 1) + k
             SUNQ(idx) = daylength(yday, lat)
+            sumSUNQ = sumSUNQ + SUNQ(idx)
          END DO
          ! Now computing the area
          lat1 = GRID(ng) % latp(i,j)
@@ -271,7 +274,7 @@
          IF (ChlAttenFlag .eq. 2) THEN
            DO k=1,N(ng)
               idxB = N(ng) * (idx - 1) + k
-              EIR(idxB) = p_PARRGB* wlight / E2W
+              EIR(idxB) = p_PARRGB * wlight / E2W
               EIRR(idxB) = EIR(idxB) * exp ( -R_eps(idxB) )
               EIRG(idxB) = EIR(idxB) * exp ( -G_eps(idxB) )
               EIRB(idxB) = EIR(idxB) * exp ( -B_eps(idxB) )
@@ -322,8 +325,9 @@
       END DO
       ERHO(:) = density(ETW(:),ESW(:),Depth(:)/2.0_RLEN)
       avgWlight = sumWlight / NO_BOXES_XY
+      avgSUNQ = sumSUNQ / NO_BOXES_XY
 #ifdef BFM_DEBUG
-      Print *, 'avgWlight=', avgWlight
+      Print *, 'avgWlight=', avgWlight, 'avgSUNQ=', avgSUNQ
 #endif
       END SUBROUTINE
 !
@@ -355,9 +359,9 @@
       NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
 !      Print *, 'NO_BOXES=', NO_BOXES, ' RLEN=', RLEN
 !      Print *, 'Before correct_flux_output idx_ruptc=', idx_ruptc
-      Print *, 'NO_BOXES=', NO_BOXES
-      Print *, 'NO_BOXES_XY=', NO_BOXES_XY
-      Print *, 'NO_BOXES_Z=', NO_BOXES_Z
+!      Print *, 'NO_BOXES=', NO_BOXES
+!      Print *, 'NO_BOXES_XY=', NO_BOXES_XY
+!      Print *, 'NO_BOXES_Z=', NO_BOXES_Z
 
 
       CALL correct_flux_output(1,idx_ruptc,1,NO_BOXES,ARR)
