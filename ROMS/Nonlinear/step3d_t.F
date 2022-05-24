@@ -129,7 +129,9 @@
       USE mod_param
       USE mod_clima
       USE mod_ncparam
+# ifdef BFM_COUPLING
       USE biology_mod,          ONLY : PRINT_CRITICAL
+# endif
 # if defined NESTING && !defined ONE_WAY
       USE mod_nesting
 # endif
@@ -340,7 +342,9 @@
 !
 !  Compute horizontal tracer advection fluxes.
 !
+# ifdef BFM_COUPLING
       CALL PRINT_CRITICAL(1301)
+# endif
       T_LOOP : DO itrc=1,NT(ng)
         K_LOOP : DO k=1,N(ng)
 
@@ -657,8 +661,9 @@
 # endif
         END DO K_LOOP
       END DO T_LOOP
+# ifdef BFM_COUPLING
       CALL PRINT_CRITICAL(1302)
-
+# endif
 !
 !-----------------------------------------------------------------------
 !  Time-step vertical advection term.
@@ -896,7 +901,9 @@
 # undef J_RANGE
 # ifdef TS_MPDATA
       END DO
+# ifdef BFM_COUPLING
       CALL PRINT_CRITICAL(1303)
+# endif
 !
 !-----------------------------------------------------------------------
 !  Compute anti-diffusive velocities to corrected advected tracers
@@ -1002,7 +1009,9 @@
           END DO
         END DO
       END DO
+# ifdef BFM_COUPLING
       CALL PRINT_CRITICAL(1304)
+# endif
 !
 !  Start pipelined J-loop.
 !
@@ -1147,7 +1156,9 @@
 # endif
         END DO
       END DO
+# ifdef BFM_COUPLING
       CALL PRINT_CRITICAL(1305)
+# endif
 
 # if defined AGE_MEAN && defined T_PASSIVE
 !
@@ -1182,7 +1193,9 @@
         END DO
       END DO
 # endif
+# ifdef BFM_COUPLING
       CALL PRINT_CRITICAL(1306)
+# endif
 !
 !-----------------------------------------------------------------------
 !  Apply lateral boundary conditions and, if appropriate, nudge
@@ -1264,7 +1277,9 @@
      &                            t(:,:,:,nnew,itrc))
         END IF
       END DO
+# ifdef BFM_COUPLING
       CALL PRINT_CRITICAL(1307)
+# endif
 # ifdef DISTRIBUTE
 !
 !  Exchange boundary data.
@@ -1306,7 +1321,9 @@
      &                    dAktdz)
 #  endif
 # endif
+# ifdef BFM_COUPLING
       CALL PRINT_CRITICAL(1308)
+# endif
 
       RETURN
       END SUBROUTINE step3d_t_tile

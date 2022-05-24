@@ -31,7 +31,7 @@
 #undef ANA_INITIAL
 #undef RST_SINGLE
 
-#define BFM_COUPLING
+#undef BFM_COUPLING
 
 #undef ANA_TAIR
 #undef ANA_PAIR

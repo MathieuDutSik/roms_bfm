@@ -134,8 +134,10 @@
       USE mod_param
       USE mod_ncparam
       USE mod_scalars
+# ifdef BFM_COUPLING
       USE biology_mod,          ONLY : biology, PRINT_CRITICAL
       USE mod_biology,          ONLY : idbio
+# endif
 # if defined SEDIMENT || defined BBL_MODEL
       USE mod_sediment
 # endif
@@ -600,13 +602,17 @@
 !
       ic=0
       Print *, 'ini_fields, nstp=', nstp, ' nnew=', nnew
+#  ifdef BFM_COUPLING
       CALL PRINT_CRITICAL(701)
+#  endif
       IF (.not.PerfectRST(ng)) THEN
-        ibio = idbio(1)
         DO itrc=1,NT(ng)
+#  ifdef BFM_COUPLING
+          ibio = idbio(1)
           IF (itrc .eq. ibio) THEN
             CALL PRINT_CRITICAL(702)
           END IF
+#  endif
           IF (LtracerCLM(itrc,ng).and.LnudgeTCLM(itrc,ng)) THEN
             ic=ic+1
           END IF
@@ -622,9 +628,11 @@
               END DO
             END DO
           END DO
+#  ifdef BFM_COUPLING
           IF (itrc .eq. ibio) THEN
             CALL PRINT_CRITICAL(703)
           END IF
+#  endif
 !
 !  Apply boundary conditions.
 !
@@ -638,9 +646,11 @@
      &                     IminS, ImaxS, JminS, JmaxS,                  &
      &                     nstp, nnew,                                  &
      &                     t)
+#  ifdef BFM_COUPLING
           IF (itrc .eq. ibio) THEN
             CALL PRINT_CRITICAL(704)
           END IF
+#  endif
         END DO
       END IF
 !
@@ -654,7 +664,9 @@
      &                            t(:,:,:,nnew,itrc))
         END DO
       END IF
+#  ifdef BFM_COUPLING
       CALL PRINT_CRITICAL(705)
+#  endif
 
 #  ifdef DISTRIBUTE
 !
@@ -665,7 +677,9 @@
      &                    t(:,:,:,nstp,:),                              &
      &                    t(:,:,:,nnew,:))
 #  endif
+#  ifdef BFM_COUPLING
       CALL PRINT_CRITICAL(706)
+#  endif
 
 #  if defined BBL_MODEL || defined SEDIMENT
 !

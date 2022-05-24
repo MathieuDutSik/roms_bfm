@@ -154,7 +154,9 @@
       USE mod_param
       USE mod_scalars
       USE mod_sources
+# ifdef BFM_COUPLING
       USE biology_mod, only : PRINT_CRITICAL
+# endif
 !
       USE exchange_3d_mod, ONLY : exchange_r3d_tile
 # ifdef DISTRIBUTE
@@ -310,7 +312,9 @@
 !=======================================================================
 !  Tracer equation(s).
 !=======================================================================
+#  ifdef BFM_COUPLING
       CALL PRINT_CRITICAL(7901)
+#  endif
 #  ifdef SOLAR_SOURCE
 !
 !  Compute fraction of the solar shortwave radiation, "swdk"
@@ -333,7 +337,9 @@
         END DO
       END DO
 #  endif
+#  ifdef BFM_COUPLING
       CALL PRINT_CRITICAL(7902)
+#  endif
 !
 !-----------------------------------------------------------------------
 !  Compute intermediate tracer at n+1/2 time-step, t(i,j,k,3,itrc).
@@ -560,7 +566,9 @@
           END DO
         END DO K_LOOP
       END DO T_LOOP1
+#  ifdef BFM_COUPLING
       CALL PRINT_CRITICAL(7903)
+#  endif
 
 #  if (defined AGE_MEAN && defined T_PASSIVE) && !defined TS_MPDATA
 !
@@ -592,7 +600,9 @@
 !  Compute artificial continuity equation (same for all tracers) and
 !  load it into private array DC (1/m). Notice pipelined J-loop.
 !
+#  ifdef BFM_COUPLING
       CALL PRINT_CRITICAL(7904)
+#  endif
       J_LOOP1 : DO j=Jstr,Jend
         IF (iic(ng).eq.ntfirst(ng)) THEN
           cff=0.5_r8*dt(ng)
@@ -817,7 +827,9 @@
           END DO
         END DO T_LOOP2
       END DO J_LOOP1
+#  ifdef BFM_COUPLING
       CALL PRINT_CRITICAL(7905)
+#  endif
 !
 !-----------------------------------------------------------------------
 !  Start computation of tracers at n+1 time-step, t(i,j,k,nnew,itrc).
@@ -899,7 +911,9 @@
         END DO
       END DO
 # endif /* !TS_FIXED */
+# ifdef BFM_COUPLING
       CALL PRINT_CRITICAL(7906)
+# endif
 !
 !=======================================================================
 !  3D momentum equation in the XI-direction.
@@ -1111,7 +1125,9 @@
           END IF
         END IF
       END DO J_LOOP2
+# ifdef BFM_COUPLING
       CALL PRINT_CRITICAL(7907)
+# endif
 
 # ifndef TS_FIXED
 !
@@ -1146,7 +1162,9 @@
 #  endif
 # endif
 
+# ifdef BFM_COUPLING
       CALL PRINT_CRITICAL(7908)
+# endif
       RETURN
       END SUBROUTINE pre_step3d_tile
 #endif

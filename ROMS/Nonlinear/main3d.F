@@ -31,7 +31,7 @@
 # ifdef ANA_VMIX
       USE analytical_mod,       ONLY : ana_vmix
 # endif
-# ifdef BIOLOGY
+# ifdef BFM_COUPLING
       USE biology_mod,          ONLY : biology, PRINT_CRITICAL
 # endif
 # ifdef SIMPLE_GROWTH
@@ -154,7 +154,9 @@
 !  combinations. Otherwise, the solution it is looped once for a single
 !  grid application (NestLayers = 1).
 !
+#ifdef BFM_COUPLING
         CALL PRINT_CRITICAL(1)
+#endif
         nl=0
 #ifdef NESTING
         TwoWayCounter(1:Ngrids)=0
@@ -180,7 +182,9 @@
 !
 !  Set time indices and time clock.
 !
+# ifdef BFM_COUPLING
             CALL PRINT_CRITICAL(2)
+# endif
             DO ig=1,GridsInLayer(nl)
               ng=GridNumber(ig,nl)
               iic(ng)=iic(ng)+1
@@ -196,7 +200,9 @@
               IF (step_counter(ng).eq.Rsteps) Time_Step=.FALSE.
 # endif
             END DO
+# ifdef BFM_COUPLING
             CALL PRINT_CRITICAL(3)
+# endif
 !
 !-----------------------------------------------------------------------
 !  Read in required data, if any, from input NetCDF files.
@@ -211,7 +217,9 @@
               IF (FoundError(exit_flag, NoError, __LINE__,              &
      &                       __FILE__)) RETURN
             END DO
+# ifdef BFM_COUPLING
             CALL PRINT_CRITICAL(4)
+# endif
 !
 !-----------------------------------------------------------------------
 !  If applicable, process input data: time interpolate between data
@@ -225,7 +233,9 @@
               END DO
 !$OMP BARRIER
             END DO
+# ifdef BFM_COUPLING
             CALL PRINT_CRITICAL(5)
+# endif
             IF (FoundError(exit_flag, NoError, __LINE__,                &
      &                     __FILE__)) RETURN
 
@@ -251,7 +261,9 @@
               END IF
             END DO
 # endif
+# ifdef BFM_COUPLING
             CALL PRINT_CRITICAL(6)
+# endif
 !
 !-----------------------------------------------------------------------
 !  Initialize all time levels and compute other initial fields.
@@ -265,20 +277,30 @@
 !  depths.
 !
                 DO tile=first_tile(ng),last_tile(ng),+1
+# ifdef BFM_COUPLING
                   CALL PRINT_CRITICAL(301)
+# endif
                   CALL ini_zeta (ng, tile, iNLM)
+# ifdef BFM_COUPLING
                   CALL PRINT_CRITICAL(302)
+# endif
                   CALL set_depth (ng, tile, iNLM)
+# ifdef BFM_COUPLING
                   CALL PRINT_CRITICAL(303)
+# endif
                 END DO
 !$OMP BARRIER
 !
 !  Initialize other state variables.
 !
                 DO tile=last_tile(ng),first_tile(ng),-1
+# ifdef BFM_COUPLING
                   CALL PRINT_CRITICAL(304)
+# endif
                   CALL ini_fields (ng, tile, iNLM)
+# ifdef BFM_COUPLING
                   CALL PRINT_CRITICAL(305)
+# endif
                 END DO
 !$OMP BARRIER
 
@@ -293,7 +315,9 @@
 # endif
               END IF
             END DO
+# ifdef BFM_COUPLING
             CALL PRINT_CRITICAL(31)
+# endif
 !
 !-----------------------------------------------------------------------
 !  Compute horizontal mass fluxes (Hz*u/n and Hz*v/m), density related
@@ -314,7 +338,9 @@
               END DO
 !$OMP BARRIER
             END DO
+# ifdef BFM_COUPLING
             CALL PRINT_CRITICAL(32)
+# endif
             IF (FoundError(exit_flag, NoError, __LINE__,                &
      &                     __FILE__)) RETURN
 
@@ -325,7 +351,9 @@
 !  timesteps: get air/sea fluxes.
 !-----------------------------------------------------------------------
 !
+# ifdef BFM_COUPLING
             CALL PRINT_CRITICAL(7)
+# endif
             DO ig=1,GridsInLayer(nl)
               ng=GridNumber(ig,nl)
               IF ((iic(ng).ne.ntstart(ng)).and.                         &
@@ -371,7 +399,9 @@
 !$OMP BARRIER
             END DO
 # endif
+# ifdef BFM_COUPLING
             CALL PRINT_CRITICAL(8)
+# endif
 !
 !-----------------------------------------------------------------------
 !  Set fields for vertical boundary conditions. Process tidal forcing,
@@ -411,7 +441,9 @@
               END IF
             END DO
 # endif
+# ifdef BFM_COUPLING
             CALL PRINT_CRITICAL(9)
+# endif
 
 # ifdef ADJUST_BOUNDARY
 !
@@ -451,7 +483,9 @@
               END IF
             END DO
 # endif
+# ifdef BFM_COUPLING
             CALL PRINT_CRITICAL(10)
+# endif
 !
 !-----------------------------------------------------------------------
 !  Compute time-dependent vertical/horizontal mixing coefficients for
@@ -497,7 +531,9 @@
               END DO
 !$OMP BARRIER
             END DO
+# ifdef BFM_COUPLING
             CALL PRINT_CRITICAL(11)
+# endif
 
 # ifdef NESTING
 !
@@ -556,25 +592,37 @@
 !  Compute right-hand-side terms for 3D equations.
 !-----------------------------------------------------------------------
 !
+# ifdef BFM_COUPLING
             CALL PRINT_CRITICAL(1101)
+# endif
             DO ig=1,GridsInLayer(nl)
               ng=GridNumber(ig,nl)
               DO tile=last_tile(ng),first_tile(ng),-1
+# ifdef BFM_COUPLING
                 CALL PRINT_CRITICAL(1102)
+# endif
                 CALL rhs3d (ng, tile)
+# ifdef BFM_COUPLING
                 CALL PRINT_CRITICAL(1103)
+# endif
 # ifdef MY25_MIXING
                 CALL my25_prestep (ng, tile)
+#  ifdef BFM_COUPLING
                 CALL PRINT_CRITICAL(1104)
+#  endif
 # elif defined GLS_MIXING
                 CALL gls_prestep (ng, tile)
+#  ifdef BFM_COUPLING
                 CALL PRINT_CRITICAL(1105)
+#  endif
 # endif
               END DO
 !$OMP BARRIER
             END DO
 
+# ifdef BFM_COUPLING
             CALL PRINT_CRITICAL(12)
+# endif
 # ifdef NESTING
 !
 !  If composite or mosaic grids, process additional points in the
@@ -812,7 +860,9 @@
 !  Time-step tracer equations.
 !-----------------------------------------------------------------------
 !
+#  ifdef BFM_COUPLING
             CALL PRINT_CRITICAL(13)
+#  endif
             DO ig=1,GridsInLayer(nl)
               ng=GridNumber(ig,nl)
               DO tile=last_tile(ng),first_tile(ng),-1
@@ -820,7 +870,9 @@
               END DO
 !$OMP BARRIER
             END DO
+#  ifdef BFM_COUPLING
             CALL PRINT_CRITICAL(14)
+#  endif
 
 #  ifdef NESTING
 !
