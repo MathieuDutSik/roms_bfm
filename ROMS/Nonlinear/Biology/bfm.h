@@ -198,14 +198,21 @@
       REAL(r8) :: Rearth = 6371000
       REAL(r8) yday
       REAL(r8) z1, z2
+      REAL(r8) sumReps, sumGeps, sumBeps
+      REAL(r8) avgReps, avgGeps, avgBeps
       integer k
 # include "set_bounds.h"
+#ifdef BFM_DEBUG
       Print *, 'SET_BFM_FIELDS_FROM_ROMS, ChlAttenFlag=', ChlAttenFlag
+#endif
       b_dew=18.678_r8
       c_dew=157.14_r8
       tileS = tile - first_tile(ng) + 1
       sumWlight = 0
       sumSUNQ = 0
+      sumReps = 0
+      sumGeps = 0
+      sumBeps = 0
       Hscale = rho0 * Cp
       CALL GetTime_for_daylength(ng, yday)
       DO idx=1,NO_BOXES_XY
@@ -279,6 +286,9 @@
               EIRG(idxB) = EIR(idxB) * exp ( -G_eps(idxB) )
               EIRB(idxB) = EIR(idxB) * exp ( -B_eps(idxB) )
               EIR(idxB) = EIRB(idxB) + EIRG(idxB) + EIRR(idxB)
+              sumReps = sumReps + R_eps(idxB)
+              sumGeps = sumReps + G_eps(idxB)
+              sumBeps = sumReps + B_eps(idxB)
               ! weighted broadband diffuse attenuation coefficient for diagnostics
               xEPS(idxB) = (EIRB(idxB)*B_eps(idxB) +                    &
      &             EIRG(idxB)*G_eps(idxB) +                             &
@@ -326,8 +336,13 @@
       ERHO(:) = density(ETW(:),ESW(:),Depth(:)/2.0_RLEN)
       avgWlight = sumWlight / NO_BOXES_XY
       avgSUNQ = sumSUNQ / NO_BOXES_XY
+
+      avgReps = sumReps / (NO_BOXES_XY * N(ng))
+      avgGeps = sumGeps / (NO_BOXES_XY * N(ng))
+      avgBeps = sumBeps / (NO_BOXES_XY * N(ng))
 #ifdef BFM_DEBUG
       Print *, 'avgWlight=', avgWlight, 'avgSUNQ=', avgSUNQ
+      Print *, 'avgReps=', avgReps, ' avgGeps=', avgGeps, ' avgBeps=', avgBeps
 #endif
       END SUBROUTINE
 !
@@ -433,7 +448,9 @@
       REAL(r8) emaxval, eminval, eavgval, eVal
       integer iVar, itrc, ibio, pos, iNode, i, j, k, idx
       integer NO_BOXES_XY_loc, tileS, posmax
+#ifdef BFM_DEBUG
       Print *, 'PRINT_T_KEYS ng=', ng, ' tile=', tile
+#endif
       posmax = 1
       tileS = tile - first_tile(ng) + 1
       NO_BOXES_XY_loc = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
@@ -688,16 +705,6 @@
          eavgval = sum(F) / TotalNb
          Print *, 'j=', j, ' min/max/avg=', eminval, emaxval, eavgval
       END DO
-
-      DO j=1,NO_D3_BOX_STATES
-         DO i=1,TotalNb
-            F(i) = D3STATE(j,i)
-         END DO
-         eminval = minval(F)
-         emaxval = maxval(F)
-         eavgval = sum(F) / TotalNb
-!         Print *, 'j=', j, ' min/max/avg=', eminval, emaxval, eavgval
-      END DO
       deallocate(F)
       END SUBROUTINE
 
@@ -878,9 +885,11 @@
       integer idx, j, i, Nwetpoint, istat
 #include "set_bounds.h"
       tileS = tile - first_tile(ng) + 1
+#ifdef BFM_DEBUG
       Print *, 'ng=', ng, ' tile=', tile, ' tileS=', tileS
       Print *, 'allocated(ListArrayWet)=', allocated(ListArrayWet)
       Print *, 'allocated(ListArrayWet(ng) % TheArr)=', allocated(ListArrayWet(ng) % TheArr)
+#endif
       Nwetpoint = ListArrayWet(ng) % TheArr(tileS) % Nwetpoint
       allocate(ListArrayWet(ng) % TheArr(tileS) % ListI(Nwetpoint), stat=istat)
       allocate(ListArrayWet(ng) % TheArr(tileS) % ListJ(Nwetpoint), stat=istat)
