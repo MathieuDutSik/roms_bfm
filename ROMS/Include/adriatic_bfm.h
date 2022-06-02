@@ -32,6 +32,9 @@
 
 #define BFM_COUPLING
 
+#define WTYPE_GRID
+#define ANA_WTYPE
+
 #undef ANA_TAIR
 #undef ANA_PAIR
 #undef ANA_HUMIDITY
