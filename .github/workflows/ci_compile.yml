@@ -1,13 +1,13 @@
-name: CI of Matrix canonicalization + CUT8 + Reflective
+name: Compiling ROMS
 
 # https://help.github.com/en/articles/events-that-trigger-workflows#release-event-release
 # model taken from https://github.com/mockersf/kmanb/releases
 # on: release
 
 on:
-  # Every day at 5 am.
+  # Every sunday morning
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "0 0 * * 0"
   # Manually triggered
   workflow_dispatch:
   # Disabled right now, when a push is made on master.
@@ -20,34 +20,10 @@ jobs:
       BOOST_INCDIR: "/usr/include"
       BOOST_LINK: "/usr/lib/x86_64-linux-gnu/libboost_serialization.a"
       EIGEN_PATH: /home/runner/work/opt/eigen
-      TBB_INCDIR: /usr/include
-      TBB_LINK: "-ltbb"
-      GSL_INCDIR: /usr/include
-      GSL_C_LINK: "-lgsl -lgslcblas"
-      GLPK_INCLUDE: "-I/usr/include"
-      GLPK_LINK: "-L/usr/lib -lglpk -Wl,-rpath,/usr/lib"
       FLINT_INCDIR: "/include"
       FLINT_LINK: "-lflint"
-      CDDLIB_PATH: "/home/runner/work/opt/cddlib"
-      CDDLIB_INCLUDE: "-I/home/runner/work/opt/cddlib/include/cddlib"
-      CDDLIB_DOUBLE_LINK: "-L/home/runner/work/opt/cddlib/lib  -lcdd -Wl,-rpath,/home/runner/work/opt/cddlib/lib"
-      CDDLIB_GMP_LINK: "-L/home/runner/work/opt/cddlib/lib  -lcddgmp -Wl,-rpath,/home/runner/work/opt/cddlib/lib"
       NETCDF_CXX_ALLINC: "-I/home/runner/work/opt/netcdf-cxx4-4.3.1/include -I/home/runner/work/opt/netcdf-cxx4-4.3.1/include"
       NETCDF_CXX_LINK: "-L/home/runner/work/opt/netcdf-cxx4-4.3.1/lib -lnetcdf_c++4 -Wl,-rpath,/home/runner/work/opt/netcdf-cxx4-4.3.1/lib"
-      NAUTY_PATH: /home/runner/work/opt/nauty
-      NAUTY_INCLUDE: "-I/home/runner/work/opt/nauty/include"
-      NAUTY_LINK: "/home/runner/work/opt/nauty/lib/libnauty_static.a"
-#      NAUTY_LINK: "-L/home/runner/work/opt/nauty/lib -lnauty_shared -Wl,-rpath,/home/runner/work/opt/nauty/lib"
-      LIBBLISS_PATH: /home/runner/opt/libbliss
-      LIBBLISS_INCDIR: /home/runner/opt/libbliss/include
-      LIBBLISS_LINK: "-L/home/runner/opt/libbliss/lib -lbliss -Wl,-rpath,/home/runner/opt/libbliss/lib"
-      LIBSHORT_PATH: /home/runner/opt/libshort
-      LIBSHORT_INCDIR: /home/runner/opt/libshort/include
-      LIBSHORT_LINK: "-L/home/runner/opt/libshort/lib -lshort -Wl,-rpath,/home/runner/opt/libshort/lib"
-      MPFR_INCDIR: /usr/include
-      MPFR_LINK: "-lmpfr"
-
-
 
 
 
@@ -74,6 +50,7 @@ jobs:
           sudo apt-get install -y autoconf autotools-dev libtool
           sudo apt-get install -y openmpi-bin libopenmpi-dev
           sudo apt-get install -y autoconf autotools-dev libtool
+          sudo apt-get install -y libnetcdff-dev
 
       - name: Build test code
         run: |
