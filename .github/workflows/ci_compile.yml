@@ -15,17 +15,10 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     env:
-      GMP_INCDIR: /usr/include
-      GMP_CXX_LINK: "-lm -lgmp -lgmpxx"
       BOOST_INCDIR: "/usr/include"
       BOOST_LINK: "/usr/lib/x86_64-linux-gnu/libboost_serialization.a"
-      EIGEN_PATH: /home/runner/work/opt/eigen
-      FLINT_INCDIR: "/include"
-      FLINT_LINK: "-lflint"
-      NETCDF_CXX_ALLINC: "-I/home/runner/work/opt/netcdf-cxx4-4.3.1/include -I/home/runner/work/opt/netcdf-cxx4-4.3.1/include"
-      NETCDF_CXX_LINK: "-L/home/runner/work/opt/netcdf-cxx4-4.3.1/lib -lnetcdf_c++4 -Wl,-rpath,/home/runner/work/opt/netcdf-cxx4-4.3.1/lib"
-
-
+      NETCDF_INCDIR: "/usr/include"
+      NETCDF_LIBDIR: "/usr/lib -lnetcdff"
 
     steps:
 #      - name: Get the version
