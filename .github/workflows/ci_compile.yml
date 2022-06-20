@@ -19,6 +19,7 @@ jobs:
       BOOST_LINK: "/usr/lib/x86_64-linux-gnu/libboost_serialization.a"
       NETCDF_INCDIR: "/usr/include"
       NETCDF_LIBDIR: "/usr/lib -lnetcdff"
+      FORT: "gfortran"
 
     steps:
 #      - name: Get the version
