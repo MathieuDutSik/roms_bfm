@@ -13,7 +13,7 @@ on:
   # Disabled right now, when a push is made on master.
 jobs:
   build-linux:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     env:
       BOOST_INCDIR: "/usr/include"
       BOOST_LINK: "/usr/lib/x86_64-linux-gnu/libboost_serialization.a"
